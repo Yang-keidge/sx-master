@@ -1,0 +1,18 @@
+# Maven
+biyeshengshixiyujiuye/target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# Node
+biyeshengshixiyujiuye/src/main/resources/admin/admin/node_modules/
+biyeshengshixiyujiuye/src/main/resources/admin/admin/dist/
+
+# Logs
+*.log
