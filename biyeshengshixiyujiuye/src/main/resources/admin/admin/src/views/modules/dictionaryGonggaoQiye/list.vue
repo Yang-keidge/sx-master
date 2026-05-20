@@ -14,13 +14,13 @@
                 <el-row class="ad" :style="{justifyContent:contents.btnAdAllBoxPosition=='1'?'flex-start':contents.btnAdAllBoxPosition=='2'?'center':'flex-end'}">
                     <el-form-item>
                         <el-button
-                                v-if="isAuth('dictionaryGonggaoLaoshi','新增')"
+                                v-if="isAuth('dictionaryGonggaoQiye','新增')"
                                 type="success"
                                 icon="el-icon-plus"
                                 @click="addOrUpdateHandler()"
                         >新增</el-button>
                         <el-button
-                                v-if="isAuth('dictionaryGonggaoLaoshi','删除')"
+                                v-if="isAuth('dictionaryGonggaoQiye','删除')"
                                 :disabled="dataListSelections.length <= 0"
                                 type="danger"
                                 icon="el-icon-delete"
@@ -38,7 +38,7 @@
                           :row-style="rowStyle"
                           :cell-style="cellStyle"
                           :style="{width: '100%',fontSize:contents.tableContentFontSize,color:contents.tableContentFontColor}"
-                          v-if="isAuth('dictionaryGonggaoLaoshi','查看')"
+                          v-if="isAuth('dictionaryGonggaoQiye','查看')"
                           :data="dataList"
                           v-loading="dataListLoading"
                           @selection-change="selectionChangeHandler">
@@ -65,21 +65,13 @@
                             {{scope.row.indexName}}
                         </template>
                     </el-table-column>
-                    <!--<el-table-column  :sortable="contents.tableSortable" :align="contents.tableAlign"
-                                      prop="beizhu"
-                                      header-align="center"
-                                      label="备注">
-                        <template slot-scope="scope">
-                            {{scope.row.beizhu}}
-                        </template>
-                    </el-table-column>-->
                     <el-table-column width="300" :align="contents.tableAlign"
                                      header-align="center"
                                      label="操作">
                         <template slot-scope="scope">
-                            <el-button v-if="isAuth('dictionaryGonggaoLaoshi','查看')" type="success" icon="el-icon-tickets" size="mini" @click="addOrUpdateHandler(scope.row.id,'info')">详情</el-button>
-                            <el-button v-if="isAuth('dictionaryGonggaoLaoshi','修改')" type="primary" icon="el-icon-edit" size="mini" @click="addOrUpdateHandler(scope.row.id)">修改</el-button>
-                            <el-button v-if="isAuth('dictionaryGonggaoLaoshi','删除')" type="danger" icon="el-icon-delete" size="mini" @click="deleteHandler(scope.row.id)">删除</el-button>
+                            <el-button v-if="isAuth('dictionaryGonggaoQiye','查看')" type="success" icon="el-icon-tickets" size="mini" @click="addOrUpdateHandler(scope.row.id,'info')">详情</el-button>
+                            <el-button v-if="isAuth('dictionaryGonggaoQiye','修改')" type="primary" icon="el-icon-edit" size="mini" @click="addOrUpdateHandler(scope.row.id)">修改</el-button>
+                            <el-button v-if="isAuth('dictionaryGonggaoQiye','删除')" type="danger" icon="el-icon-delete" size="mini" @click="deleteHandler(scope.row.id)">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -199,7 +191,6 @@
 
             })
             },
-            // 搜索按钮
             contentSearchBtnStyleChange() {
                 this.$nextTick(()=>{
                     document.querySelectorAll('.form-content .slt .el-button--success').forEach(el=>{
@@ -214,7 +205,6 @@
             })
             })
             },
-            // 新增、批量删除
             contentBtnAdAllStyleChange() {
                 this.$nextTick(()=>{
                     document.querySelectorAll('.form-content .ad .el-button--success').forEach(el=>{
@@ -249,7 +239,6 @@
             })
             })
             },
-            // 表格
             rowStyle({ row, rowIndex}) {
                 if (rowIndex % 2 == 1) {
                     if(this.contents.tableStripe) {
@@ -274,10 +263,8 @@
             headerCellStyle({ row, rowIndex}){
                 return {backgroundColor: this.contents.tableHeaderBgColor}
             },
-            // 表格按钮
             contentTableBtnStyleChange(){
             },
-            // 分页
             contentPageStyleChange(){
                 let arr = []
                 if(this.contents.pageTotal) arr.push('total')
@@ -298,7 +285,6 @@
                 this.pageIndex = 1;
                 this.getDataList();
             },
-            // 获取数据列表
             getDataList() {
                 this.dataListLoading = true;
                 let params = {
@@ -309,9 +295,8 @@
                 if(this.searchForm.indexNameSearch!='' && this.searchForm.indexNameSearch!=undefined){
                     params['indexName'] = this.searchForm.indexNameSearch
                 }
-                //本表的
-                params['dicCode'] = "gonggao_laoshi_types"//编码名字
-                params['dicName'] = "公告类型",//汉字名字
+                params['dicCode'] = "gonggao_qiye_types"
+                params['dicName'] = "公告类型"
                 this.$http({
                     url: "dictionary/page",
                     method: "get",
@@ -327,22 +312,18 @@
                 this.dataListLoading = false;
             });
             },
-            // 每页数
             sizeChangeHandle(val) {
                 this.pageSize = val;
                 this.pageIndex = 1;
                 this.getDataList();
             },
-            // 当前页
             currentChangeHandle(val) {
                 this.pageIndex = val;
                 this.getDataList();
             },
-            // 多选
             selectionChangeHandler(val) {
                 this.dataListSelections = val;
             },
-            // 添加/修改
             addOrUpdateHandler(id,type) {
                 this.showFlag = false;
                 this.addOrUpdateFlag = true;
@@ -354,7 +335,6 @@
                     this.$refs.addOrUpdate.init(id,type);
             });
             },
-            // 删除
             deleteHandler(id) {
                 var ids = id
                         ? [Number(id)]
@@ -456,5 +436,3 @@
     }
   }
 </style>
-
-

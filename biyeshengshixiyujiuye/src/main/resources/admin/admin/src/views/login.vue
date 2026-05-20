@@ -262,7 +262,7 @@
         height: 40px;
         width: 100%;
 
-    & /deep/ input {
+    &::v-deep input {
           background: transparent;
           border: 0px;
           -webkit-appearance: none;
@@ -322,7 +322,7 @@
     }
 
     .el-input {
-    & /deep/ input {
+    &::v-deep input {
           padding: 0 130px 0 30px;
       }
     }
@@ -330,7 +330,7 @@
     }
 
     .setting {
-    & /deep/ .el-form-item__content {
+    &::v-deep .el-form-item__content {
           padding: 0 15px;
           box-sizing: border-box;
           line-height: 32px;
@@ -360,7 +360,7 @@
     }
 
     .el-input {
-    & /deep/ input {
+    &::v-deep input {
           padding: 0 15px !important;
       }
     }
@@ -368,30 +368,30 @@
 
     .code.style2, .code.style3 {
     .el-input {
-    & /deep/ input {
+    &::v-deep input {
           padding: 0 115px 0 15px;
       }
     }
     }
 
     .style3 {
-    & /deep/ .el-form-item__label {
+    &::v-deep .el-form-item__label {
           padding-right: 6px;
       }
 
     .el-input {
-    & /deep/ input {
+    &::v-deep input {
           padding: 0 15px !important;
       }
     }
     }
 
     .role {
-    & /deep/ .el-form-item__label {
+    &::v-deep .el-form-item__label {
           width: 56px !important;
       }
 
-    & /deep/ .el-radio {
+    &::v-deep .el-radio {
           margin-right: 12px;
       }
     }

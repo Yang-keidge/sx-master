@@ -359,13 +359,13 @@
     .input {
         width: 100%;
 
-    & /deep/ .el-form-item__label {
+    &::v-deep .el-form-item__label {
           line-height: 40px;
           color: rgba(17, 16, 16, 1);
           font-size: #606266;
       }
 
-    & /deep/ .el-input__inner {
+    &::v-deep .el-input__inner {
           height: 40px;
           color: rgba(23, 24, 26, 1);
           font-size: 14px;

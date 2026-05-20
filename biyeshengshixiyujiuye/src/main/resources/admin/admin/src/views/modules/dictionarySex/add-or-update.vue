@@ -10,41 +10,29 @@
         >
             <el-row>
                 <el-col :span="12">
-                    <el-form-item class="input" v-if="type!='info'"  label="行业编码" prop="codeIndex">
+                    <el-form-item class="input" v-if="type!='info'"  label="性别编码" prop="codeIndex">
                         <el-input v-model="ruleForm.codeIndex"
-                                  placeholder="行业编码" clearable  :readonly="ro.codeIndex"></el-input>
+                                  placeholder="性别编码" clearable  :readonly="ro.codeIndex"></el-input>
                     </el-form-item>
                     <div v-else>
-                        <el-form-item class="input" label="行业编码" prop="codeIndex">
+                        <el-form-item class="input" label="性别编码" prop="codeIndex">
                             <el-input v-model="ruleForm.codeIndex"
-                                      placeholder="行业编码" readonly></el-input>
+                                      placeholder="性别编码" readonly></el-input>
                         </el-form-item>
                     </div>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item class="input" v-if="type!='info'"  label="行业" prop="indexName">
+                    <el-form-item class="input" v-if="type!='info'"  label="性别" prop="indexName">
                         <el-input v-model="ruleForm.indexName"
-                                  placeholder="行业" clearable  :readonly="ro.indexName"></el-input>
+                                  placeholder="性别" clearable  :readonly="ro.indexName"></el-input>
                     </el-form-item>
                     <div v-else>
-                        <el-form-item class="input" label="行业" prop="indexName">
+                        <el-form-item class="input" label="性别" prop="indexName">
                             <el-input v-model="ruleForm.indexName"
-                                      placeholder="行业" readonly></el-input>
+                                      placeholder="性别" readonly></el-input>
                         </el-form-item>
                     </div>
                 </el-col>
-                <!--<el-col :span="12">
-                    <el-form-item class="input" v-if="type!='info'"  label="备注" prop="beizhu">
-                        <el-input v-model="ruleForm.beizhu"
-                                  placeholder="备注" clearable  :readonly="ro.beizhu"></el-input>
-                    </el-form-item>
-                    <div v-else>
-                        <el-form-item class="input" label="备注" prop="beizhu">
-                            <el-input v-model="ruleForm.beizhu"
-                                      placeholder="备注" readonly></el-input>
-                        </el-form-item>
-                    </div>
-                </el-col>-->
             </el-row>
             <el-form-item class="btn">
                 <el-button v-if="type!='info'" type="primary" class="btn-success" @click="onSubmit">提交</el-button>
@@ -52,13 +40,10 @@
                 <el-button v-if="type=='info'" class="btn-close" @click="back()">返回</el-button>
             </el-form-item>
         </el-form>
-
-
     </div>
 </template>
 <script>
     import styleJs from "../../../utils/style.js";
-    // 数字，邮件，手机，url，身份证校验
     import { isNumber,isIntNumer,isEmail,isPhone, isMobile,isURL,checkIdCard } from "@/utils/validate";
     export default {
         data() {
@@ -80,13 +65,6 @@
                     beizhu : '',
                 },
                 rules: {
-                    /*beizhu: [
-                        { required: true, message: '备注不能为空', trigger: 'blur' },
-                        {  pattern: /^[1-9]\d*$/,
-                            message: '备注只能为正整数',
-                            trigger: 'blur'
-                        }
-                    ],*/
                 }
             };
         },
@@ -99,7 +77,6 @@
             this.addEditUploadStyleChange()
         },
         methods: {
-            // 初始化
             init(id,type) {
                 if (id) {
                     this.id = id;
@@ -108,11 +85,10 @@
                 if(this.type=='info'||this.type=='else'){
                     this.info(id);
                 }else{
-                    //查询最大值 start
                     this.$http({
                         url: `dictionary/maxCodeIndex`,
                         method: "post",
-                        data: {"dicCode":"qiye_types"}
+                        data: {"dicCode":"sex_types"}
                     }).then(({ data }) => {
                         if (data && data.code === 0) {
                             this.ruleForm.codeIndex = data.maxCodeIndex;
@@ -120,10 +96,8 @@
                             this.$message.error(data.msg);
                         }
                     });
-                    //查询最大值 end
                 }
             },
-            // 多级联动参数
             info(id) {
                 this.$http({
                     url: `dictionary/info/${id}`,
@@ -131,24 +105,22 @@
                 }).then(({ data }) => {
                     if (data && data.code === 0) {
                     this.ruleForm = data.data;
-                    //解决前台上传图片后台不显示的问题
-                    let reg=new RegExp('../../../upload','g')//g代表全部
+                    let reg=new RegExp('../../../upload','g')
                 } else {
                     this.$message.error(data.msg);
                 }
             });
             },
-            // 提交
             onSubmit() {
                 if((!this.ruleForm.indexName)){
-                    this.$message.error('行业不能为空');
+                    this.$message.error('性别类型不能为空');
                     return
                 }
                 this.$refs["ruleForm"].validate(valid => {
                     if (valid) {
                         let ruleForm = this.ruleForm;
-                        ruleForm["dicCode"]="qiye_types";
-                        ruleForm["dicName"]="行业";
+                        ruleForm["dicCode"]="sex_types";
+                        ruleForm["dicName"]="性别类型";
                         this.$http({
                             url: `dictionary/${!this.ruleForm.id ? "save" : "update"}`,
                             method: "post",
@@ -165,7 +137,6 @@
                                         this.parent.dictionaryCrossAddOrUpdateFlag = false;
                                         this.parent.search();
                                         this.parent.contentStyleChange();
-
                                     }
                                 });
                             } else {
@@ -175,7 +146,6 @@
                     }
                 });
             },
-            // 返回
             back() {
                 this.parent.showFlag = true;
                 this.parent.addOrUpdateFlag = false;
@@ -184,7 +154,6 @@
             },
             addEditStyleChange() {
                 this.$nextTick(()=>{
-                    // input
                     document.querySelectorAll('.addEdit-block .input .el-input__inner').forEach(el=>{
                     el.style.height = this.addEditForm.inputHeight
                 el.style.color = this.addEditForm.inputFontColor
@@ -200,7 +169,6 @@
                 el.style.color = this.addEditForm.inputLableColor
                 el.style.fontSize = this.addEditForm.inputLableFontSize
             })
-                // select
                 document.querySelectorAll('.addEdit-block .select .el-input__inner').forEach(el=>{
                     el.style.height = this.addEditForm.selectHeight
                 el.style.color = this.addEditForm.selectFontColor
@@ -220,7 +188,6 @@
                     el.style.color = this.addEditForm.selectIconFontColor
                 el.style.fontSize = this.addEditForm.selectIconFontSize
             })
-                // date
                 document.querySelectorAll('.addEdit-block .date .el-input__inner').forEach(el=>{
                     el.style.height = this.addEditForm.dateHeight
                 el.style.color = this.addEditForm.dateFontColor
@@ -241,7 +208,6 @@
                 el.style.fontSize = this.addEditForm.dateIconFontSize
                 el.style.lineHeight = this.addEditForm.dateHeight
             })
-                // upload
                 let iconLineHeight = parseInt(this.addEditForm.uploadHeight) - parseInt(this.addEditForm.uploadBorderWidth) * 2 + 'px'
                 document.querySelectorAll('.addEdit-block .upload .el-upload--picture-card').forEach(el=>{
                     el.style.width = this.addEditForm.uploadHeight
@@ -263,7 +229,6 @@
                 el.style.lineHeight = iconLineHeight
                 el.style.display = 'block'
             })
-                // 多文本输入框
                 document.querySelectorAll('.addEdit-block .textarea .el-textarea__inner').forEach(el=>{
                     el.style.height = this.addEditForm.textareaHeight
                 el.style.color = this.addEditForm.textareaFontColor
@@ -275,11 +240,9 @@
                 el.style.backgroundColor = this.addEditForm.textareaBgColor
             })
                 document.querySelectorAll('.addEdit-block .textarea .el-form-item__label').forEach(el=>{
-                    // el.style.lineHeight = this.addEditForm.textareaHeight
                     el.style.color = this.addEditForm.textareaLableColor
                 el.style.fontSize = this.addEditForm.textareaLableFontSize
             })
-                // 保存
                 document.querySelectorAll('.addEdit-block .btn .btn-success').forEach(el=>{
                     el.style.width = this.addEditForm.btnSaveWidth
                 el.style.height = this.addEditForm.btnSaveHeight
@@ -291,7 +254,6 @@
                 el.style.borderRadius = this.addEditForm.btnSaveBorderRadius
                 el.style.backgroundColor = this.addEditForm.btnSaveBgColor
             })
-                // 返回
                 document.querySelectorAll('.addEdit-block .btn .btn-close').forEach(el=>{
                     el.style.width = this.addEditForm.btnCancelWidth
                 el.style.height = this.addEditForm.btnCancelHeight
@@ -324,7 +286,6 @@
 <style lang="scss">
 .editor{
   height: 500px;
-
   &::v-deep .ql-container {
 	  height: 310px;
   }

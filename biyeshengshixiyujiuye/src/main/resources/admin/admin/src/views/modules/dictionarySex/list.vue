@@ -4,8 +4,8 @@
         <div v-if="showFlag">
             <el-form :inline="true" :model="searchForm" class="form-content">
                 <el-row :gutter="20" class="slt" :style="{justifyContent:contents.searchBoxPosition=='1'?'flex-start':contents.searchBoxPosition=='2'?'center':'flex-end'}">
-                    <el-form-item label="公告类型">
-                        <el-input prefix-icon="el-icon-search" v-model="searchForm.indexNameSearch" placeholder="公告类型" clearable></el-input>
+                    <el-form-item label="性别类型">
+                        <el-input prefix-icon="el-icon-search" v-model="searchForm.indexNameSearch" placeholder="性别类型" clearable></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button icon="el-icon-search" type="success" @click="search()">查询</el-button>
@@ -14,13 +14,13 @@
                 <el-row class="ad" :style="{justifyContent:contents.btnAdAllBoxPosition=='1'?'flex-start':contents.btnAdAllBoxPosition=='2'?'center':'flex-end'}">
                     <el-form-item>
                         <el-button
-                                v-if="isAuth('dictionaryGonggaoLaoshi','新增')"
+                                v-if="isAuth('dictionarySex','新增')"
                                 type="success"
                                 icon="el-icon-plus"
                                 @click="addOrUpdateHandler()"
                         >新增</el-button>
                         <el-button
-                                v-if="isAuth('dictionaryGonggaoLaoshi','删除')"
+                                v-if="isAuth('dictionarySex','删除')"
                                 :disabled="dataListSelections.length <= 0"
                                 type="danger"
                                 icon="el-icon-delete"
@@ -38,7 +38,7 @@
                           :row-style="rowStyle"
                           :cell-style="cellStyle"
                           :style="{width: '100%',fontSize:contents.tableContentFontSize,color:contents.tableContentFontColor}"
-                          v-if="isAuth('dictionaryGonggaoLaoshi','查看')"
+                          v-if="isAuth('dictionarySex','查看')"
                           :data="dataList"
                           v-loading="dataListLoading"
                           @selection-change="selectionChangeHandler">
@@ -52,7 +52,7 @@
                     <el-table-column  :sortable="contents.tableSortable" :align="contents.tableAlign"
                                       prop="codeIndex"
                                       header-align="center"
-                                      label="公告类型编码">
+                                      label="性别编码">
                         <template slot-scope="scope">
                             {{scope.row.codeIndex}}
                         </template>
@@ -60,26 +60,18 @@
                     <el-table-column  :sortable="contents.tableSortable" :align="contents.tableAlign"
                                       prop="indexName"
                                       header-align="center"
-                                      label="公告类型名称">
+                                      label="性别名称">
                         <template slot-scope="scope">
                             {{scope.row.indexName}}
                         </template>
                     </el-table-column>
-                    <!--<el-table-column  :sortable="contents.tableSortable" :align="contents.tableAlign"
-                                      prop="beizhu"
-                                      header-align="center"
-                                      label="备注">
-                        <template slot-scope="scope">
-                            {{scope.row.beizhu}}
-                        </template>
-                    </el-table-column>-->
                     <el-table-column width="300" :align="contents.tableAlign"
                                      header-align="center"
                                      label="操作">
                         <template slot-scope="scope">
-                            <el-button v-if="isAuth('dictionaryGonggaoLaoshi','查看')" type="success" icon="el-icon-tickets" size="mini" @click="addOrUpdateHandler(scope.row.id,'info')">详情</el-button>
-                            <el-button v-if="isAuth('dictionaryGonggaoLaoshi','修改')" type="primary" icon="el-icon-edit" size="mini" @click="addOrUpdateHandler(scope.row.id)">修改</el-button>
-                            <el-button v-if="isAuth('dictionaryGonggaoLaoshi','删除')" type="danger" icon="el-icon-delete" size="mini" @click="deleteHandler(scope.row.id)">删除</el-button>
+                            <el-button v-if="isAuth('dictionarySex','查看')" type="success" icon="el-icon-tickets" size="mini" @click="addOrUpdateHandler(scope.row.id,'info')">详情</el-button>
+                            <el-button v-if="isAuth('dictionarySex','修改')" type="primary" icon="el-icon-edit" size="mini" @click="addOrUpdateHandler(scope.row.id)">修改</el-button>
+                            <el-button v-if="isAuth('dictionarySex','删除')" type="danger" icon="el-icon-delete" size="mini" @click="deleteHandler(scope.row.id)">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -99,11 +91,7 @@
                 ></el-pagination>
             </div>
         </div>
-        <!-- 添加/修改页面  将父组件的search方法传递给子组件-->
         <add-or-update v-if="addOrUpdateFlag" :parent="this" ref="addOrUpdate"></add-or-update>
-
-
-
     </div>
 </template>
 <script>
@@ -129,9 +117,6 @@
                 addOrUpdateFlag:false,
                 contents:null,
                 layouts: '',
-
-
-
             };
         },
         created() {
@@ -141,7 +126,6 @@
             this.contentStyleChange()
         },
         mounted() {
-
         },
         filters: {
             htmlfilter: function (val) {
@@ -196,10 +180,8 @@
                     el.style.lineHeight = this.contents.inputHeight
             })
             },10)
-
             })
             },
-            // 搜索按钮
             contentSearchBtnStyleChange() {
                 this.$nextTick(()=>{
                     document.querySelectorAll('.form-content .slt .el-button--success').forEach(el=>{
@@ -214,7 +196,6 @@
             })
             })
             },
-            // 新增、批量删除
             contentBtnAdAllStyleChange() {
                 this.$nextTick(()=>{
                     document.querySelectorAll('.form-content .ad .el-button--success').forEach(el=>{
@@ -249,7 +230,6 @@
             })
             })
             },
-            // 表格
             rowStyle({ row, rowIndex}) {
                 if (rowIndex % 2 == 1) {
                     if(this.contents.tableStripe) {
@@ -274,10 +254,8 @@
             headerCellStyle({ row, rowIndex}){
                 return {backgroundColor: this.contents.tableHeaderBgColor}
             },
-            // 表格按钮
             contentTableBtnStyleChange(){
             },
-            // 分页
             contentPageStyleChange(){
                 let arr = []
                 if(this.contents.pageTotal) arr.push('total')
@@ -291,14 +269,12 @@
                 this.layouts = arr.join()
                 this.contents.pageEachNum = 10
             },
-
             init () {
             },
             search() {
                 this.pageIndex = 1;
                 this.getDataList();
             },
-            // 获取数据列表
             getDataList() {
                 this.dataListLoading = true;
                 let params = {
@@ -309,9 +285,8 @@
                 if(this.searchForm.indexNameSearch!='' && this.searchForm.indexNameSearch!=undefined){
                     params['indexName'] = this.searchForm.indexNameSearch
                 }
-                //本表的
-                params['dicCode'] = "gonggao_laoshi_types"//编码名字
-                params['dicName'] = "公告类型",//汉字名字
+                params['dicCode'] = "sex_types"
+                params['dicName'] = "性别类型"
                 this.$http({
                     url: "dictionary/page",
                     method: "get",
@@ -327,22 +302,18 @@
                 this.dataListLoading = false;
             });
             },
-            // 每页数
             sizeChangeHandle(val) {
                 this.pageSize = val;
                 this.pageIndex = 1;
                 this.getDataList();
             },
-            // 当前页
             currentChangeHandle(val) {
                 this.pageIndex = val;
                 this.getDataList();
             },
-            // 多选
             selectionChangeHandler(val) {
                 this.dataListSelections = val;
             },
-            // 添加/修改
             addOrUpdateHandler(id,type) {
                 this.showFlag = false;
                 this.addOrUpdateFlag = true;
@@ -354,7 +325,6 @@
                     this.$refs.addOrUpdate.init(id,type);
             });
             },
-            // 删除
             deleteHandler(id) {
                 var ids = id
                         ? [Number(id)]
@@ -386,10 +356,7 @@
             });
             });
             },
-
-
         }
-
     };
 </script>
 <style lang="scss" scoped>
@@ -397,12 +364,10 @@
     margin: 0 !important;
     display: flex;
   }
-
   .ad {
     margin: 0 !important;
     display: flex;
   }
-
   .pages {
     &::v-deep el-pagination__sizes{
       &::v-deep el-input__inner {
@@ -411,12 +376,9 @@
       }
     }
   }
-  
-
   .el-button+.el-button {
     margin:0;
   } 
-
   .tables {
 	&::v-deep .el-button--success {
 		height: 40px;
@@ -428,7 +390,6 @@
 		border-radius: 20px;
 		background-color: rgba(153, 204, 51, 1);
 	}
-
 	&::v-deep .el-button--primary {
 		height: 40px;
 		color: rgba(91, 87, 87, 1);
@@ -439,7 +400,6 @@
 		border-radius: 20px;
 		background-color: rgba(255, 255, 102, 1);
 	}
-
 	&::v-deep .el-button--danger {
 		height: 40px;
 		color: rgba(255, 255, 255, 1);
@@ -450,11 +410,8 @@
 		border-radius: 20px;
 		background-color: rgba(51, 102, 0, 1);
 	}
-
     &::v-deep .el-button {
       margin: 4px;
     }
   }
 </style>
-
-

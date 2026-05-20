@@ -1,35 +1,14 @@
-<template>
+﻿<template>
     <div class="main-content">
 
         <!-- 条件查询 -->
         <div v-if="showFlag">
             <el-form :inline="true" :model="searchForm" class="form-content">
                 <el-row :gutter="20" class="slt" :style="{justifyContent:contents.searchBoxPosition=='1'?'flex-start':contents.searchBoxPosition=='2'?'center':'flex-end'}">
-                         
-                     <el-form-item :label="contents.inputTitle == 1 ? '公告名称' : ''">
-                         <el-input prefix-icon="el-icon-search" v-model="searchForm.gonggaoLaoshiName" placeholder="公告名称" clearable></el-input>
+                                 
+                     <el-form-item :label="contents.inputTitle == 1 ? '老师姓名' : ''">
+                         <el-input prefix-icon="el-icon-search" v-model="searchForm.laoshiName" placeholder="老师姓名" clearable></el-input>
                      </el-form-item>
-         
-                     <el-form-item :label="contents.inputTitle == 1 ? '公告类型' : ''">
-                        <el-select v-model="searchForm.gonggaoLaoshiTypes" placeholder="请选择公告类型">
-                            <el-option label="=-请选择-=" value=""></el-option>
-                            <el-option
-                               v-for="(item,index) in gonggaoLaoshiTypesSelectSearch"
-                               v-bind:key="index"
-                               :label="item.indexName"
-                               :value="item.codeIndex">
-                            <!--lable是要展示的名称-->
-                            <!--value是值-->
-                            </el-option>
-                        </el-select>
-                     </el-form-item>
-
-                        
-                                         
-                    <el-form-item :label="contents.inputTitle == 1 ? '老师姓名' : ''">
-                        <el-input prefix-icon="el-icon-search" v-model="searchForm.laoshiName" placeholder="老师姓名" clearable></el-input>
-                    </el-form-item>
-                                                                                                    
 
                     <el-form-item>
                         <el-button type="success" @click="search()">查询<i class="el-icon-search el-icon--right"/></el-button>
@@ -38,14 +17,14 @@
                 <el-row class="ad" :style="{justifyContent:contents.btnAdAllBoxPosition=='1'?'flex-start':contents.btnAdAllBoxPosition=='2'?'center':'flex-end'}">
                     <el-form-item>
                         <el-button
-                                v-if="isAuth('gonggaoLaoshi','新增')"
+                                v-if="isAuth('laoshi','新增')"
                                 type="success"
                                 icon="el-icon-plus"
                                 @click="addOrUpdateHandler()"
                         >新增</el-button>
                         &nbsp;
                         <el-button
-                                v-if="isAuth('gonggaoLaoshi','删除')"
+                                v-if="isAuth('laoshi','删除')"
                                 :disabled="dataListSelections.length <= 0"
                                 type="danger"
                                 icon="el-icon-delete"
@@ -53,34 +32,34 @@
                         >删除</el-button>
                         &nbsp;
                         <el-button
-                                v-if="isAuth('gonggaoLaoshi','报表')"
+                                v-if="isAuth('laoshi','报表')"
                                 type="success"
                                 icon="el-icon-pie-chart"
                                 @click="chartDialog()"
                         >报表</el-button>
                         &nbsp;
                         <a style="text-decoration:none" class="el-button el-button--success"
-                           v-if="isAuth('gonggaoLaoshi','导入导出')"
+                           v-if="isAuth('laoshi','导入导出')"
                            icon="el-icon-download"
-                           href="http://localhost:8080/biyeshengshixiyujiuye/upload/gonggaoLaoshiMuBan.xls"
-                        >批量导入老师发布的公告数据模板</a>
+                           href="http://localhost:8080/biyeshengshixiyujiuye/upload/laoshiMuBan.xls"
+                        >批量导入老师数据模板</a>
                         &nbsp;
                         <el-upload
-                                v-if="isAuth('gonggaoLaoshi','导入导出')"
+                                v-if="isAuth('laoshi','导入导出')"
                                 style="display: inline-block"
                                 action="biyeshengshixiyujiuye/file/upload"
-                                :on-success="gonggaoLaoshiUploadSuccess"
-                                :on-error="gonggaoLaoshiUploadError"
+                                :on-success="laoshiUploadSuccess"
+                                :on-error="laoshiUploadError"
                                 :show-file-list = false>
                             <el-button
-                                    v-if="isAuth('gonggaoLaoshi','导入导出')"
+                                    v-if="isAuth('laoshi','导入导出')"
                                     type="success"
                                     icon="el-icon-upload2"
-                            >批量导入老师发布的公告数据</el-button>
+                            >批量导入老师数据</el-button>
                         </el-upload>
                         &nbsp;
                         <!-- 导出excel -->
-                        <download-excel v-if="isAuth('gonggaoLaoshi','导入导出')" style="display: inline-block" class = "export-excel-wrapper" :data = "dataList" :fields = "json_fields" name = "gonggaoLaoshi.xls">
+                        <download-excel v-if="isAuth('laoshi','导入导出')" style="display: inline-block" class = "export-excel-wrapper" :data = "dataList" :fields = "json_fields" name = "laoshi.xls">
                             <!-- 导出excel -->
                             <el-button
                                     type="success"
@@ -100,7 +79,7 @@
                           :row-style="rowStyle"
                           :cell-style="cellStyle"
                           :style="{width: '100%',fontSize:contents.tableContentFontSize,color:contents.tableContentFontColor}"
-                          v-if="isAuth('gonggaoLaoshi','查看')"
+                          v-if="isAuth('laoshi','查看')"
                           :data="dataList"
                           v-loading="dataListLoading"
                           @selection-change="selectionChangeHandler">
@@ -111,20 +90,40 @@
                                       width="50">
                     </el-table-column>
                     <el-table-column label="索引" v-if="contents.tableIndex" type="index" width="50" />
+
                     <el-table-column  :sortable="contents.tableSortable" :align="contents.tableAlign"
-                                      prop="laoshiName"
-                                      header-align="center"
-                                      label="老师姓名">
+                                   prop="username"
+                                   header-align="center"
+                                   label="账户">
+                        <template slot-scope="scope">
+                            {{scope.row.username}}
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column  :sortable="contents.tableSortable" :align="contents.tableAlign"
+                                   prop="laoshiName"
+                                   header-align="center"
+                                   label="老师姓名">
                         <template slot-scope="scope">
                             {{scope.row.laoshiName}}
                         </template>
                     </el-table-column>
+
                     <el-table-column  :sortable="contents.tableSortable" :align="contents.tableAlign"
-                                      prop="laoshiPhone"
-                                      header-align="center"
-                                      label="老师手机号">
+                                   prop="laoshiPhone"
+                                   header-align="center"
+                                   label="老师手机号">
                         <template slot-scope="scope">
                             {{scope.row.laoshiPhone}}
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column  :sortable="contents.tableSortable" :align="contents.tableAlign"
+                                   prop="laoshiIdNumber"
+                                   header-align="center"
+                                   label="老师身份证号">
+                        <template slot-scope="scope">
+                            {{scope.row.laoshiIdNumber}}
                         </template>
                     </el-table-column>
                     <el-table-column :sortable="contents.tableSortable" :align="contents.tableAlign" prop="laoshiPhoto"
@@ -138,30 +137,21 @@
                             <div v-else>无图片</div>
                         </template>
                     </el-table-column>
-
                     <el-table-column  :sortable="contents.tableSortable" :align="contents.tableAlign"
-                                   prop="gonggaoLaoshiName"
-                                   header-align="center"
-                                   label="公告名称">
-                        <template slot-scope="scope">
-                            {{scope.row.gonggaoLaoshiName}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column  :sortable="contents.tableSortable" :align="contents.tableAlign"
-                                      prop="gonggaoLaoshiTypes"
+                                      prop="sexTypes"
                                       header-align="center"
-                                      label="公告类型">
+                                      label="性别">
                         <template slot-scope="scope">
-                            {{scope.row.gonggaoLaoshiValue}}
+                            {{scope.row.sexValue}}
                         </template>
                     </el-table-column>
 
                     <el-table-column  :sortable="contents.tableSortable" :align="contents.tableAlign"
-                                   prop="insertTime"
+                                   prop="laoshiEmail"
                                    header-align="center"
-                                   label="公告发布时间">
+                                   label="电子邮箱">
                         <template slot-scope="scope">
-                            {{scope.row.insertTime}}
+                            {{scope.row.laoshiEmail}}
                         </template>
                     </el-table-column>
 
@@ -169,11 +159,12 @@
                                      header-align="center"
                                      label="操作">
                         <template slot-scope="scope">
-                            <el-button v-if="isAuth('gonggaoLaoshi','查看')" type="success" icon="el-icon-tickets" size="mini" @click="addOrUpdateHandler(scope.row.id,'info')">详情</el-button>
-                            <el-button v-if="isAuth('gonggaoLaoshi','修改')" type="primary" icon="el-icon-edit" size="mini" @click="addOrUpdateHandler(scope.row.id)">修改</el-button>
+                            <el-button v-if="isAuth('laoshi','查看')" type="success" icon="el-icon-tickets" size="mini" @click="addOrUpdateHandler(scope.row.id,'info')">详情</el-button>
+                            <el-button v-if="isAuth('laoshi','修改')" type="primary" icon="el-icon-edit" size="mini" @click="addOrUpdateHandler(scope.row.id)">修改</el-button>
 
-                            <el-button v-if="isAuth('gonggaoLaoshi','删除')" type="danger" icon="el-icon-delete" size="mini" @click="deleteHandler(scope.row.id)">删除</el-button>
+                            <el-button v-if="isAuth('laoshi','删除')" type="danger" icon="el-icon-delete" size="mini" @click="deleteHandler(scope.row.id)">删除</el-button>
 
+                            <el-button v-if="isAuth('laoshi','修改')" type="success" icon="el-icon-tickets" size="mini" @click="resetPassword(scope.row.id)">重置密码</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -193,8 +184,7 @@
                 ></el-pagination>
             </div>
         </div>
-        <!-- 添加/修改页面  将父组件的search方法传递给子组件-->
-        <add-or-update v-if="addOrUpdateFlag" :parent="this" ref="addOrUpdate"></add-or-update>
+        <add-or-update v-if="addOrUpdateFlag" :parent="this" ref="add-or-update"></add-or-update>
 
 
 
@@ -224,19 +214,21 @@
             searchForm: {
                 key: ""
             },
-            sessionTable : "",//登录账户所在表名
-            role : "",//权限
-            userId:"",//当前登录人的id
+            sessionTable : "",
+            role : "",
+            userId:"",
     //级联表下拉框搜索条件
     //当前表下拉框搜索条件
-              gonggaoLaoshiTypesSelectSearch : [],
             form:{
                 id : null,
-                laoshiId : null,
-                gonggaoLaoshiName : null,
-                gonggaoLaoshiTypes : null,
-                insertTime : null,
-                gonggaoLaoshiContent : null,
+                username : null,
+                password : null,
+                laoshiName : null,
+                laoshiPhone : null,
+                laoshiIdNumber : null,
+                laoshiPhoto : null,
+                sexTypes : null,
+                laoshiEmail : null,
                 createTime : null,
             },
             dataList: [],
@@ -249,23 +241,19 @@
             sfshVisiable: false,
             shForm: {},
             chartVisiable: false,
-            echartsDate: new Date(),//echarts的时间查询字段
+            echartsDate: new Date(),
             addOrUpdateFlag:false,
             contents:null,
             layouts: '',
 
-            //导出excel
             json_fields: {
-                //级联表字段
-                     '老师姓名': 'laoshiName',
-                     '老师手机号': 'laoshiPhone',
-                     '老师身份证号': 'laoshiIdNumber',
-                     '老师头像': 'laoshiPhoto',
-                     '电子邮箱': 'laoshiEmail',
-                //本表字段
-                     '公告名称': "gonggaoLaoshiName",
-                     '公告类型': "gonggaoLaoshiTypes",
-                     '公告发布时间': "insertTime",
+                     '账户': "username",
+                     '老师姓名': "laoshiName",
+                     '老师手机号': "laoshiPhone",
+                     '老师身份证号': "laoshiIdNumber",
+                     '老师头像': "laoshiPhoto",
+                     '性别': "sexTypes",
+                     '电子邮箱': "laoshiEmail",
             },
 
             };
@@ -277,8 +265,7 @@
             this.contentStyleChange()
         },
         mounted() {
-            //获取当前登录用户的信息
-            this.sessionTable = this.$storage.get("sessionTable");
+this.sessionTable = this.$storage.get("sessionTable");
             this.role = this.$storage.get("role");
             this.userId = this.$storage.get("userId");
 
@@ -297,25 +284,16 @@
             chartDialog() {
                 let _this = this;
                 let params = {
-                    dateFormat :"%Y", //%Y-%m
+                    dateFormat :"%Y",
                     riqi :_this.echartsDate.getFullYear(),
-                    // riqi :_this.echartsDate.getFullYear()+"-"+(_this.echartsDate.getMonth() + 1 < 10 ? '0' + (_this.echartsDate.getMonth() + 1) : _this.echartsDate.getMonth() + 1),
-                    thisTable : {//当前表
-                        tableName :'gonggao_laoshi',//当前表表名,
-                        sumColum : 'gonggao_laoshi_number', //求和字段
-                        date : 'insert_time',//分组日期字段
-                        // string : 'gonggao_laoshi_name',//分组字符串字段
-                        // types : 'gonggao_laoshi_types',//分组下拉框字段
+                    thisTable : {
+                        tableName :'laoshi',
+                        sumColum : 'laoshi_number',
+                        date : 'insert_time',
                     },
-                    // joinTable : {//级联表（可以不存在）
-                    //     tableName :'yonghu',//级联表表名
-                    //     // date : 'insert_time',//分组日期字段
-                    //     string : 'yonghu_name',//分组字符串字段
-                    //     // types : 'yonghu_types',//分组下拉框字段
-                    // }
                 }
                 _this.chartVisiable = true;
-                _this.$nextTick(() => {
+_this.$nextTick(() => {
                     var statistic = this.$echarts.init(document.getElementById("statistic"), 'macarons');
                     this.$http({
                         url: "barSum",
@@ -323,22 +301,16 @@
                         params: params
                     }).then(({data}) => {
                         if(data && data.code === 0){
-
-                            //柱状图 求和 已成功使用
-                            //start
-                            let yAxisName = "数值";//根据查询数据具体改(单列要改,多列不改)
+                            let yAxisName = "数值";
                             let xAxisName = "月份";
-                            let series = [];//具体数据值
+                            let series = [];
                             data.data.yAxis.forEach(function (item,index) {
                                 let tempMap = {};
-                                // tempMap.name= ["数值"];//根据查询数据具体改(单列要改,多列不改)
                                 tempMap.name=data.data.legend[index];
                                 tempMap.type='bar';
                                 tempMap.data=item;
                                 series.push(tempMap);
-
                             })
-
                             var option = {
                                 tooltip: {
                                     trigger: 'axis',
@@ -351,14 +323,12 @@
                                 },
                                 toolbox: {
                                     feature: {
-                                        // dataView: { show: true, readOnly: false },  // 数据查看
-                                        magicType: { show: true, type: ['line', 'bar'] },//切换图形展示方式
-                                        // restore: { show: true }, // 刷新
-                                        saveAsImage: { show: true }//保存
+                                        magicType: { show: true, type: ['line', 'bar'] },
+                                        saveAsImage: { show: true }
                                     }
                                 },
                                 legend: {
-                                    data: data.data.legend//标题  可以点击导致某一列数据消失
+                                    data: data.data.legend
                                 },
                                 xAxis: [
                                     {
@@ -372,24 +342,21 @@
                                 ],
                                 yAxis: [
                                     {
-                                        type: 'value',//不能改
-                                        name: yAxisName,//y轴单位
+                                        type: 'value',
+                                        name: yAxisName,
                                         axisLabel: {
-                                            formatter: '{value}' // 后缀
+                                            formatter: '{value}'
                                         }
                                     }
                                 ],
-                                series:series//具体数据
+                                series:series
                             };
-                            // 使用刚指定的配置项和数据显示图表。
                             statistic.setOption(option,true);
-                            //根据窗口的大小变动图表
                             window.onresize = function () {
                                 statistic.resize();
                             };
-                            //end
                         }else {
-                            this.$message({
+this.$message({
                                 message: "报表未查询到数据",
                                 type: "success",
                                 duration: 1500,
@@ -400,65 +367,6 @@
                         }
                     });
                 });
-                ////饼状图
-                //_this.chartVisiable = true;
-                // this.$nextTick(()=>{
-                //     var statistic = this.$echarts.init(document.getElementById("statistic"),'macarons');
-                //     let params = {
-                //         tableName: "gonggao_laoshi",
-                //         groupColumn: "gonggao_laoshi_types",
-                //     }
-                //     this.$http({
-                //         url: "newSelectGroupCount",
-                //         method: "get",
-                //         params: params
-                //     }).then(({data}) => {
-                //         if (data && data.code === 0) {
-                //             let res = data.data;
-                //             let xAxis = [];
-                //             let yAxis = [];
-                //             let pArray = []
-                //             var option = {};
-                //             for(let i=0;i<res.length;i++){
-                //                 xAxis.push(res[i].name);
-                //                 yAxis.push(res[i].value);
-                //                 pArray.push({
-                //                     value: res[i].value,
-                //                     name: res[i].name
-                //                 })
-                //                 option = {
-                //                     title: {
-                //                         text: '保险合同类型统计',
-                //                         left: 'center'
-                //                     },
-                //                     tooltip: {
-                //                         trigger: 'item',
-                //                         formatter: '{b} : {c} ({d}%)'
-                //                     },
-                //                     series: [
-                //                         {
-                //                             type: 'pie',
-                //                             radius: '55%',
-                //                             center: ['50%', '60%'],
-                //                             data: pArray,
-                //                             emphasis: {
-                //                                 itemStyle: {
-                //                                     shadowBlur: 10,
-                //                                     shadowOffsetX: 0,
-                //                                     shadowColor: 'rgba(0, 0, 0, 0.5)'
-                //                                 }
-                //                             }
-                //                         }
-                //                     ]
-                //                 };
-                //             }
-                //                 statistic.setOption(option);
-                //                 window.onresize = function() {
-                //                     statistic.resize();
-                //                 };
-                //         }
-                //     });
-                // })
             },
             contentStyleChange() {
                 this.contentSearchStyleChange()
@@ -467,7 +375,7 @@
                 this.contentTableBtnStyleChange()
                 this.contentPageStyleChange()
             },
-            contentSearchStyleChange() {
+contentSearchStyleChange() {
                 this.$nextTick(() => {
                     document.querySelectorAll('.form-content .slt .el-input__inner').forEach(el => {
                         let textAlign = 'left'
@@ -507,8 +415,7 @@
                     }, 10 )
                 })
             },
-            // 搜索按钮
-            contentSearchBtnStyleChange() {
+contentSearchBtnStyleChange() {
                 this.$nextTick(() => {
                     document.querySelectorAll('.form-content .slt .el-button--success').forEach(el => {
                         el.style.height = this.contents.searchBtnHeight
@@ -522,42 +429,40 @@
                     })
                 })
             },
-            // 新增、批量删除
-            contentBtnAdAllStyleChange() {
+contentBtnAdAllStyleChange() {
                 this.$nextTick(() => {
                     document.querySelectorAll('.form-content .ad .el-button--success').forEach(el => {
                         el.style.height = this.contents.btnAdAllHeight
-                        el.style.color = this.contents.btnAdAllAddFontColor
-                        el.style.fontSize = this.contents.btnAdAllFontSize
-                        el.style.borderWidth = this.contents.btnAdAllBorderWidth
-                        el.style.borderStyle = this.contents.btnAdAllBorderStyle
-                        el.style.borderColor = this.contents.btnAdAllBorderColor
-                        el.style.borderRadius = this.contents.btnAdAllBorderRadius
-                        el.style.backgroundColor = this.contents.btnAdAllAddBgColor
-                    })
+                    el.style.color = this.contents.btnAdAllAddFontColor
+                    el.style.fontSize = this.contents.btnAdAllFontSize
+                    el.style.borderWidth = this.contents.btnAdAllBorderWidth
+                    el.style.borderStyle = this.contents.btnAdAllBorderStyle
+                    el.style.borderColor = this.contents.btnAdAllBorderColor
+                    el.style.borderRadius = this.contents.btnAdAllBorderRadius
+                    el.style.backgroundColor = this.contents.btnAdAllAddBgColor
+                })
                     document.querySelectorAll('.form-content .ad .el-button--danger').forEach(el => {
                         el.style.height = this.contents.btnAdAllHeight
-                        el.style.color = this.contents.btnAdAllDelFontColor
-                        el.style.fontSize = this.contents.btnAdAllFontSize
-                        el.style.borderWidth = this.contents.btnAdAllBorderWidth
-                        el.style.borderStyle = this.contents.btnAdAllBorderStyle
-                        el.style.borderColor = this.contents.btnAdAllBorderColor
-                        el.style.borderRadius = this.contents.btnAdAllBorderRadius
-                        el.style.backgroundColor = this.contents.btnAdAllDelBgColor
-                    })
+                    el.style.color = this.contents.btnAdAllDelFontColor
+                    el.style.fontSize = this.contents.btnAdAllFontSize
+                    el.style.borderWidth = this.contents.btnAdAllBorderWidth
+                    el.style.borderStyle = this.contents.btnAdAllBorderStyle
+                    el.style.borderColor = this.contents.btnAdAllBorderColor
+                    el.style.borderRadius = this.contents.btnAdAllBorderRadius
+                    el.style.backgroundColor = this.contents.btnAdAllDelBgColor
+                })
                     document.querySelectorAll('.form-content .ad .el-button--warning').forEach(el => {
                         el.style.height = this.contents.btnAdAllHeight
-                        el.style.color = this.contents.btnAdAllWarnFontColor
-                        el.style.fontSize = this.contents.btnAdAllFontSize
-                        el.style.borderWidth = this.contents.btnAdAllBorderWidth
-                        el.style.borderStyle = this.contents.btnAdAllBorderStyle
-                        el.style.borderColor = this.contents.btnAdAllBorderColor
-                        el.style.borderRadius = this.contents.btnAdAllBorderRadius
-                        el.style.backgroundColor = this.contents.btnAdAllWarnBgColor
-                    })
+                    el.style.color = this.contents.btnAdAllWarnFontColor
+                    el.style.fontSize = this.contents.btnAdAllFontSize
+                    el.style.borderWidth = this.contents.btnAdAllBorderWidth
+                    el.style.borderStyle = this.contents.btnAdAllBorderStyle
+                    el.style.borderColor = this.contents.btnAdAllBorderColor
+                    el.style.borderRadius = this.contents.btnAdAllBorderRadius
+                    el.style.backgroundColor = this.contents.btnAdAllWarnBgColor
+                })
                 })
             },
-            // 表格
             rowStyle({row, rowIndex}) {
                 if (rowIndex % 2 == 1) {
                     if (this.contents.tableStripe) {
@@ -582,45 +487,8 @@
             headerCellStyle({row, rowIndex}) {
                 return {backgroundColor: this.contents.tableHeaderBgColor}
             },
-            // 表格按钮
             contentTableBtnStyleChange() {
-                // this.$nextTick(()=>{
-                //   setTimeout(()=>{
-                //     document.querySelectorAll('.table-content .tables .el-table__body .el-button--success').forEach(el=>{
-                //       el.style.height = this.contents.tableBtnHeight
-                //       el.style.color = this.contents.tableBtnDetailFontColor
-                //       el.style.fontSize = this.contents.tableBtnFontSize
-                //       el.style.borderWidth = this.contents.tableBtnBorderWidth
-                //       el.style.borderStyle = this.contents.tableBtnBorderStyle
-                //       el.style.borderColor = this.contents.tableBtnBorderColor
-                //       el.style.borderRadius = this.contents.tableBtnBorderRadius
-                //       el.style.backgroundColor = this.contents.tableBtnDetailBgColor
-                //     })
-                //     document.querySelectorAll('.table-content .tables .el-table__body .el-button--primary').forEach(el=>{
-                //       el.style.height = this.contents.tableBtnHeight
-                //       el.style.color = this.contents.tableBtnEditFontColor
-                //       el.style.fontSize = this.contents.tableBtnFontSize
-                //       el.style.borderWidth = this.contents.tableBtnBorderWidth
-                //       el.style.borderStyle = this.contents.tableBtnBorderStyle
-                //       el.style.borderColor = this.contents.tableBtnBorderColor
-                //       el.style.borderRadius = this.contents.tableBtnBorderRadius
-                //       el.style.backgroundColor = this.contents.tableBtnEditBgColor
-                //     })
-                //     document.querySelectorAll('.table-content .tables .el-table__body .el-button--danger').forEach(el=>{
-                //       el.style.height = this.contents.tableBtnHeight
-                //       el.style.color = this.contents.tableBtnDelFontColor
-                //       el.style.fontSize = this.contents.tableBtnFontSize
-                //       el.style.borderWidth = this.contents.tableBtnBorderWidth
-                //       el.style.borderStyle = this.contents.tableBtnBorderStyle
-                //       el.style.borderColor = this.contents.tableBtnBorderColor
-                //       el.style.borderRadius = this.contents.tableBtnBorderRadius
-                //       el.style.backgroundColor = this.contents.tableBtnDelBgColor
-                //     })
-
-                //   }, 50)
-                // })
             },
-            // 分页
             contentPageStyleChange() {
                 let arr = []
                 if (this.contents.pageTotal) arr.push('total')
@@ -641,7 +509,6 @@
                 this.pageIndex = 1;
                 this.getDataList();
             },
-            // 获取数据列表
             getDataList() {
                 this.dataListLoading = true;
                 let params = {
@@ -650,24 +517,16 @@
                     sort: 'id',
                 }
 
-                                         
+                                        
                 if (this.searchForm.laoshiName!= '' && this.searchForm.laoshiName!= undefined) {
                     params['laoshiName'] = '%' + this.searchForm.laoshiName + '%'
                 }
-                                                                                                                             
-                if (this.searchForm.gonggaoLaoshiName!= '' && this.searchForm.gonggaoLaoshiName!= undefined) {
-                    params['gonggaoLaoshiName'] = '%' + this.searchForm.gonggaoLaoshiName + '%'
-                }
-         
-                if (this.searchForm.gonggaoLaoshiTypes!= '' && this.searchForm.gonggaoLaoshiTypes!= undefined) {
-                    params['gonggaoLaoshiTypes'] = this.searchForm.gonggaoLaoshiTypes
-                }
-                        
-                params['gonggaoLaoshiDelete'] = 1// 逻辑删除字段 1 未删除 2 删除
+                                                        
+                params['laoshiDelete'] = 1;
 
 
-                this.$http({
-                    url: "gonggaoLaoshi/page",
+this.$http({
+                    url: "laoshi/page",
                     method: "get",
                     params: params
                 }).then(({data}) => {
@@ -681,34 +540,19 @@
                     this.dataListLoading = false;
                 });
 
-                //查询级联表搜索条件所有列表
-                //查询当前表搜索条件所有列表
-                //填充下拉框选项
-                this.$http({
-                    url: "dictionary/page?dicCode=gonggao_laoshi_types&page=1&limit=100",
-                    method: "get",
-                }).then(({data}) => {
-                    if(data && data.code === 0){
-                        this.gonggaoLaoshiTypesSelectSearch = data.data.list;
-                    }
-                });
             },
-            //每页数
             sizeChangeHandle(val) {
                 this.pageSize = val;
                 this.pageIndex = 1;
                 this.getDataList();
             },
-            // 当前页
             currentChangeHandle(val) {
                 this.pageIndex = val;
                 this.getDataList();
             },
-            // 多选
             selectionChangeHandler(val) {
                 this.dataListSelections = val;
             },
-            // 添加/修改
             addOrUpdateHandler(id, type) {
                 this.showFlag = false;
                 this.addOrUpdateFlag = true;
@@ -716,15 +560,13 @@
                 if (type != 'info') {
                     type = 'else';
                 }
-                this.$nextTick(() => {
-                    this.$refs.addOrUpdate.init(id, type);
+this.$nextTick(() => {
+                    this.$refs['add-or-update'].init(id, type);
                 });
             },
-            // 下载
             download(file) {
                 window.open(" ${file} ")
             },
-            // 删除
             deleteHandler(id) {
                 var ids = id ? [Number(id)] : this.dataListSelections.map(item => {
                     return Number(item.id);
@@ -735,13 +577,13 @@
                     cancelButtonText: "取消",
                     type: "warning"
                 }).then(() => {
-                    this.$http({
-                        url: "gonggaoLaoshi/delete",
+this.$http({
+                        url: "laoshi/delete",
                         method: "post",
                         data: ids
                     }).then(({data}) => {
                         if(data && data.code === 0){
-                            this.$message({
+this.$message({
                                 message: "操作成功",
                                 type: "success",
                                 duration: 1500,
@@ -750,21 +592,30 @@
                                 }
                             });
                         }else{
-                            this.$message.error(data.msg);
+this.$message.error(data.msg);
                         }
                     });
                 });
             },
-            // 导入功能上传文件成功后调用导入方法
-            gonggaoLaoshiUploadSuccess(data){
+            resetPassword(id) {
+this.$http({
+                    url: "laoshi/resetPassword?id=" + id,
+                    method: "get",
+                }).then(({data}) => {
+                    if(data && data.code === 0){
+                        alert('重置成功,密码已重置为123456');
+                    }
+                });
+            },
+            laoshiUploadSuccess(data){
                 let _this = this;
-                _this.$http({
-                    url: "gonggaoLaoshi/batchInsert?fileName=" + data.file,
+_this.$http({
+                    url: "laoshi/batchInsert?fileName=" + data.file,
                     method: "get"
                 }).then(({data}) => {
                     if(data && data.code === 0){
-                        _this.$message({
-                            message: "导入老师发布的公告数据成功",
+_this.$message({
+                            message: "导入老师数据成功",
                             type: "success",
                             duration: 1500,
                             onClose: () => {
@@ -777,8 +628,7 @@
                 });
 
             },
-            // 导入功能上传文件失败后调用导入方法
-            gonggaoLaoshiUploadError(data){
+            laoshiUploadError(data){
                 this.$message.error('上传失败');
             },
         }
@@ -848,5 +698,3 @@
     }
   }
 </style>
-
-
