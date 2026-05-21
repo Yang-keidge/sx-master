@@ -3,6 +3,10 @@
 
 SHELL := /bin/bash
 
+# Windows 下 Git Bash 可能找不到 netstat/taskkill，用完整路径
+NETSTAT := $(shell command -v netstat 2>/dev/null || echo /c/WINDOWS/system32/netstat.exe)
+TASKKILL := $(shell command -v taskkill 2>/dev/null || echo /c/WINDOWS/system32/taskkill.exe)
+
 # 配置
 BACKEND_PORT = 8080
 FRONTEND_PORT = 8081
@@ -33,9 +37,10 @@ help:
 
 # 根据端口号精确查找并杀死进程
 define kill_by_port
-	@pid=$$(netstat -ano 2>/dev/null | grep ":$(1) .*LISTENING" | awk '{print $$NF}' | head -1); \
+	@pid=$$($(NETSTAT) -ano 2>/dev/null | grep ":$(1) .*LISTENING" | awk '{print $$NF}' | head -1); \
 	if [ -n "$$pid" ] && [ "$$pid" != "0" ]; then \
-		taskkill //F //PID $$pid >/dev/null 2>&1 || true; \
+		echo -e "$(YELLOW)停止端口 $(1) PID $$pid$(NC)"; \
+		$(TASKKILL) //F //PID $$pid || true; \
 	fi
 endef
 
@@ -44,10 +49,10 @@ dev:
 	@echo -e "$(GREEN)启动开发环境...$(NC)"; \
 	cleanup() { \
 		echo -e "\n$(YELLOW)正在停止服务...$(NC)"; \
-		pid=$$(netstat -ano 2>/dev/null | grep ":$(BACKEND_PORT) .*LISTENING" | awk '{print $$NF}' | head -1); \
-		[ -n "$$pid" ] && [ "$$pid" != "0" ] && taskkill //F //PID $$pid >/dev/null 2>&1; \
-		pid=$$(netstat -ano 2>/dev/null | grep ":$(FRONTEND_PORT) .*LISTENING" | awk '{print $$NF}' | head -1); \
-		[ -n "$$pid" ] && [ "$$pid" != "0" ] && taskkill //F //PID $$pid >/dev/null 2>&1; \
+		pid=$$( $(NETSTAT) -ano 2>/dev/null | grep ":$(BACKEND_PORT) .*LISTENING" | awk '{print $$NF}' | head -1); \
+		[ -n "$$pid" ] && [ "$$pid" != "0" ] && $(TASKKILL) //F //PID $$pid 2>&1; \
+		pid=$$( $(NETSTAT) -ano 2>/dev/null | grep ":$(FRONTEND_PORT) .*LISTENING" | awk '{print $$NF}' | head -1); \
+		[ -n "$$pid" ] && [ "$$pid" != "0" ] && $(TASKKILL) //F //PID $$pid 2>&1; \
 		echo -e "$(GREEN)服务已停止$(NC)"; \
 		exit 0; \
 	}; \
