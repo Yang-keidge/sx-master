@@ -180,8 +180,9 @@ export default {
         this.pieChart = echarts.init(this.$refs.pieChart)
       }
       const option = {
+        textStyle: { color: '#606266' },
         tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
-        legend: { orient: 'vertical', left: 'left', top: 'center' },
+        legend: { orient: 'vertical', left: 'left', top: 'center', textStyle: { color: '#606266' } },
         series: [{
           type: 'pie',
           radius: ['40%', '70%'],
@@ -202,6 +203,7 @@ export default {
         this.gaugeChart = echarts.init(this.$refs.gaugeChart)
       }
       const option = {
+        textStyle: { color: '#606266' },
         tooltip: { formatter: '{a} <br/>{b} : {c}%' },
         series: [{
           name: '就业率',
@@ -214,8 +216,8 @@ export default {
           pointer: { itemStyle: { color: '#409EFF' } },
           axisTick: { distance: -10, length: 5, lineStyle: { color: '#fff', width: 1 } },
           splitLine: { distance: -10, length: 12, lineStyle: { color: '#fff', width: 2 } },
-          axisLabel: { color: '#666', distance: 15, fontSize: 10 },
-          title: { offsetCenter: [0, '30%'], fontSize: 14 }
+          axisLabel: { color: '#606266', distance: 15, fontSize: 10 },
+          title: { offsetCenter: [0, '30%'], fontSize: 14, color: '#606266' }
         }]
       }
       this.gaugeChart.setOption(option, true)
@@ -227,10 +229,11 @@ export default {
       const names = (data || []).map(item => item.name)
       const values = (data || []).map(item => item.value)
       const option = {
+        textStyle: { color: '#606266' },
         tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
         grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-        xAxis: { type: 'category', data: names, axisTick: { alignWithLabel: true } },
-        yAxis: { type: 'value' },
+        xAxis: { type: 'category', data: names, axisTick: { alignWithLabel: true }, axisLabel: { color: '#606266' } },
+        yAxis: { type: 'value', axisLabel: { color: '#606266' } },
         series: [{
           type: 'bar',
           barWidth: '40%',
@@ -249,10 +252,11 @@ export default {
         this.lineChart = echarts.init(this.$refs.lineChart)
       }
       const option = {
+        textStyle: { color: '#606266' },
         tooltip: { trigger: 'axis' },
         grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-        xAxis: { type: 'category', boundaryGap: false, data: data.xData || [] },
-        yAxis: { type: 'value' },
+        xAxis: { type: 'category', boundaryGap: false, data: data.xData || [], axisLabel: { color: '#606266' } },
+        yAxis: { type: 'value', axisLabel: { color: '#606266' } },
         series: [{
           name: '新增实习',
           type: 'line',
@@ -278,10 +282,11 @@ export default {
       const names = (data || []).map(item => item.name).reverse()
       const values = (data || []).map(item => item.value).reverse()
       const option = {
+        textStyle: { color: '#606266' },
         tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
         grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-        xAxis: { type: 'value' },
-        yAxis: { type: 'category', data: names, axisTick: { alignWithLabel: true } },
+        xAxis: { type: 'value', axisLabel: { color: '#606266' } },
+        yAxis: { type: 'category', data: names, axisTick: { alignWithLabel: true }, axisLabel: { color: '#606266' } },
         series: [{
           type: 'bar',
           barWidth: '50%',
@@ -321,7 +326,7 @@ export default {
   margin-bottom: 20px;
   .current-time {
     font-size: 16px;
-    color: #606266;
+    color: #303133;
     font-weight: 500;
   }
 }
@@ -334,16 +339,16 @@ export default {
   margin-bottom: 20px;
   .stat-title {
     font-size: 14px;
-    color: #909399;
+    color: #606266;
     margin-bottom: 10px;
   }
   .stat-value {
     font-size: 28px;
     font-weight: bold;
   }
-  .stat-subtitle {
+.stat-subtitle {
     font-size: 12px;
-    color: #909399;
+    color: #606266;
     margin-top: 6px;
   }
 }

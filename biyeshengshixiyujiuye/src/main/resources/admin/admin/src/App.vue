@@ -32,6 +32,9 @@ export default {
     line-height: 1.5;
     letter-spacing: -0.007em;
   }
+  .el-table th.el-table__cell {
+    color: #000000 !important;
+  }
 
   :root {
     /* Colors */
