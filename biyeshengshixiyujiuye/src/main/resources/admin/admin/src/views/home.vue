@@ -16,6 +16,7 @@
         <el-card shadow="hover" class="stat-card">
           <div class="stat-title">{{ card.title }}</div>
           <div class="stat-value" :style="{ color: card.color }">{{ card.value }}</div>
+          <div class="stat-subtitle" v-if="card.subTitle">{{ card.subTitle }}</div>
         </el-card>
       </el-col>
     </el-row>
@@ -73,11 +74,11 @@ export default {
       loading: false,
       currentTime: '',
       statCards: [
-        { title: '学生总数', value: 0, color: '#409EFF' },
-        { title: '实习人数', value: 0, color: '#67C23A' },
-        { title: '就业人数', value: 0, color: '#E6A23C' },
-        { title: '企业数量', value: 0, color: '#F56C6C' },
-        { title: '就业率', value: '0%', color: '#409EFF' }
+        { title: '学生总数', value: 0, subTitle: '', color: '#409EFF' },
+        { title: '未毕业实习', value: 0, subTitle: '', color: '#67C23A' },
+        { title: '已毕业就业', value: 0, subTitle: '', color: '#E6A23C' },
+        { title: '企业数量', value: 0, subTitle: '', color: '#F56C6C' },
+        { title: '本月新增实习', value: 0, subTitle: '', color: '#409EFF' }
       ],
       pieChart: null,
       gaugeChart: null,
@@ -158,12 +159,21 @@ export default {
       })
     },
     updateStatCards(data) {
+      // 学生总数
       this.statCards[0].value = data.studentCount || 0
-      this.statCards[1].value = data.shixiCount || 0
-      this.statCards[2].value = data.jiuyeCount || 0
+      this.statCards[0].subTitle = '未毕业 ' + (data.notGraduatedCount || 0) + ' / 已毕业 ' + (data.graduatedCount || 0)
+      // 未毕业实习
+      this.statCards[1].value = data.notGraduatedShixiCount || 0
+      this.statCards[1].subTitle = '实习率 ' + (data.shixiRate || 0) + '%'
+      // 已毕业就业
+      this.statCards[2].value = data.graduatedJiuyeCount || 0
+      this.statCards[2].subTitle = '就业率 ' + (data.employmentRate || 0) + '%'
+      // 企业数量
       this.statCards[3].value = data.qiyeCount || 0
-      const rate = data.employmentRate || 0
-      this.statCards[4].value = rate + '%'
+      this.statCards[3].subTitle = ''
+      // 本月新增实习记录
+      this.statCards[4].value = data.monthShixiCount || 0
+      this.statCards[4].subTitle = '本月新增实习记录'
     },
     renderPieChart(data) {
       if (!this.pieChart) {
@@ -330,6 +340,11 @@ export default {
   .stat-value {
     font-size: 28px;
     font-weight: bold;
+  }
+  .stat-subtitle {
+    font-size: 12px;
+    color: #909399;
+    margin-top: 6px;
   }
 }
 .chart-row {

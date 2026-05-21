@@ -140,6 +140,16 @@ public class JiuyeController {
         else if("企业".equals(role))
             jiuye.setQiyeId(Integer.valueOf(String.valueOf(request.getSession().getAttribute("userId"))));
 
+        // 校验：未毕业学生不能添加就业记录
+        XueshengEntity xuesheng = xueshengService.selectById(jiuye.getXueshengId());
+        if(xuesheng != null && xuesheng.getRuxueYear() != null){
+            int graduationYear = xuesheng.getRuxueYear() + 4;
+            java.time.LocalDate graduationDate = java.time.LocalDate.of(graduationYear, 6, 1);
+            if(java.time.LocalDate.now().isBefore(graduationDate)){
+                return R.error(511,"该学生尚未毕业，不能添加就业记录");
+            }
+        }
+
         Wrapper<JiuyeEntity> queryWrapper = new EntityWrapper<JiuyeEntity>()
             .eq("xuesheng_id", jiuye.getXueshengId())
             .eq("qiye_id", jiuye.getQiyeId())
@@ -171,6 +181,17 @@ public class JiuyeController {
 //            jiuye.setXueshengId(Integer.valueOf(String.valueOf(request.getSession().getAttribute("userId"))));
 //        else if("企业".equals(role))
 //            jiuye.setQiyeId(Integer.valueOf(String.valueOf(request.getSession().getAttribute("userId"))));
+
+        // 校验：未毕业学生不能修改为就业记录
+        XueshengEntity xuesheng = xueshengService.selectById(jiuye.getXueshengId());
+        if(xuesheng != null && xuesheng.getRuxueYear() != null){
+            int graduationYear = xuesheng.getRuxueYear() + 4;
+            java.time.LocalDate graduationDate = java.time.LocalDate.of(graduationYear, 6, 1);
+            if(java.time.LocalDate.now().isBefore(graduationDate)){
+                return R.error(511,"该学生尚未毕业，不能添加就业记录");
+            }
+        }
+
         //根据字段查询是否有相同数据
         Wrapper<JiuyeEntity> queryWrapper = new EntityWrapper<JiuyeEntity>()
             .notIn("id",jiuye.getId())

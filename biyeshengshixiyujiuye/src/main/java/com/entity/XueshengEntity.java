@@ -127,6 +127,14 @@ public class XueshengEntity<T> implements Serializable {
 
 
     /**
+     * 入学年份
+     */
+    @TableField(value = "ruxue_year")
+
+    private Integer ruxueYear;
+
+
+    /**
      * 电子邮箱
      */
     @TableField(value = "xuesheng_email")
@@ -273,6 +281,19 @@ public class XueshengEntity<T> implements Serializable {
 
     public void setBanjiTypes(Integer banjiTypes) {
         this.banjiTypes = banjiTypes;
+    }
+    /**
+	 * 设置：入学年份
+	 */
+    public Integer getRuxueYear() {
+        return ruxueYear;
+    }
+    /**
+	 * 获取：入学年份
+	 */
+
+    public void setRuxueYear(Integer ruxueYear) {
+        this.ruxueYear = ruxueYear;
     }
     /**
 	 * 设置：电子邮箱

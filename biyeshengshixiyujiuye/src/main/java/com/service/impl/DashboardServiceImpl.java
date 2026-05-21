@@ -24,34 +24,28 @@ public class DashboardServiceImpl implements DashboardService {
         Map<String, Object> baseData = dashboardDao.selectBaseData();
 
         Long studentCount = ((Number) baseData.get("studentCount")).longValue();
-        Long jiuyeCount = ((Number) baseData.get("jiuyeCount")).longValue();
+        Long graduatedCount = ((Number) baseData.get("graduatedCount")).longValue();
+        Long notGraduatedCount = ((Number) baseData.get("notGraduatedCount")).longValue();
         Long shixiCount = ((Number) baseData.get("shixiCount")).longValue();
+        Long jiuyeCount = ((Number) baseData.get("jiuyeCount")).longValue();
+        Long notGraduatedShixiCount = ((Number) baseData.get("notGraduatedShixiCount")).longValue();
+        Long graduatedJiuyeCount = ((Number) baseData.get("graduatedJiuyeCount")).longValue();
 
-        // 计算就业率
+        // 计算已毕业就业率 = 已毕业就业人数 / 已毕业总人数
         BigDecimal employmentRate = BigDecimal.ZERO;
-        if (studentCount != null && studentCount > 0 && jiuyeCount != null) {
-            employmentRate = new BigDecimal(jiuyeCount)
+        if (graduatedCount != null && graduatedCount > 0 && graduatedJiuyeCount != null) {
+            employmentRate = new BigDecimal(graduatedJiuyeCount)
                     .multiply(new BigDecimal(100))
-                    .divide(new BigDecimal(studentCount), 1, RoundingMode.HALF_UP);
+                    .divide(new BigDecimal(graduatedCount), 1, RoundingMode.HALF_UP);
         }
         baseData.put("employmentRate", employmentRate);
 
-        // 计算实习完成率（优秀 + 良好）/ 总实习数
-        List<Map<String, Object>> resultStats = dashboardDao.selectShixiResultStats();
-        long goodCount = 0;
-        for (Map<String, Object> stat : resultStats) {
-            String name = (String) stat.get("name");
-            Number value = (Number) stat.get("value");
-            if (value == null) value = 0;
-            if ("优秀".equals(name) || "良好".equals(name)) {
-                goodCount += value.longValue();
-            }
-        }
+        // 计算未毕业实习率 = 未毕业实习人数 / 未毕业总人数
         BigDecimal shixiRate = BigDecimal.ZERO;
-        if (shixiCount != null && shixiCount > 0) {
-            shixiRate = new BigDecimal(goodCount)
+        if (notGraduatedCount != null && notGraduatedCount > 0 && notGraduatedShixiCount != null) {
+            shixiRate = new BigDecimal(notGraduatedShixiCount)
                     .multiply(new BigDecimal(100))
-                    .divide(new BigDecimal(shixiCount), 1, RoundingMode.HALF_UP);
+                    .divide(new BigDecimal(notGraduatedCount), 1, RoundingMode.HALF_UP);
         }
         baseData.put("shixiRate", shixiRate);
 
