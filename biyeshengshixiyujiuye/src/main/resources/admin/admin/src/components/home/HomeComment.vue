@@ -56,25 +56,25 @@ export default {
 </script>
 <style lang="scss" scoped>
 .home-comment {
-  background: #ffffff;
+  background: #252540;
   .title {
     font-size: 18px;
-    color: #666;
+    color: #a0aec0;
     font-weight: bold;
     padding: 10px;
-    border-bottom: 1px solid #eeeeee;
+    border-bottom: 1px solid #333355;
   }
   .comment-list {
     padding: 10px;
     .comment-item {
       padding: 10px;
-      border-bottom: 1px solid #eeeeee;
+      border-bottom: 1px solid #333355;
       .user-content {
         display: flex;
         align-items: center;
         .user {
           font-size: 18px;
-          color: #666;
+          color: #a0aec0;
           font-weight: bold;
           line-height: 50px;
           margin-left: 10px;
@@ -88,12 +88,12 @@ export default {
       .comment {
         margin-top: 10px;
         font-size: 14px;
-        color: #888888;
+        color: #6b7280;
       }
       .create-time {
         margin-top: 15px;
         font-size: 14px;
-        color: #888888;
+        color: #6b7280;
       }
     }
   }

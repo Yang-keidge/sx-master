@@ -1,9 +1,62 @@
-/* 改变主题色变量 */
-$--color-primary: #00c292 !default;
-$--color-success: #67c23a !default;
+/* Element UI Theme Override — Business Ice-Blue Dark */
+
+/* Primary & Status Colors */
+$--color-primary: #64b5f6 !default;
+$--color-success: #64b5f6 !default;
 $--color-warning: #e6a23c !default;
-$--color-danger: #f56c6c !default;
-$--color-info: #909399 !default;
-/* 改变 icon 字体路径变量，必需 */
+$--color-danger: #ef5350 !default;
+$--color-info: #6b7280 !default;
+
+/* Text Colors */
+$--color-text-primary: #e8eaf6 !default;
+$--color-text-regular: #a0aec0 !default;
+$--color-text-secondary: #6b7280 !default;
+$--color-text-placeholder: #4a4a6a !default;
+
+/* Border Colors */
+$--border-color-base: #333355 !default;
+$--border-color-light: #2a2a45 !default;
+$--border-color-lighter: #252540 !default;
+$--border-color-extra-light: #1e1e36 !default;
+
+/* Background Colors */
+$--background-color-base: #1a1a2e !default;
+
+/* Input */
+$--input-background-color: #1e1e36 !default;
+$--input-border-color: #333355 !default;
+$--input-font-color: #e8eaf6 !default;
+$--input-placeholder-color: #4a4a6a !default;
+
+/* Button */
+$--button-primary-background-color: #1e3a5f !default;
+$--button-primary-border-color: rgba(100, 181, 246, 0.3) !default;
+$--button-primary-font-color: #e8eaf6 !default;
+
+/* Table */
+$--table-header-background-color: #1e1e36 !default;
+$--table-header-font-color: #a0aec0 !default;
+$--table-row-hover-background-color: #2d2d4a !default;
+$--table-border-color: #333355 !default;
+
+/* Menu */
+$--menu-background-color: #252540 !default;
+$--menu-text-color: #a0aec0 !default;
+$--menu-hover-text-color: #e8eaf6 !default;
+$--menu-active-text-color: #64b5f6 !default;
+$--menu-hover-background-color: #2a2a45 !default;
+
+/* Dialog / Card / Popover */
+$--dialog-background-color: #252540 !default;
+$--card-background-color: #252540 !default;
+$--popover-background-color: #252540 !default;
+
+/* Pagination */
+$--pagination-button-color: #a0aec0 !default;
+$--pagination-button-disabled-color: #4a4a6a !default;
+$--pagination-button-disabled-background-color: #2a2a45 !default;
+$--pagination-hover-color: #64b5f6 !default;
+
+/* Font path */
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import "~element-ui/packages/theme-chalk/src/index";

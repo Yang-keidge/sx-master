@@ -34,17 +34,17 @@ export default {};
 </script>
 <style lang="scss">
 .home-progress {
-  background: #ffffff;
+  background: #252540;
   height: 400px;
   padding: 20px;
   .title {
-    color: #666666;
+    color: #a0aec0;
     font-weight: bold;
     font-size: 20px;
     margin-top: 10px;
   }
   .tip {
-    color: #888888;
+    color: #6b7280;
     font-size: 16px;
     margin-top: 10px;
   }

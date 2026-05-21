@@ -402,7 +402,7 @@
                                     axisPointer: {
                                         type: 'cross',
                                         crossStyle: {
-                                            color: '#999'
+                                            color: '#6b7280'
                                         }
                                     }
                                 },
@@ -869,36 +869,48 @@
 
   .tables {
 	&::v-deep .el-button--success {
-		height: 40px;
-		color: rgba(88, 84, 84, 1);
-		font-size: 10px;
-		border-width: 1px;
-		border-style: solid;
-		border-color: #DCDFE6;
-		border-radius: 20px;
-		background-color: rgba(153, 204, 51, 1);
+		height: 32px;
+		color: #64b5f6;
+		font-size: 12px;
+		border-width: 0px;
+		background-color: transparent;
+		padding: 0 8px;
+		border-radius: 4px;
+		transition: all 0.2s ease;
+	}
+	&::v-deep .el-button--success:hover {
+		background-color: #1e2a4a;
+		color: #90caf9;
 	}
 
 	&::v-deep .el-button--primary {
-		height: 40px;
-		color: rgba(91, 87, 87, 1);
-		font-size: 10px;
-		border-width: 1px;
-		border-style: solid;
-		border-color: #DCDFE6;
-		border-radius: 20px;
-		background-color: rgba(255, 255, 102, 1);
+		height: 32px;
+		color: #a0aec0;
+		font-size: 12px;
+		border-width: 0px;
+		background-color: transparent;
+		padding: 0 8px;
+		border-radius: 4px;
+		transition: all 0.2s ease;
+	}
+	&::v-deep .el-button--primary:hover {
+		background-color: #2a2a45;
+		color: #e8eaf6;
 	}
 
 	&::v-deep .el-button--danger {
-		height: 40px;
-		color: rgba(255, 255, 255, 1);
-		font-size: 10px;
-		border-width: 1px;
-		border-style: solid;
-		border-color: #DCDFE6;
-		border-radius: 20px;
-		background-color: rgba(51, 102, 0, 1);
+		height: 32px;
+		color: #ef5350;
+		font-size: 12px;
+		border-width: 0px;
+		background-color: transparent;
+		padding: 0 8px;
+		border-radius: 4px;
+		transition: all 0.2s ease;
+	}
+	&::v-deep .el-button--danger:hover {
+		background-color: #3a1e2e;
+		color: #ff8a80;
 	}
 
     &::v-deep .el-button {

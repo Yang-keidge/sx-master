@@ -1,8 +1,8 @@
 <template>
-    <div style="backgroundImage: url('/biyeshengshixiyujiuye/img/back-img-bg.jpg');background-size:cover;">
+    <div style="background-color: #1a1a2e;">
         <div class="container">
-            <div class="login-form" style="backgroundColor:rgba(183, 174, 174, 0.5);borderRadius:22px">
-                <h1 class="h1" style="color:#000;fontSize:28px;">毕业生实习与就业管理系统注册</h1>
+            <div class="login-form" style="backgroundColor:#252540;borderRadius:12px">
+                <h1 class="h1" style="color:#e8eaf6;fontSize:28px;">毕业生实习与就业管理系统注册</h1>
                 <el-form class="rgs-form" label-width="120px">
                         <el-form-item label="账号" class="input">
                             <el-input v-model="ruleForm.username" autocomplete="off" placeholder="账号"  />
@@ -168,30 +168,30 @@
 </script>
 <style lang="scss" scoped>
     .el-radio__input.is-checked .el-radio__inner {
-        border-color: #00c292;
-        background: #00c292;
+        border-color: #64b5f6;
+        background: #64b5f6;
     }
 
     .el-radio__input.is-checked .el-radio__inner {
-        border-color: #00c292;
-        background: #00c292;
+        border-color: #64b5f6;
+        background: #64b5f6;
     }
 
     .el-radio__input.is-checked .el-radio__inner {
-        border-color: #00c292;
-        background: #00c292;
+        border-color: #64b5f6;
+        background: #64b5f6;
     }
 
     .el-radio__input.is-checked+.el-radio__label {
-        color: #00c292;
+        color: #64b5f6;
     }
 
     .el-radio__input.is-checked+.el-radio__label {
-        color: #00c292;
+        color: #64b5f6;
     }
 
     .el-radio__input.is-checked+.el-radio__label {
-        color: #00c292;
+        color: #64b5f6;
     }
 
     .h1 {
@@ -203,86 +203,12 @@
         margin: 0;
     }
 
-    // .container {
-       //    min-height: 100vh;
-       //    text-align: center;
-       //    // background-color: #00c292;
-       //    padding-top: 20vh;
-       //    background-image: url(../assets/img/bg.jpg);
-       //    background-size: 100% 100%;
-       //    opacity: 0.9;
-       //  }
-
-    // .login-form:before {
-       // 	vertical-align: middle;
-       // 	display: inline-block;
-       // }
-
-    // .login-form {
-       // 	max-width: 500px;
-       // 	padding: 20px 0;
-       // 	width: 80%;
-       // 	position: relative;
-       // 	margin: 0 auto;
-
-    // 	.label {
-          // 		min-width: 60px;
-          // 	}
-
-    // 	.input-group {
-          // 		max-width: 500px;
-          // 		padding: 20px 0;
-          // 		width: 80%;
-          // 		position: relative;
-          // 		margin: 0 auto;
-          // 		display: flex;
-          // 		align-items: center;
-
-    // 		.input-container {
-              // 			display: inline-block;
-              // 			width: 100%;
-              // 			text-align: left;
-              // 			margin-left: 10px;
-              // 		}
-
-    // 		.icon {
-              // 			width: 30px;
-              // 			height: 30px;
-              // 		}
-
-    // 		.input {
-              // 			position: relative;
-              // 			z-index: 2;
-              // 			float: left;
-              // 			width: 100%;
-              // 			margin-bottom: 0;
-              // 			box-shadow: none;
-              // 			border-top: 0px solid #ccc;
-              // 			border-left: 0px solid #ccc;
-              // 			border-right: 0px solid #ccc;
-              // 			border-bottom: 1px solid #ccc;
-              // 			padding: 0px;
-              // 			resize: none;
-              // 			border-radius: 0px;
-              // 			display: block;
-              // 			width: 100%;
-              // 			height: 34px;
-              // 			padding: 6px 12px;
-              // 			font-size: 14px;
-              // 			line-height: 1.42857143;
-              // 			color: #555;
-              // 			background-color: #fff;
-              // 		}
-
-    // 	}
-    // }
-
     .nk-navigation {
         margin-top: 15px;
 
     a {
         display: inline-block;
-        color: #fff;
+        color: #252540;
         background: rgba(255, 255, 255, .2);
         width: 100px;
         height: 50px;
@@ -307,7 +233,7 @@
 
     a {
         display: inline-block;
-        color: #fff;
+        color: #252540;
         max-width: 500px;
         height: 50px;
         border-radius: 30px;
@@ -329,14 +255,15 @@
         background-position: center center;
         background-size: cover;
         background-repeat: no-repeat;
+        background-color: #1a1a2e;
 
     .login-form {
         right: 50%;
         top: 50%;
         height: auto;
         transform: translate3d(50%, -50%, 0);
-        border-radius: 10px;
-        background-color: rgba(255,255,255,.5);
+        border-radius: 12px;
+        background-color: #252540;
         width: 420px;
         padding: 30px 30px 40px 30px;
         font-size: 14px;
@@ -347,7 +274,7 @@
         text-align: center;
         line-height: 54px;
         font-size: 24px;
-        color: #000;
+        color: #e8eaf6;
     }
 
     .rgs-form {
@@ -361,19 +288,19 @@
 
     &::v-deep .el-form-item__label {
           line-height: 40px;
-          color: rgba(17, 16, 16, 1);
-          font-size: #606266;
+          color: #a0aec0;
+          font-size: 14px;
       }
 
     &::v-deep .el-input__inner {
           height: 40px;
-          color: rgba(23, 24, 26, 1);
+          color: #e8eaf6;
           font-size: 14px;
           border-width: 1px;
           border-style: solid;
-          border-color: #606266;
+          border-color: #333355;
           border-radius: 22px;
-          background-color: #fff;
+          background-color: #1e1e36;
       }
     }
 
@@ -381,26 +308,26 @@
         margin: 0 10px;
         width: 88px;
         height: 44px;
-        color: #fff;
+        color: #e8eaf6;
         font-size: 14px;
         border-width: 1px;
         border-style: solid;
-        border-color: #409EFF;
+        border-color: #64b5f6;
         border-radius: 22px;
-        background-color: #409EFF;
+        background-color: #1e3a5f;
     }
 
     .close {
         margin: 0 10px;
         width: 88px;
         height: 44px;
-        color: #409EFF;
+        color: #64b5f6;
         font-size: 14px;
         border-width: 1px;
         border-style: solid;
-        border-color: #409EFF;
+        border-color: #64b5f6;
         border-radius: 22px;
-        background-color: #FFF;
+        background-color: #252540;
     }
 
     }

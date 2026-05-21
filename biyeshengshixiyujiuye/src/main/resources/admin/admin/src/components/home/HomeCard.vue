@@ -44,7 +44,7 @@ export default {
   .content {
     font-size: 30px;
     font-weight: bold;
-    color: #666;
+    color: #a0aec0;
     text-align: center;
     .unit {
       font-size: 16px;

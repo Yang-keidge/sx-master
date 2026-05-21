@@ -131,7 +131,7 @@ export default {
     margin-top: 20px;
     padding-bottom: 20px;
     padding: 20px;
-    border-bottom: 1px solid #eeeeee;
+    border-bottom: 1px solid #333355;
     font-size: 20px;
     font-weight: bold;
     color: red;
@@ -150,7 +150,7 @@ export default {
       justify-content: space-between;
       width: 300px;
       margin: 20px;
-      border: 1px solid #eeeeee;
+      border: 1px solid #333355;
       padding: 20px;
     }
   }

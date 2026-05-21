@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.DashboardDao">
+
+    <!-- 基础统计数据 -->
+    <select id="selectBaseData" resultType="map">
+        SELECT
+            (SELECT COUNT(*) FROM xuesheng) AS studentCount,
+            (SELECT COUNT(*) FROM shixi) AS shixiCount,
+            (SELECT COUNT(*) FROM jiuye) AS jiuyeCount,
+            (SELECT COUNT(*) FROM qiye) AS qiyeCount,
+            (SELECT COUNT(*) FROM laoshi) AS laoshiCount,
+            (SELECT COUNT(*) FROM shixi WHERE MONTH(create_time) = MONTH(NOW()) AND YEAR(create_time) = YEAR(NOW())) AS monthShixiCount
+    </select>
+
+    <!-- 实习类型统计 -->
+    <select id="selectShixiTypeStats" resultType="map">
+        SELECT
+            d.index_name AS name,
+            COUNT(s.id) AS value
+        FROM dictionary d
+        LEFT JOIN shixi s ON s.shixi_types = d.code_index
+        WHERE d.dic_code = 'shixi_types'
+        GROUP BY d.code_index, d.index_name
+        ORDER BY d.code_index
+    </select>
+
+    <!-- 实习结果统计 -->
+    <select id="selectShixiResultStats" resultType="map">
+        SELECT
+            d.index_name AS name,
+            COUNT(s.id) AS value
+        FROM dictionary d
+        LEFT JOIN shixi s ON s.shixi_jieguo_types = d.code_index
+        WHERE d.dic_code = 'shixi_jieguo_types'
+        GROUP BY d.code_index, d.index_name
+        ORDER BY d.code_index
+    </select>
+
+    <!-- 月度趋势统计 -->
+    <select id="selectMonthTrend" resultType="map">
+        SELECT
+            DATE_FORMAT(create_time, '%c') AS monthNum,
+            COUNT(*) AS total
+        FROM shixi
+        WHERE create_time IS NOT NULL
+          AND YEAR(create_time) = #{year}
+        GROUP BY monthNum
+        ORDER BY CAST(monthNum AS SIGNED)
+    </select>
+
+    <!-- 企业招聘 TOP10 -->
+    <select id="selectCompanyTop" resultType="map">
+        SELECT
+            IFNULL(q.qiye_name, '未知企业') AS name,
+            COUNT(j.id) AS value
+        FROM jiuye j
+        LEFT JOIN qiye q ON j.qiye_id = q.id
+        WHERE q.qiye_name IS NOT NULL AND q.qiye_name != ''
+        GROUP BY q.qiye_name
+        ORDER BY value DESC
+        LIMIT 10
+    </select>
+
+</mapper>

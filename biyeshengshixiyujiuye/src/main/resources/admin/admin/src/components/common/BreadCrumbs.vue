@@ -1,5 +1,5 @@
 <template>
-  <el-breadcrumb class="app-breadcrumb" separator="/" style="height:50px;backgroundColor:rgba(255, 255, 255, 1);borderRadius:4px;padding:0px 20px 0px 20px;boxShadow:0px 0px 0px #f903d4;borderWidth:0px;borderStyle:dotted solid double dashed;borderColor:#ff0000;">
+  <el-breadcrumb class="app-breadcrumb" separator="/" style="height:50px;backgroundColor:#252540;borderRadius:4px;padding:0px 20px 0px 20px;boxShadow:0px 0px 0px #f903d4;borderWidth:0px;borderStyle:dotted solid double dashed;borderColor:#333355;">
     <transition-group name="breadcrumb" class="box" :style="1==1?'justifyContent:flex-start;':1==2?'justifyContent:center;':'justifyContent:flex-end;'">
       <el-breadcrumb-item v-for="(item,index) in levelList" :key="item.path">
         <span v-if="item.redirect==='noRedirect'||index==levelList.length-1" class="no-redirect">{{ item.name }}</span>
@@ -63,13 +63,13 @@ export default {
       this.$nextTick(()=>{
         document.querySelectorAll('.app-breadcrumb .el-breadcrumb__separator').forEach(el=>{
           el.innerText = "/"
-          el.style.color = "rgba(255, 69, 0, 1)"
+          el.style.color = "#4a4a6a"
         })
         document.querySelectorAll('.app-breadcrumb .el-breadcrumb__inner a').forEach(el=>{
-          el.style.color = "#303133"
+          el.style.color = "#6b7280"
         })
         document.querySelectorAll('.app-breadcrumb .el-breadcrumb__inner .no-redirect').forEach(el=>{
-          el.style.color = "rgba(25, 169, 123, 1)"
+          el.style.color = "#a0aec0"
         })
 
         let str = "vertical"
@@ -102,7 +102,7 @@ export default {
   }
 
   .no-redirect {
-    color: #97a8be;
+    color: #a0aec0;
     cursor: text;
   }
 }

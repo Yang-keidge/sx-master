@@ -27,6 +27,7 @@ export default {
   height: 100%;
   min-height: 900px;
   text-align: center;
+  background-color: #1a1a2e;
   .backgroud {
     display: inline-block;
     width: 200px;
@@ -35,12 +36,12 @@ export default {
   }
   .main-text{
     margin-top: 80px;
+    color: #e8eaf6;
   }
   .text {
     font-size: 24px;
     font-weight: bold;
-    color: #333;
+    color: #e8eaf6;
   }
 }
 </style>
-

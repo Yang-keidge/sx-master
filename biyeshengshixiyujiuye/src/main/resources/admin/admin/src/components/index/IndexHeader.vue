@@ -1,27 +1,13 @@
 
 <template>
-    <!-- <el-header>
-        <el-menu background-color="#00c292" text-color="#FFFFFF" active-text-color="#FFFFFF" mode="horizontal">
-            <div class="fl title">{{this.$project.projectName}}</div>
-            <div class="fr logout" style="display:flex;">
-                <el-menu-item index="3">
-                    <div>{{this.$storage.get('role')}} {{this.$storage.get('adminName')}}</div>
-                </el-menu-item>
-                <el-menu-item @click="onLogout" index="2">
-                    <div>退出登录</div>
-                </el-menu-item>
-            </div>
-        </el-menu>
-    </el-header> -->
-    <div class="navbar" :style="{backgroundColor:heads.headBgColor,height:heads.headHeight,boxShadow:heads.headBoxShadow,lineHeight:heads.headHeight}">
-        <div class="title-menu" :style="{justifyContent:heads.headTitleStyle=='1'?'flex-start':'center'}">
+    <div class="navbar">
+        <div class="title-menu">
             <el-image v-if="heads.headTitleImg" class="title-img" :style="{width:heads.headTitleImgWidth,height:heads.headTitleImgHeight,boxShadow:heads.headTitleImgBoxShadow,borderRadius:heads.headTitleImgBorderRadius}" :src="heads.headTitleImgUrl" fit="cover"></el-image>
-            <div class="title-name" :style="{color:heads.headFontColor,fontSize:heads.headFontSize}">{{this.$project.projectName}}</div>
-            <!--             <img src="../../../../img/logo.jpg" style="width: 60px;height: 60px;border-radius:60px"> -->
+            <div class="title-name">{{this.$project.projectName}}</div>
         </div>
         <div class="right-menu">
-            <div class="user-info" :style="{color:heads.headUserInfoFontColor,fontSize:heads.headUserInfoFontSize}">{{this.$storage.get('role')}} {{this.$storage.get('adminName')}}</div>
-            <div class="logout" :style="{color:heads.headLogoutFontColor,fontSize:heads.headLogoutFontSize}" @click="onLogout">退出登录</div>
+            <div class="user-info">{{this.$storage.get('role')}} {{this.$storage.get('adminName')}}</div>
+            <div class="logout" @click="onLogout">退出登录</div>
         </div>
     </div>
 </template>
@@ -33,7 +19,7 @@
                 dialogVisible: false,
                 ruleForm: {},
                 user: {},
-                heads: {"headLogoutFontHoverColor":"#fff","headFontSize":"25px","headUserInfoFontColor":"rgba(231, 231, 231, 1)","headBoxShadow":"0px 0px 0px 10px #FFFF66","headTitleImgHeight":"44px","headLogoutFontHoverBgColor":"rgba(170, 153, 153, 0.41)","headFontColor":"rgba(255, 255, 255, 1)","headTitleImg":false,"headHeight":"70px","headTitleImgBorderRadius":"22px","headTitleImgUrl":"http://codegen.caihongy.cn/20201021/cc7d45d9c8164b58b18351764eba9be1.jpg","headBgColor":"#19A97B","headTitleImgBoxShadow":"0 1px 6px #444","headLogoutFontColor":"rgba(231, 231, 231, 1)","headUserInfoFontSize":"16px","headTitleImgWidth":"44px","headTitleStyle":"2","headLogoutFontSize":"16px"},
+                heads: {"headLogoutFontHoverColor":"#252540","headFontSize":"25px","headUserInfoFontColor":"rgba(231, 231, 231, 1)","headBoxShadow":"0px 0px 0px 10px #FFFF66","headTitleImgHeight":"44px","headLogoutFontHoverBgColor":"rgba(42, 42, 69, 0.41)","headFontColor":"#e8eaf6","headTitleImg":false,"headHeight":"70px","headTitleImgBorderRadius":"22px","headTitleImgUrl":"http://codegen.caihongy.cn/20201021/cc7d45d9c8164b58b18351764eba9be1.jpg","headBgColor":"#64b5f6","headTitleImgBoxShadow":"0 1px 6px #444","headLogoutFontColor":"rgba(231, 231, 231, 1)","headUserInfoFontSize":"16px","headTitleImgWidth":"44px","headTitleStyle":"2","headLogoutFontSize":"16px"},
             };
         },
         created() {
@@ -95,7 +81,8 @@
         width: 100%;
         padding: 0 34px;
         box-sizing: border-box;
-        background-color: #ff00ff;
+        background-color: #1a1a2e;
+        border-bottom: 1px solid #333355;
         position: relative;
         z-index: 111;
 
@@ -111,15 +98,22 @@
 
     .user-info {
         font-size: 16px;
-        color: red;
+        color: #6b7280;
         padding: 0 12px;
     }
 
     .logout {
         font-size: 16px;
-        color: red;
+        color: #6b7280;
         padding: 0 12px;
         cursor: pointer;
+        border-radius: 4px;
+        transition: all 0.3s;
+
+        &:hover {
+            color: #e8eaf6;
+            background-color: #2a2a45;
+        }
     }
 
     }
@@ -141,45 +135,9 @@
 
     .title-name {
         font-size: 24px;
-        color: #fff;
+        color: #e8eaf6;
         font-weight: 700;
     }
     }
     }
-    // .el-header .fr {
-       // 	float: right;
-       // }
-
-    // .el-header .fl {
-       // 	float: left;
-       // }
-
-    // .el-header {
-       // 	width: 100%;
-       // 	color: #333;
-       // 	text-align: center;
-       // 	line-height: 60px;
-       // 	padding: 0;
-       // 	z-index: 99;
-       // }
-
-    // .logo {
-       // 	width: 60px;
-       // 	height: 60px;
-       // 	margin-left: 70px;
-       // }
-
-    // .avator {
-       // 	width: 40px;
-       // 	height: 40px;
-       // 	background: #ffffff;
-       // 	border-radius: 50%;
-       // }
-
-    // .title {
-       // 	color: #ffffff;
-       // 	font-size: 20px;
-       // 	font-weight: bold;
-       // 	margin-left: 20px;
-       // }
 </style>

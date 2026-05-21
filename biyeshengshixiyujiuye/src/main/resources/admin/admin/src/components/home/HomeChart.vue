@@ -120,7 +120,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 #home-chart {
-  background: #ffffff;
+  background: #252540;
   padding: 20px 0;
 }
 </style>

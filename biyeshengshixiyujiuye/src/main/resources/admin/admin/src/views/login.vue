@@ -1,20 +1,19 @@
 <template>
     <div>
-        <div class="container loginIn" style="backgroundImage: url(/biyeshengshixiyujiuye/img/back-img-bg.jpg)">
-
-            <div :class="2 == 1 ? 'left' : 2 == 2 ? 'left center' : 'left right'" style="backgroundColor: rgba(237, 237, 237, 0.17)">
+        <div class="container loginIn" style="background-color: #1a1a2e;">
+            <div class="left center" style="backgroundColor: #252540; borderRadius: 12px;">
                 <el-form class="login-form" label-position="left" :label-width="1 == 3 ? '56px' : '0px'">
-                    <div class="title-container"><h3 class="title" style="color: rgba(25, 169, 123, 1)">毕业生实习与就业管理系统</h3></div>
+                    <div class="title-container"><h3 class="title" style="color: #64b5f6">毕业生实习与就业管理系统</h3></div>
                     <el-form-item :label="1 == 3 ? '用户名' : ''" :class="'style'+1">
-                        <span v-if="1 != 3" class="svg-container" style="color:rgba(136, 154, 164, 1);line-height:44px"><svg-icon icon-class="user" /></span>
+                        <span v-if="1 != 3" class="svg-container" style="color:#4a4a6a;line-height:44px"><svg-icon icon-class="user" /></span>
                         <el-input placeholder="请输入用户名" name="username" type="text" v-model="rulesForm.username" />
                     </el-form-item>
                     <el-form-item :label="1 == 3 ? '密码' : ''" :class="'style'+1">
-                        <span v-if="1 != 3" class="svg-container" style="color:rgba(136, 154, 164, 1);line-height:44px"><svg-icon icon-class="password" /></span>
+                        <span v-if="1 != 3" class="svg-container" style="color:#4a4a6a;line-height:44px"><svg-icon icon-class="password" /></span>
                         <el-input placeholder="请输入密码" name="password" type="password" v-model="rulesForm.password" />
                     </el-form-item>
                     <el-form-item v-if="0 == '1'" class="code" :label="1 == 3 ? '验证码' : ''" :class="'style'+1">
-                        <span v-if="1 != 3" class="svg-container" style="color:rgba(136, 154, 164, 1);line-height:44px"><svg-icon icon-class="code" /></span>
+                        <span v-if="1 != 3" class="svg-container" style="color:#4a4a6a;line-height:44px"><svg-icon icon-class="code" /></span>
                         <el-input placeholder="请输入验证码" name="code" type="text" v-model="rulesForm.code" />
                         <div class="getCodeBt" @click="getRandCode(4)" style="height:44px;line-height:44px">
                             <span v-for="(item, index) in codes" :key="index" :style="{color:item.color,transform:item.rotate,fontSize:item.size}">{{ item.num }}</span>
@@ -29,16 +28,12 @@
                                 :label="item.roleName"
                         >{{item.roleName}}</el-radio>
                     </el-form-item>
-                    <el-button type="primary" @click="login()" class="loginInBt" style="padding:0;font-size:16px;border-radius:4px;height:44px;line-height:44px;width:100%;backgroundColor:rgba(25, 169, 123, 1); borderColor:rgba(25, 169, 123, 1); color:rgba(255, 255, 255, 1)">{{'1' == '1' ? '登录' : 'login'}}</el-button>
+                    <el-button type="primary" @click="login()" class="loginInBt" style="padding:0;font-size:16px;border-radius:4px;height:44px;line-height:44px;width:100%;backgroundColor:#1e3a5f; borderColor:#64b5f6; color:#e8eaf6">{{'1' == '1' ? '登录' : 'login'}}</el-button>
                     <el-form-item class="setting">
-            <!--<div style="color:rgba(25, 169, 123, 1)" class="register" @click="register('laoshi')">老师注册</div>-->
-            <!--<div style="color:rgba(25, 169, 123, 1)" class="register" @click="register('qiye')">企业注册</div>-->
-            <div style="color:rgba(25, 169, 123, 1)" class="register" @click="register('xuesheng')">学生注册</div>
-                        <!-- <div style="color:rgba(25, 169, 123, 1)" class="reset">修改密码</div> -->
+            <div style="color:#64b5f6" class="register" @click="register('xuesheng')">学生注册</div>
                     </el-form-item>
                 </el-form>
             </div>
-
         </div>
     </div>
 </template>
@@ -57,22 +52,22 @@
                 tableName: "",
                 codes: [{
                     num: 1,
-                    color: '#000',
+                    color: '#e8eaf6',
                     rotate: '10deg',
                     size: '16px'
                 },{
                     num: 2,
-                    color: '#000',
+                    color: '#e8eaf6',
                     rotate: '10deg',
                     size: '16px'
                 },{
                     num: 3,
-                    color: '#000',
+                    color: '#e8eaf6',
                     rotate: '10deg',
                     size: '16px'
                 },{
                     num: 4,
-                    color: '#000',
+                    color: '#e8eaf6',
                     rotate: '10deg',
                     size: '16px'
                 }],
@@ -90,22 +85,23 @@
             setInputColor(){
                 this.$nextTick(()=>{
                     document.querySelectorAll('.loginIn .el-input__inner').forEach(el=>{
-                        el.style.backgroundColor = "rgba(255, 255, 255, 1)"
-                        el.style.color = "rgba(25, 169, 123, 1)"
+                        el.style.backgroundColor = "#1e1e36"
+                        el.style.color = "#e8eaf6"
                         el.style.height = "44px"
                         el.style.lineHeight = "44px"
                         el.style.borderRadius = "4px"
+                        el.style.border = "1px solid #333355"
                     })
                     document.querySelectorAll('.loginIn .style3 .el-form-item__label').forEach(el=>{
                         el.style.height = "44px"
                         el.style.lineHeight = "44px"
                     })
                     document.querySelectorAll('.loginIn .el-form-item__label').forEach(el=>{
-                        el.style.color = "rgb(0 0 0)"
+                        el.style.color = "#a0aec0"
                     })
                     setTimeout(()=>{
                         document.querySelectorAll('.loginIn .role .el-radio__label').forEach(el=>{
-                            el.style.color = "rgb(0 0 0)"
+                            el.style.color = "#e8eaf6"
                         })
                     },350)
                 })
@@ -208,9 +204,10 @@
     .loginIn {
         min-height: 100vh;
         position: relative;
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: cover;
+        background-color: #1a1a2e;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
     .left {
         position: absolute;
@@ -267,7 +264,7 @@
           border: 0px;
           -webkit-appearance: none;
           padding: 0 15px 0 30px;
-          color: #fff;
+          color: #252540;
           height: 40px;
       }
     }
@@ -284,7 +281,7 @@
         width: 360px;
         transform: translate3d(-50%,-50%,0);
         height: 446px;
-        border-radius: 8px;
+        border-radius: 12px;
     }
 
     .right {
@@ -307,7 +304,7 @@
         line-height: 40px;
         width: 100px;
         background-color: rgba(51,51,51,0.4);
-        color: #fff;
+        color: #252540;
         text-align: center;
         border-radius: 0 4px 4px 0;
         height: 40px;
@@ -336,7 +333,7 @@
           line-height: 32px;
           height: 32px;
           font-size: 14px;
-          color: #999;
+          color: #6b7280;
           margin: 0 !important;
 
     .register {
