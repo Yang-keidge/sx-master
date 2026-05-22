@@ -93,10 +93,10 @@
 
 ## 业务页面清单
 
-### list.vue (12)
-- dictionaryBanji, dictionaryGonggaoLaoshi, dictionaryGonggaoQiye, dictionaryQiye,
+### list.vue
+- dictionaryBanji, dictionaryGonggao, dictionaryQiye,
 - dictionarySex, dictionaryShixi, dictionaryShixiJieguo, dictionaryYuanxi,
-- gonggaoLaoshi, gonggaoQiye, jiuye, laoshi, qiye, shixi, users, xuesheng, dictionary
+- gonggao, jiuye, laoshi, qiye, shixi, users, xuesheng, dictionary
 
 ### add-or-update.vue (17)
 - 同上对应模块

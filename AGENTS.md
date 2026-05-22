@@ -55,8 +55,7 @@ cnpm run build             # production build -> dist/
 | qiye | QiyeEntity | Enterprise |
 | shixi | ShixiEntity | Internship record |
 | jiuye | JiuyeEntity | Employment record |
-| gonggao_laoshi | GonggaoLaoshiEntity | Teacher announcements |
-| gonggao_qiye | GonggaoQiyeEntity | Enterprise announcements |
+| gonggao | GonggaoEntity | Announcements from teachers, enterprises, and admins |
 | dictionary | DictionaryEntity | Enum/dropdown values |
 | users | UsersEntity | Admin |
 | token | TokenEntity | Auth tokens |
