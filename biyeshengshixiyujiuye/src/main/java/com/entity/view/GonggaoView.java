@@ -24,6 +24,11 @@ public class GonggaoView extends GonggaoEntity implements Serializable {
      */
     private String fabuzheName;
 
+    /**
+     * 评论数量
+     */
+    private Integer commentCount;
+
     public GonggaoView() {
     }
 
@@ -49,5 +54,13 @@ public class GonggaoView extends GonggaoEntity implements Serializable {
 
     public void setFabuzheName(String fabuzheName) {
         this.fabuzheName = fabuzheName;
+    }
+
+    public Integer getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
     }
 }

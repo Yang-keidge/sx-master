@@ -12,6 +12,7 @@
         ,a.insert_time as insertTime
         ,a.gonggao_content as gonggaoContent
         ,a.create_time as createTime
+        ,(select count(1) from gonggao_comment gc where gc.gonggao_id = a.id) as commentCount
     </sql>
 
     <select id="selectListView" parameterType="map" resultType="com.entity.view.GonggaoView">

@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.entity.GonggaoEntity;
+import com.entity.GonggaoCommentEntity;
 import com.entity.view.GonggaoView;
 import com.service.DictionaryService;
+import com.service.GonggaoCommentService;
 import com.service.GonggaoService;
 import com.utils.PageUtils;
 import com.utils.R;
@@ -36,6 +38,9 @@ public class GonggaoController {
     private GonggaoService gonggaoService;
 
     @Autowired
+    private GonggaoCommentService gonggaoCommentService;
+
+    @Autowired
     private DictionaryService dictionaryService;
 
     @RequestMapping("/page")
@@ -64,6 +69,7 @@ public class GonggaoController {
         if (gonggao != null) {
             GonggaoView view = new GonggaoView();
             BeanUtils.copyProperties(gonggao, view);
+            view.setCommentCount(gonggaoCommentService.selectCount(new EntityWrapper<GonggaoCommentEntity>().eq("gonggao_id", id)));
             dictionaryService.dictionaryConvert(view, request);
             return R.ok().put("data", view);
         } else {

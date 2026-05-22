@@ -74,6 +74,28 @@ CREATE TABLE `gonggao` (
 
 insert  into `gonggao`(`id`,`fabuzhe_id`,`fabuzhe_table`,`fabuzhe_role`,`gonggao_name`,`gonggao_types`,`insert_time`,`gonggao_content`,`create_time`) values (1,6,'users','管理员','2025届毕业生就业数据集中核验通知',5,'2025-06-01','请各学院就业负责老师在6月15日前完成2025届毕业生就业协议、劳动合同和升学录取材料核验，核验结果将纳入就业质量统计。','2025-06-01 09:00:00'),(2,6,'users','管理员','校企合作实习岗位申报说明',5,'2025-06-03','企业账号发布实习推荐前需补全企业编号、行业、联系方式和岗位要求，学校管理员审核后统一向学生开放。','2025-06-03 10:00:00'),(3,1,'laoshi','老师','2021级毕业生就业材料核验通知',2,'2025-06-05','请2021级毕业生在6月12日前上传劳动合同、三方协议或录用证明，辅导员将逐项核验。','2025-06-05 09:00:00'),(4,1,'qiye','企业','Java开发工程师校园招聘',3,'2025-06-10','郑州云启软件有限公司面向2021级软件工程、网络工程毕业生招聘Java开发工程师，要求掌握Spring Boot基础。','2025-06-10 09:30:00'),(5,4,'qiye','企业','后端开发实习生岗位开放',4,'2025-06-18','河南数科信息技术有限公司开放2022级后端开发实习岗位，实习期4个月，提供导师带教。','2025-06-18 10:30:00'),(6,1,'laoshi','老师','2022级专业实习动员会安排',4,'2025-06-20','数学与计算机应用学院2022级专业实习动员会定于6月25日下午在综合楼302举行，请相关学生准时参加。','2025-06-20 10:00:00'),(7,2,'qiye','企业','化工分析员招聘简章',3,'2025-06-22','河南中原化工科技有限公司招聘化工分析员，面向应用化学、化学工程与工艺专业毕业生。','2025-06-22 15:00:00'),(8,2,'laoshi','老师','化工类实习安全与保密要求',1,'2025-06-25','进入化工企业实习前须完成安全教育，不得擅自拍摄生产装置和工艺资料。','2025-06-25 14:30:00'),(9,3,'qiye','企业','智能制造设备工程师招聘',3,'2025-06-28','洛阳智造装备有限公司招聘设备工程师，欢迎机械类毕业生投递简历。','2025-06-28 13:30:00'),(10,3,'laoshi','老师','就业协议签订注意事项',2,'2025-07-01','已确定就业单位的毕业生请核对单位名称、岗位、入职日期后再提交就业协议。','2025-07-01 09:30:00'),(11,5,'qiye','企业','财务助理岗位招聘',3,'2025-07-02','河南华信财务咨询有限公司招聘财务助理，要求熟悉基础会计处理和办公软件。','2025-07-02 10:00:00'),(12,6,'qiye','企业','软件测试实习与就业岗位',4,'2025-07-08','郑州星河网络科技有限公司提供软件测试实习岗位，表现优秀者可转为正式员工。','2025-07-08 09:00:00'),(13,3,'laoshi','老师','毕业去向信息确认提醒',2,'2025-08-25','请2021级毕业生在8月31日前确认毕业去向，信息将用于学院就业质量统计。','2025-08-25 16:00:00'),(14,1,'laoshi','老师','秋季校园招聘宣讲安排',2,'2025-09-10','9月中旬起学校将陆续举办软件开发、智能制造、财务管理方向专场宣讲，请关注系统通知。','2025-09-10 11:00:00');
 
+/*Table structure for table `gonggao_comment` */
+
+CREATE TABLE IF NOT EXISTS `gonggao_comment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `gonggao_id` int(11) NOT NULL COMMENT '公告',
+  `pinglunren_id` int(11) NOT NULL COMMENT '评论人',
+  `pinglunren_table` varchar(50) NOT NULL COMMENT '评论人表名',
+  `pinglunren_role` varchar(50) NOT NULL COMMENT '评论人身份 Search111 ',
+  `pinglunren_name` varchar(200) DEFAULT NULL COMMENT '评论人名称 Search111 ',
+  `gonggao_comment_content` text NOT NULL COMMENT '评论内容',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_gonggao_comment_gonggao` (`gonggao_id`),
+  KEY `idx_gonggao_comment_pinglunren` (`pinglunren_table`,`pinglunren_id`),
+  KEY `idx_gonggao_comment_role` (`pinglunren_role`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='公告评论';
+
+/*Data for the table `gonggao_comment` */
+
+insert  into `gonggao_comment`(`id`,`gonggao_id`,`pinglunren_id`,`pinglunren_table`,`pinglunren_role`,`pinglunren_name`,`gonggao_comment_content`,`create_time`,`update_time`) values (1,1,1,'xuesheng','学生','张三','老师，材料核验是否需要同时提交纸质版？','2025-06-01 10:20:00','2025-06-01 10:20:00'),(2,1,1,'laoshi','老师','王老师','先在线上传材料，学院复核后会另行通知是否需要纸质版。','2025-06-01 11:00:00','2025-06-01 11:00:00'),(3,4,2,'xuesheng','学生','李四','请问这个岗位是否接受远程面试？','2025-06-10 11:20:00','2025-06-10 11:20:00'),(4,4,1,'qiye','企业','郑州云启软件有限公司','可以远程初面，复试安排会通过系统通知。','2025-06-10 14:00:00','2025-06-10 14:00:00'),(5,6,7,'xuesheng','学生','吴八','实习动员会可以请假吗？','2025-06-20 12:30:00','2025-06-20 12:30:00'),(6,6,1,'laoshi','老师','王老师','特殊情况请提前向辅导员提交请假说明。','2025-06-20 13:10:00','2025-06-20 13:10:00');
+
 /*Table structure for table `jiuye` */
 
 DROP TABLE IF EXISTS `jiuye`;
