@@ -71,6 +71,14 @@ public class XueshengEntity<T> implements Serializable {
 
 
     /**
+     * 学生学号
+     */
+    @TableField(value = "xuesheng_xuehao")
+
+    private String xueshengXuehao;
+
+
+    /**
      * 学生姓名
      */
     @TableField(value = "xuesheng_name")
@@ -190,6 +198,19 @@ public class XueshengEntity<T> implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    /**
+	 * 设置：学生学号
+	 */
+    public String getXueshengXuehao() {
+        return xueshengXuehao;
+    }
+    /**
+	 * 获取：学生学号
+	 */
+
+    public void setXueshengXuehao(String xueshengXuehao) {
+        this.xueshengXuehao = xueshengXuehao;
     }
     /**
 	 * 设置：学生姓名
@@ -328,6 +349,7 @@ public class XueshengEntity<T> implements Serializable {
             "id=" + id +
             ", username=" + username +
             ", password=" + password +
+            ", xueshengXuehao=" + xueshengXuehao +
             ", xueshengName=" + xueshengName +
             ", xueshengPhone=" + xueshengPhone +
             ", xueshengIdNumber=" + xueshengIdNumber +

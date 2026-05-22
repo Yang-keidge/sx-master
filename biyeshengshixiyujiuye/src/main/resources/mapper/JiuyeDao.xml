@@ -11,7 +11,6 @@
         ,a.jiuye_gangwei_name as jiuyeGangweiName
         ,a.jiuye_file as jiuyeFile
         ,a.jiuye_content as jiuyeContent
-        ,a.insert_time as insertTime
         ,a.create_time as createTime
     </sql>
     <select id="selectListView" parameterType="map" resultType="com.entity.view.JiuyeView" >
@@ -20,6 +19,7 @@
 
 --         级联表的字段
         ,qiye.qiye_name as qiyeName
+        ,qiye.qiye_bianhao as qiyeBianhao
         ,qiye.qiye_address as qiyeAddress
         ,qiye.qiye_photo as qiyePhoto
         ,qiye.qiye_phone as qiyePhone
@@ -27,6 +27,7 @@
         ,qiye.qiye_types as qiyeTypes
         ,qiye.qiye_content as qiyeContent
         ,xuesheng.xuesheng_name as xueshengName
+        ,xuesheng.xuesheng_xuehao as xueshengXuehao
         ,xuesheng.xuesheng_phone as xueshengPhone
         ,xuesheng.xuesheng_id_number as xueshengIdNumber
         ,xuesheng.xuesheng_photo as xueshengPhoto
@@ -67,19 +68,15 @@
             <if test=" params.jiuyeContent != '' and params.jiuyeContent != null and params.jiuyeContent != 'null' ">
                 and a.jiuye_content like CONCAT('%',#{params.jiuyeContent},'%')
             </if>
-            <if test=" params.insertTimeStart != '' and params.insertTimeStart != null ">
-                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) >= UNIX_TIMESTAMP(#{params.insertTimeStart}) ]]>
-            </if>
-            <if test=" params.insertTimeEnd != '' and params.insertTimeEnd != null ">
-                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) <= UNIX_TIMESTAMP(#{params.insertTimeEnd}) ]]>
-            </if>
-
                 <!-- 判断企业的id不为空 -->
             <if test=" params.qiyeIdNotNull != '' and params.qiyeIdNotNull != null and params.qiyeIdNotNull != 'null' ">
                 and a.qiye_id IS NOT NULL
             </if>
             <if test=" params.qiyeName != '' and params.qiyeName != null and params.qiyeName != 'null' ">
                 and qiye.qiye_name like CONCAT('%',#{params.qiyeName},'%')
+            </if>
+            <if test=" params.qiyeBianhao != '' and params.qiyeBianhao != null and params.qiyeBianhao != 'null' ">
+                and qiye.qiye_bianhao like CONCAT('%',#{params.qiyeBianhao},'%')
             </if>
             <if test=" params.qiyeAddress != '' and params.qiyeAddress != null and params.qiyeAddress != 'null' ">
                 and qiye.qiye_address like CONCAT('%',#{params.qiyeAddress},'%')
@@ -103,6 +100,9 @@
             </if>
             <if test=" params.xueshengName != '' and params.xueshengName != null and params.xueshengName != 'null' ">
                 and xuesheng.xuesheng_name like CONCAT('%',#{params.xueshengName},'%')
+            </if>
+            <if test=" params.xueshengXuehao != '' and params.xueshengXuehao != null and params.xueshengXuehao != 'null' ">
+                and xuesheng.xuesheng_xuehao like CONCAT('%',#{params.xueshengXuehao},'%')
             </if>
             <if test=" params.xueshengPhone != '' and params.xueshengPhone != null and params.xueshengPhone != 'null' ">
                 and xuesheng.xuesheng_phone like CONCAT('%',#{params.xueshengPhone},'%')

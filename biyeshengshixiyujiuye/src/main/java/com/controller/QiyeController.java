@@ -88,9 +88,17 @@ public class QiyeController {
         String role = String.valueOf(request.getSession().getAttribute("role"));
         if(false)
             return R.error(511,"永远不会进入");
+        if(StringUtils.isBlank(qiye.getQiyeBianhao())){
+            qiye.setQiyeBianhao(qiye.getUsername());
+        }
+        if(StringUtils.isBlank(qiye.getUsername())){
+            qiye.setUsername(qiye.getQiyeBianhao());
+        }
 
         Wrapper<QiyeEntity> queryWrapper = new EntityWrapper<QiyeEntity>()
             .eq("username", qiye.getUsername())
+            .or()
+            .eq("qiye_bianhao", qiye.getQiyeBianhao())
             .or()
             .eq("qiye_phone", qiye.getQiyePhone())
             .or()
@@ -105,18 +113,26 @@ public class QiyeController {
             qiyeService.insert(qiye);
             return R.ok();
         }else {
-            return R.error(511,"账户或者企业联系方式或者企业邮箱已经被使用");
+            return R.error(511,"账户或者企业编号或者企业联系方式或者企业邮箱已经被使用");
         }
     }
 
     @RequestMapping("/update")
     public R update(@RequestBody QiyeEntity qiye, HttpServletRequest request){
         logger.debug("update方法:,,Controller:{},,qiye:{}",this.getClass().getName(),qiye.toString());
+        if(StringUtils.isBlank(qiye.getQiyeBianhao())){
+            qiye.setQiyeBianhao(qiye.getUsername());
+        }
+        if(StringUtils.isBlank(qiye.getUsername())){
+            qiye.setUsername(qiye.getQiyeBianhao());
+        }
 
         Wrapper<QiyeEntity> queryWrapper = new EntityWrapper<QiyeEntity>()
             .notIn("id",qiye.getId())
             .andNew()
             .eq("username", qiye.getUsername())
+            .or()
+            .eq("qiye_bianhao", qiye.getQiyeBianhao())
             .or()
             .eq("qiye_phone", qiye.getQiyePhone())
             .or()
@@ -135,7 +151,7 @@ public class QiyeController {
             qiyeService.updateById(qiye);
             return R.ok();
         }else {
-            return R.error(511,"账户或者企业联系方式或者企业邮箱已经被使用");
+            return R.error(511,"账户或者企业编号或者企业联系方式或者企业邮箱已经被使用");
         }
     }
 

@@ -71,6 +71,14 @@ public class LaoshiEntity<T> implements Serializable {
 
 
     /**
+     * 老师工号
+     */
+    @TableField(value = "laoshi_gonghao")
+
+    private String laoshiGonghao;
+
+
+    /**
      * 老师姓名
      */
     @TableField(value = "laoshi_name")
@@ -166,6 +174,19 @@ public class LaoshiEntity<T> implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    /**
+	 * 设置：老师工号
+	 */
+    public String getLaoshiGonghao() {
+        return laoshiGonghao;
+    }
+    /**
+	 * 获取：老师工号
+	 */
+
+    public void setLaoshiGonghao(String laoshiGonghao) {
+        this.laoshiGonghao = laoshiGonghao;
     }
     /**
 	 * 设置：老师姓名
@@ -265,6 +286,7 @@ public class LaoshiEntity<T> implements Serializable {
             "id=" + id +
             ", username=" + username +
             ", password=" + password +
+            ", laoshiGonghao=" + laoshiGonghao +
             ", laoshiName=" + laoshiName +
             ", laoshiPhone=" + laoshiPhone +
             ", laoshiIdNumber=" + laoshiIdNumber +

@@ -52,17 +52,17 @@ public class ShixiModel implements Serializable {
 
 
     /**
-     * 实习开始时间
+     * 实习开始日期
      */
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd")
 	@DateTimeFormat
     private Date shixiKaishiTime;
 
 
     /**
-     * 实习结束时间
+     * 实习结束日期
      */
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd")
 	@DateTimeFormat
     private Date shixiJieshuTime;
 
@@ -83,14 +83,6 @@ public class ShixiModel implements Serializable {
      * 实习详情
      */
     private String shixiContent;
-
-
-    /**
-     * 录入时间
-     */
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
-	@DateTimeFormat
-    private Date insertTime;
 
 
     /**
@@ -240,20 +232,6 @@ public class ShixiModel implements Serializable {
 	 */
     public void setShixiContent(String shixiContent) {
         this.shixiContent = shixiContent;
-    }
-    /**
-	 * 获取：录入时间
-	 */
-    public Date getInsertTime() {
-        return insertTime;
-    }
-
-
-    /**
-	 * 设置：录入时间
-	 */
-    public void setInsertTime(Date insertTime) {
-        this.insertTime = insertTime;
     }
     /**
 	 * 获取：创建时间

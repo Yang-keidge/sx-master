@@ -44,9 +44,9 @@ public class JiuyeVO implements Serializable {
 
 
     /**
-     * 入职时间
+     * 入职日期
      */
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd")
 	@DateTimeFormat
 
     @TableField(value = "jiuye_kaishi_time")
@@ -75,16 +75,6 @@ public class JiuyeVO implements Serializable {
 
     @TableField(value = "jiuye_content")
     private String jiuyeContent;
-
-
-    /**
-     * 录入时间
-     */
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
-	@DateTimeFormat
-
-    @TableField(value = "insert_time")
-    private Date insertTime;
 
 
     /**
@@ -201,21 +191,6 @@ public class JiuyeVO implements Serializable {
 
     public void setJiuyeContent(String jiuyeContent) {
         this.jiuyeContent = jiuyeContent;
-    }
-    /**
-	 * 设置：录入时间
-	 */
-    public Date getInsertTime() {
-        return insertTime;
-    }
-
-
-    /**
-	 * 获取：录入时间
-	 */
-
-    public void setInsertTime(Date insertTime) {
-        this.insertTime = insertTime;
     }
     /**
 	 * 设置：创建时间

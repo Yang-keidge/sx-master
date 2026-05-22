@@ -88,9 +88,17 @@ public class LaoshiController {
         String role = String.valueOf(request.getSession().getAttribute("role"));
         if(false)
             return R.error(511,"永远不会进入");
+        if(StringUtils.isBlank(laoshi.getLaoshiGonghao())){
+            laoshi.setLaoshiGonghao(laoshi.getUsername());
+        }
+        if(StringUtils.isBlank(laoshi.getUsername())){
+            laoshi.setUsername(laoshi.getLaoshiGonghao());
+        }
 
         Wrapper<LaoshiEntity> queryWrapper = new EntityWrapper<LaoshiEntity>()
             .eq("username", laoshi.getUsername())
+            .or()
+            .eq("laoshi_gonghao", laoshi.getLaoshiGonghao())
             .or()
             .eq("laoshi_phone", laoshi.getLaoshiPhone())
             .or()
@@ -105,18 +113,26 @@ public class LaoshiController {
             laoshiService.insert(laoshi);
             return R.ok();
         }else {
-            return R.error(511,"账户或者老师手机号或者老师身份证号已经被使用");
+            return R.error(511,"账户或者老师工号或者老师手机号或者老师身份证号已经被使用");
         }
     }
 
     @RequestMapping("/update")
     public R update(@RequestBody LaoshiEntity laoshi, HttpServletRequest request){
         logger.debug("update方法:,,Controller:{},,laoshi:{}",this.getClass().getName(),laoshi.toString());
+        if(StringUtils.isBlank(laoshi.getLaoshiGonghao())){
+            laoshi.setLaoshiGonghao(laoshi.getUsername());
+        }
+        if(StringUtils.isBlank(laoshi.getUsername())){
+            laoshi.setUsername(laoshi.getLaoshiGonghao());
+        }
 
         Wrapper<LaoshiEntity> queryWrapper = new EntityWrapper<LaoshiEntity>()
             .notIn("id",laoshi.getId())
             .andNew()
             .eq("username", laoshi.getUsername())
+            .or()
+            .eq("laoshi_gonghao", laoshi.getLaoshiGonghao())
             .or()
             .eq("laoshi_phone", laoshi.getLaoshiPhone())
             .or()
@@ -132,7 +148,7 @@ public class LaoshiController {
             laoshiService.updateById(laoshi);
             return R.ok();
         }else {
-            return R.error(511,"账户或者老师手机号或者老师身份证号已经被使用");
+            return R.error(511,"账户或者老师工号或者老师手机号或者老师身份证号已经被使用");
         }
     }
 

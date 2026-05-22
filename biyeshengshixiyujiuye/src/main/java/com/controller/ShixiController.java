@@ -82,12 +82,12 @@ public class ShixiController {
 
                 QiyeEntity qiye = qiyeService.selectById(shixi.getQiyeId());
                 if(qiye != null){
-                    BeanUtils.copyProperties( qiye , view ,new String[]{ "id", "createTime", "insertTime", "updateTime"});
+                    BeanUtils.copyProperties( qiye , view ,new String[]{ "id", "createTime", "updateTime"});
                     view.setQiyeId(qiye.getId());
                 }
                 XueshengEntity xuesheng = xueshengService.selectById(shixi.getXueshengId());
                 if(xuesheng != null){
-                    BeanUtils.copyProperties( xuesheng , view ,new String[]{ "id", "createTime", "insertTime", "updateTime"});
+                    BeanUtils.copyProperties( xuesheng , view ,new String[]{ "id", "createTime", "updateTime"});
                     view.setXueshengId(xuesheng.getId());
                 }
             dictionaryService.dictionaryConvert(view, request);
@@ -118,7 +118,6 @@ public class ShixiController {
         logger.info("sql语句:"+queryWrapper.getSqlSegment());
         ShixiEntity shixiEntity = shixiService.selectOne(queryWrapper);
         if(shixiEntity==null){
-            shixi.setInsertTime(new Date());
             shixi.setCreateTime(new Date());
             shixiService.insert(shixi);
             return R.ok();

@@ -7,6 +7,7 @@
         a.id as id
         ,a.username as username
         ,a.password as password
+        ,a.xuesheng_xuehao as xueshengXuehao
         ,a.xuesheng_name as xueshengName
         ,a.xuesheng_phone as xueshengPhone
         ,a.xuesheng_id_number as xueshengIdNumber
@@ -37,6 +38,9 @@
             </if>
             <if test=" params.password != '' and params.password != null and params.password != 'null' ">
                 and a.password like CONCAT('%',#{params.password},'%')
+            </if>
+            <if test=" params.xueshengXuehao != '' and params.xueshengXuehao != null and params.xueshengXuehao != 'null' ">
+                and a.xuesheng_xuehao like CONCAT('%',#{params.xueshengXuehao},'%')
             </if>
             <if test=" params.xueshengName != '' and params.xueshengName != null and params.xueshengName != 'null' ">
                 and a.xuesheng_name like CONCAT('%',#{params.xueshengName},'%')

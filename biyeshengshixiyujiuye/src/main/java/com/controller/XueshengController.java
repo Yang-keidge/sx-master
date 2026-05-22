@@ -121,9 +121,17 @@ public class XueshengController {
         String role = String.valueOf(request.getSession().getAttribute("role"));
         if(false)
             return R.error(511,"永远不会进入");
+        if(StringUtils.isBlank(xuesheng.getXueshengXuehao())){
+            xuesheng.setXueshengXuehao(xuesheng.getUsername());
+        }
+        if(StringUtils.isBlank(xuesheng.getUsername())){
+            xuesheng.setUsername(xuesheng.getXueshengXuehao());
+        }
 
         Wrapper<XueshengEntity> queryWrapper = new EntityWrapper<XueshengEntity>()
             .eq("username", xuesheng.getUsername())
+            .or()
+            .eq("xuesheng_xuehao", xuesheng.getXueshengXuehao())
             .or()
             .eq("xuesheng_phone", xuesheng.getXueshengPhone())
             .or()
@@ -138,7 +146,7 @@ public class XueshengController {
             xueshengService.insert(xuesheng);
             return R.ok();
         }else {
-            return R.error(511,"账户或者学生手机号或者学生身份证号已经被使用");
+            return R.error(511,"账户或者学生学号或者学生手机号或者学生身份证号已经被使用");
         }
     }
 
@@ -152,11 +160,19 @@ public class XueshengController {
         String role = String.valueOf(request.getSession().getAttribute("role"));
 //        if(false)
 //            return R.error(511,"永远不会进入");
+        if(StringUtils.isBlank(xuesheng.getXueshengXuehao())){
+            xuesheng.setXueshengXuehao(xuesheng.getUsername());
+        }
+        if(StringUtils.isBlank(xuesheng.getUsername())){
+            xuesheng.setUsername(xuesheng.getXueshengXuehao());
+        }
         //根据字段查询是否有相同数据
         Wrapper<XueshengEntity> queryWrapper = new EntityWrapper<XueshengEntity>()
             .notIn("id",xuesheng.getId())
             .andNew()
             .eq("username", xuesheng.getUsername())
+            .or()
+            .eq("xuesheng_xuehao", xuesheng.getXueshengXuehao())
             .or()
             .eq("xuesheng_phone", xuesheng.getXueshengPhone())
             .or()
@@ -172,7 +188,7 @@ public class XueshengController {
             xueshengService.updateById(xuesheng);//根据id更新
             return R.ok();
         }else {
-            return R.error(511,"账户或者学生手机号或者学生身份证号已经被使用");
+            return R.error(511,"账户或者学生学号或者学生手机号或者学生身份证号已经被使用");
         }
     }
 
@@ -331,9 +347,17 @@ public class XueshengController {
     @IgnoreAuth
     @PostMapping(value = "/register")
     public R register(@RequestBody XueshengEntity xuesheng){
-//    	ValidatorUtils.validateEntity(user);
+        //    	ValidatorUtils.validateEntity(user);
+        if(StringUtils.isBlank(xuesheng.getXueshengXuehao())){
+            xuesheng.setXueshengXuehao(xuesheng.getUsername());
+        }
+        if(StringUtils.isBlank(xuesheng.getUsername())){
+            xuesheng.setUsername(xuesheng.getXueshengXuehao());
+        }
         Wrapper<XueshengEntity> queryWrapper = new EntityWrapper<XueshengEntity>()
             .eq("username", xuesheng.getUsername())
+            .or()
+            .eq("xuesheng_xuehao", xuesheng.getXueshengXuehao())
             .or()
             .eq("xuesheng_phone", xuesheng.getXueshengPhone())
             .or()

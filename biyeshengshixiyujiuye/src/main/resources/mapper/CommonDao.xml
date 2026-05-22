@@ -244,7 +244,7 @@
 						LEFT JOIN dictionary ${item} ON thisTableName.${item}=${item}.code_index
 							WHERE ${item}.dic_code= #{item}
 						<if test="(riqi != null and riqi != '') and (dateFormat != null and dateFormat != '')">
-							AND date_format(thisTableName.insert_time, #{dateFormat}) = #{riqi}
+							AND date_format(thisTableName.create_time, #{dateFormat}) = #{riqi}
 						</if>
 					</foreach>
 				</if>
@@ -253,14 +253,14 @@
 						LEFT JOIN dictionary ${item} ON joinTableName.${item}=${item}.code_index
 							WHERE ${item}.dic_code= #{item}
 						<if test="(riqi != null and riqi != '') and (dateFormat != null and dateFormat != '')">
-							AND date_format(thisTableName.insert_time, #{dateFormat}) = #{riqi}
+							AND date_format(thisTableName.create_time, #{dateFormat}) = #{riqi}
 						</if>
 					</foreach>
 				</if>
 			</when>
 			<otherwise>
 				<if test="(riqi != null and riqi != '') and (dateFormat != null and dateFormat != '')">
-					WHERE date_format(thisTableName.insert_time, #{dateFormat}) = #{riqi}
+					WHERE date_format(thisTableName.create_time, #{dateFormat}) = #{riqi}
 				</if>
 			</otherwise>
 		</choose>
@@ -379,7 +379,7 @@
 						LEFT JOIN dictionary ${item} ON thisTableName.${item}=${item}.code_index
 						WHERE ${item}.dic_code= #{item}
 						<if test="(riqi != null and riqi != '') and (dateFormat != null and dateFormat != '')">
-							AND date_format(thisTableName.insert_time, #{dateFormat}) = #{riqi}
+							AND date_format(thisTableName.create_time, #{dateFormat}) = #{riqi}
 						</if>
 					</foreach>
 				</if>
@@ -388,14 +388,14 @@
 						LEFT JOIN dictionary ${item} ON joinTableName.${item}=${item}.code_index
 						WHERE ${item}.dic_code= #{item}
 						<if test="(riqi != null and riqi != '') and (dateFormat != null and dateFormat != '')">
-							AND date_format(thisTableName.insert_time, #{dateFormat}) = #{riqi}
+							AND date_format(thisTableName.create_time, #{dateFormat}) = #{riqi}
 						</if>
 					</foreach>
 				</if>
 			</when>
 			<otherwise>
 				<if test="(riqi != null and riqi != '') and (dateFormat != null and dateFormat != '')">
-					WHERE date_format(thisTableName.insert_time, #{dateFormat}) = #{riqi}
+					WHERE date_format(thisTableName.create_time, #{dateFormat}) = #{riqi}
 				</if>
 			</otherwise>
 		</choose>

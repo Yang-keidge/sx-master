@@ -27,6 +27,10 @@ public class JiuyeView extends JiuyeEntity implements Serializable {
 			*/
 			private String qiyeName;
 			/**
+			* 企业编号
+			*/
+			private String qiyeBianhao;
+			/**
 			* 企业地址
 			*/
 			private String qiyeAddress;
@@ -60,6 +64,10 @@ public class JiuyeView extends JiuyeEntity implements Serializable {
 			* 学生姓名
 			*/
 			private String xueshengName;
+			/**
+			* 学生学号
+			*/
+			private String xueshengXuehao;
 			/**
 			* 学生手机号
 			*/
@@ -141,6 +149,19 @@ public class JiuyeView extends JiuyeEntity implements Serializable {
 					*/
 					public void setQiyeName(String qiyeName) {
 						this.qiyeName = qiyeName;
+					}
+
+					/**
+					* 获取： 企业编号
+					*/
+					public String getQiyeBianhao() {
+						return qiyeBianhao;
+					}
+					/**
+					* 设置： 企业编号
+					*/
+					public void setQiyeBianhao(String qiyeBianhao) {
+						this.qiyeBianhao = qiyeBianhao;
 					}
 
 					/**
@@ -252,6 +273,19 @@ public class JiuyeView extends JiuyeEntity implements Serializable {
 					*/
 					public void setXueshengName(String xueshengName) {
 						this.xueshengName = xueshengName;
+					}
+
+					/**
+					* 获取： 学生学号
+					*/
+					public String getXueshengXuehao() {
+						return xueshengXuehao;
+					}
+					/**
+					* 设置： 学生学号
+					*/
+					public void setXueshengXuehao(String xueshengXuehao) {
+						this.xueshengXuehao = xueshengXuehao;
 					}
 
 					/**

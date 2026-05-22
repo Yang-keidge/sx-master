@@ -2,7 +2,8 @@
 SQLyog Ultimate v11.3 (64 bit)
 MySQL - 5.7.32-log : Database - biyeshengshixiyujiuye
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -56,17 +57,18 @@ DROP TABLE IF EXISTS `gonggao_laoshi`;
 CREATE TABLE `gonggao_laoshi` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键 ',
   `laoshi_id` int(11) DEFAULT NULL COMMENT '老师',
-  `gonggao_laoshi_name` varchar(200) DEFAULT NULL COMMENT '公告名称 Search111  ',
+  `gonggao_laoshi_name` varchar(200) NOT NULL COMMENT '公告标题 Search111  ',
   `gonggao_laoshi_types` int(11) NOT NULL COMMENT '公告类型 Search111 ',
-  `insert_time` timestamp NULL DEFAULT NULL COMMENT '公告发布时间 ',
-  `gonggao_laoshi_content` text COMMENT '公告详情 ',
+  `insert_time` date DEFAULT NULL COMMENT '公告发布日期 ',
+  `gonggao_laoshi_content` text COMMENT '公告内容 ',
   `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_gonggao_laoshi_laoshi_id` (`laoshi_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='老师发布的公告';
 
 /*Data for the table `gonggao_laoshi` */
 
-insert  into `gonggao_laoshi`(`id`,`laoshi_id`,`gonggao_laoshi_name`,`gonggao_laoshi_types`,`insert_time`,`gonggao_laoshi_content`,`create_time`) values (1,2,'公告名称1',1,'2022-03-28 21:46:24','公告详情1','2022-03-28 21:46:24'),(2,3,'公告名称2',1,'2022-03-28 21:46:24','公告详情2','2022-03-28 21:46:24'),(3,1,'公告名称3',2,'2022-03-28 21:46:24','公告详情3','2022-03-28 21:46:24'),(4,3,'公告名称4',1,'2022-03-28 21:46:24','公告详情4','2022-03-28 21:46:24'),(5,3,'公告名称5',2,'2022-03-28 21:46:24','公告详情5','2022-03-28 21:46:24'),(6,1,'公告1211',2,'2022-03-29 09:13:05','<p>公告1111</p>','2022-03-29 09:13:05');
+insert  into `gonggao_laoshi`(`id`,`laoshi_id`,`gonggao_laoshi_name`,`gonggao_laoshi_types`,`insert_time`,`gonggao_laoshi_content`,`create_time`) values (1,2,'实习安排通知',1,'2022-03-28','请按学院要求完成实习单位确认。','2022-03-28 21:46:24'),(2,3,'就业材料提交',1,'2022-03-28','请毕业班学生按时提交就业证明材料。','2022-03-28 21:46:24'),(3,1,'实习安全提醒',2,'2022-03-28','实习期间请遵守企业安全管理规定。','2022-03-28 21:46:24'),(4,3,'毕业去向核对',1,'2022-03-28','请核对个人毕业去向信息。','2022-03-28 21:46:24'),(5,3,'招聘宣讲通知',2,'2022-03-28','本周五下午举行专场招聘宣讲。','2022-03-28 21:46:24'),(6,1,'就业指导讲座',2,'2022-03-29','<p>请毕业生准时参加就业指导讲座。</p>','2022-03-29 09:13:05');
 
 /*Table structure for table `gonggao_qiye` */
 
@@ -75,17 +77,18 @@ DROP TABLE IF EXISTS `gonggao_qiye`;
 CREATE TABLE `gonggao_qiye` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键 ',
   `qiye_id` int(11) DEFAULT NULL COMMENT '企业',
-  `gonggao_qiye_name` varchar(200) DEFAULT NULL COMMENT '公告名称 Search111  ',
+  `gonggao_qiye_name` varchar(200) NOT NULL COMMENT '公告标题 Search111  ',
   `gonggao_qiye_types` int(11) NOT NULL COMMENT '公告类型 Search111 ',
-  `insert_time` timestamp NULL DEFAULT NULL COMMENT '公告发布时间 ',
-  `gonggao_qiye_content` text COMMENT '公告详情 ',
+  `insert_time` date DEFAULT NULL COMMENT '公告发布日期 ',
+  `gonggao_qiye_content` text COMMENT '公告内容 ',
   `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_gonggao_qiye_qiye_id` (`qiye_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='企业发布的公告';
 
 /*Data for the table `gonggao_qiye` */
 
-insert  into `gonggao_qiye`(`id`,`qiye_id`,`gonggao_qiye_name`,`gonggao_qiye_types`,`insert_time`,`gonggao_qiye_content`,`create_time`) values (1,2,'公告名称1',1,'2022-03-28 21:46:24','公告详情1','2022-03-28 21:46:24'),(2,3,'公告名称2',1,'2022-03-28 21:46:24','公告详情2','2022-03-28 21:46:24'),(3,1,'公告名称3',1,'2022-03-28 21:46:24','公告详情3','2022-03-28 21:46:24'),(4,2,'公告名称4',2,'2022-03-28 21:46:24','公告详情4','2022-03-28 21:46:24'),(5,1,'公告名称5',2,'2022-03-28 21:46:24','公告详情5','2022-03-28 21:46:24'),(6,1,'公告11111',2,'2022-03-29 09:14:48','<p>公告111111</p>','2022-03-29 09:14:48');
+insert  into `gonggao_qiye`(`id`,`qiye_id`,`gonggao_qiye_name`,`gonggao_qiye_types`,`insert_time`,`gonggao_qiye_content`,`create_time`) values (1,2,'春季实习岗位发布',1,'2022-03-28','企业开放多个实习岗位，欢迎学生投递。','2022-03-28 21:46:24'),(2,3,'校园招聘计划',1,'2022-03-28','企业启动校园招聘计划。','2022-03-28 21:46:24'),(3,1,'实习生培训安排',1,'2022-03-28','请已录用实习生按时参加岗前培训。','2022-03-28 21:46:24'),(4,2,'就业岗位补录',2,'2022-03-28','部分就业岗位继续开放补录。','2022-03-28 21:46:24'),(5,1,'企业开放日通知',2,'2022-03-28','欢迎学生报名参加企业开放日。','2022-03-28 21:46:24'),(6,1,'招聘流程说明',2,'2022-03-29','<p>请应聘学生按流程提交简历和材料。</p>','2022-03-29 09:14:48');
 
 /*Table structure for table `jiuye` */
 
@@ -95,18 +98,20 @@ CREATE TABLE `jiuye` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键 ',
   `xuesheng_id` int(11) DEFAULT NULL COMMENT '学生',
   `qiye_id` int(11) DEFAULT NULL COMMENT '企业',
-  `jiuye_kaishi_time` timestamp NULL DEFAULT NULL COMMENT '入职时间',
+  `jiuye_kaishi_time` date DEFAULT NULL COMMENT '入职日期',
   `jiuye_gangwei_name` varchar(200) DEFAULT NULL COMMENT '入职岗位',
   `jiuye_file` varchar(200) DEFAULT NULL COMMENT '相关文件',
   `jiuye_content` text COMMENT '就业备注 ',
-  `insert_time` timestamp NULL DEFAULT NULL COMMENT '录入时间',
   `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_jiuye_xuesheng_id` (`xuesheng_id`),
+  KEY `idx_jiuye_qiye_id` (`qiye_id`),
+  UNIQUE KEY `uk_jiuye_student_company_start` (`xuesheng_id`,`qiye_id`,`jiuye_kaishi_time`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='就业信息';
 
 /*Data for the table `jiuye` */
 
-insert  into `jiuye`(`id`,`xuesheng_id`,`qiye_id`,`jiuye_kaishi_time`,`jiuye_gangwei_name`,`jiuye_file`,`jiuye_content`,`insert_time`,`create_time`) values (1,2,2,'2025-07-01 09:00:00','入职岗位1','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','就业备注1','2025-07-01 09:00:00','2025-07-01 09:00:00'),(2,1,1,'2025-07-01 09:00:00','入职岗位2','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','就业备注2','2025-07-01 09:00:00','2025-07-01 09:00:00'),(3,2,3,'2025-07-15 10:00:00','入职岗位3','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','就业备注3','2025-07-15 10:00:00','2025-07-15 10:00:00'),(4,1,2,'2025-08-01 09:00:00','入职岗位4','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','就业备注4','2025-08-01 09:00:00','2025-08-01 09:00:00'),(5,2,1,'2025-08-15 10:00:00','入职岗位5','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','<p>就业备注5111</p>','2025-08-15 10:00:00','2025-08-15 10:00:00'),(6,4,1,'2025-07-20 09:00:00','入职岗位6','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','就业备注6','2025-07-20 09:00:00','2025-07-20 09:00:00'),(7,5,3,'2025-08-01 10:00:00','入职岗位7','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','就业备注7','2025-08-01 10:00:00','2025-08-01 10:00:00'),(8,6,2,'2025-09-01 09:00:00','入职岗位8','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','就业备注8','2025-09-01 09:00:00','2025-09-01 09:00:00'),(9,7,1,'2025-07-10 10:00:00','入职岗位9','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','就业备注9','2025-07-10 10:00:00','2025-07-10 10:00:00');
+insert  into `jiuye`(`id`,`xuesheng_id`,`qiye_id`,`jiuye_kaishi_time`,`jiuye_gangwei_name`,`jiuye_file`,`jiuye_content`,`create_time`) values (1,2,2,'2025-07-01','入职岗位1','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','就业备注1','2025-07-01 09:00:00'),(2,1,1,'2025-07-01','入职岗位2','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','就业备注2','2025-07-01 09:00:00'),(3,2,3,'2025-07-15','入职岗位3','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','就业备注3','2025-07-15 10:00:00'),(4,1,2,'2025-08-01','入职岗位4','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','就业备注4','2025-08-01 09:00:00'),(5,2,1,'2025-08-15','入职岗位5','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','<p>就业备注5111</p>','2025-08-15 10:00:00'),(6,4,1,'2025-07-20','入职岗位6','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','就业备注6','2025-07-20 09:00:00'),(7,5,3,'2025-08-01','入职岗位7','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','就业备注7','2025-08-01 10:00:00'),(8,6,2,'2025-09-01','入职岗位8','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','就业备注8','2025-09-01 09:00:00'),(9,7,1,'2025-07-10','入职岗位9','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','就业备注9','2025-07-10 10:00:00');
 
 /*Table structure for table `laoshi` */
 
@@ -114,8 +119,9 @@ DROP TABLE IF EXISTS `laoshi`;
 
 CREATE TABLE `laoshi` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `username` varchar(200) DEFAULT NULL COMMENT '账户',
+  `username` varchar(200) NOT NULL COMMENT '账户',
   `password` varchar(200) DEFAULT NULL COMMENT '密码',
+  `laoshi_gonghao` varchar(50) NOT NULL COMMENT '老师工号 Search111 ',
   `laoshi_name` varchar(200) DEFAULT NULL COMMENT '老师姓名 Search111 ',
   `laoshi_phone` varchar(200) DEFAULT NULL COMMENT '老师手机号',
   `laoshi_id_number` varchar(200) DEFAULT NULL COMMENT '老师身份证号',
@@ -123,12 +129,16 @@ CREATE TABLE `laoshi` (
   `sex_types` int(11) DEFAULT NULL COMMENT '性别',
   `laoshi_email` varchar(200) DEFAULT NULL COMMENT '电子邮箱',
   `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_laoshi_username` (`username`),
+  UNIQUE KEY `uk_laoshi_gonghao` (`laoshi_gonghao`),
+  UNIQUE KEY `uk_laoshi_phone` (`laoshi_phone`),
+  UNIQUE KEY `uk_laoshi_id_number` (`laoshi_id_number`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='老师';
 
 /*Data for the table `laoshi` */
 
-insert  into `laoshi`(`id`,`username`,`password`,`laoshi_name`,`laoshi_phone`,`laoshi_id_number`,`laoshi_photo`,`sex_types`,`laoshi_email`,`create_time`) values (1,'a1','123456','老师姓名1','17703786901','410224199610232001','http://localhost:8080/biyeshengshixiyujiuye/upload/laoshi1.jpg',2,'1@qq.com','2022-03-28 21:46:24'),(2,'a2','123456','老师姓名2','17703786902','410224199610232002','http://localhost:8080/biyeshengshixiyujiuye/upload/laoshi2.jpg',1,'2@qq.com','2022-03-28 21:46:24'),(3,'a3','123456','老师姓名3','17703786903','410224199610232003','http://localhost:8080/biyeshengshixiyujiuye/upload/laoshi3.jpg',2,'3@qq.com','2022-03-28 21:46:24');
+insert  into `laoshi`(`id`,`username`,`password`,`laoshi_gonghao`,`laoshi_name`,`laoshi_phone`,`laoshi_id_number`,`laoshi_photo`,`sex_types`,`laoshi_email`,`create_time`) values (1,'T001','123456','T001','老师姓名1','17703786901','410224199610232001','http://localhost:8080/biyeshengshixiyujiuye/upload/laoshi1.jpg',2,'1@qq.com','2022-03-28 21:46:24'),(2,'T002','123456','T002','老师姓名2','17703786902','410224199610232002','http://localhost:8080/biyeshengshixiyujiuye/upload/laoshi2.jpg',1,'2@qq.com','2022-03-28 21:46:24'),(3,'T003','123456','T003','老师姓名3','17703786903','410224199610232003','http://localhost:8080/biyeshengshixiyujiuye/upload/laoshi3.jpg',2,'3@qq.com','2022-03-28 21:46:24');
 
 /*Table structure for table `qiye` */
 
@@ -136,8 +146,9 @@ DROP TABLE IF EXISTS `qiye`;
 
 CREATE TABLE `qiye` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `username` varchar(200) DEFAULT NULL COMMENT '账户',
+  `username` varchar(200) NOT NULL COMMENT '账户',
   `password` varchar(200) DEFAULT NULL COMMENT '密码',
+  `qiye_bianhao` varchar(50) NOT NULL COMMENT '企业编号 Search111 ',
   `qiye_name` varchar(200) DEFAULT NULL COMMENT '企业名称 Search111 ',
   `qiye_address` varchar(200) DEFAULT NULL COMMENT '企业地址',
   `qiye_photo` varchar(200) DEFAULT NULL COMMENT '企业图片',
@@ -146,12 +157,16 @@ CREATE TABLE `qiye` (
   `qiye_types` int(11) DEFAULT NULL COMMENT '所在行业 Search111 ',
   `qiye_content` text COMMENT '企业详情',
   `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_qiye_username` (`username`),
+  UNIQUE KEY `uk_qiye_bianhao` (`qiye_bianhao`),
+  UNIQUE KEY `uk_qiye_phone` (`qiye_phone`),
+  UNIQUE KEY `uk_qiye_email` (`qiye_email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='企业';
 
 /*Data for the table `qiye` */
 
-insert  into `qiye`(`id`,`username`,`password`,`qiye_name`,`qiye_address`,`qiye_photo`,`qiye_phone`,`qiye_email`,`qiye_types`,`qiye_content`,`create_time`) values (1,'a1','123456','企业名称1','企业地址1','http://localhost:8080/biyeshengshixiyujiuye/upload/qiye1.jpg','17703786901','1@qq.com',1,'企业详情1','2022-03-28 21:46:24'),(2,'a2','123456','企业名称2','企业地址2','http://localhost:8080/biyeshengshixiyujiuye/upload/qiye2.jpg','17703786902','2@qq.com',2,'企业详情2','2022-03-28 21:46:24'),(3,'a3','123456','企业名称3','企业地址3','http://localhost:8080/biyeshengshixiyujiuye/upload/qiye3.jpg','17703786903','3@qq.com',2,'企业详情3','2022-03-28 21:46:24');
+insert  into `qiye`(`id`,`username`,`password`,`qiye_bianhao`,`qiye_name`,`qiye_address`,`qiye_photo`,`qiye_phone`,`qiye_email`,`qiye_types`,`qiye_content`,`create_time`) values (1,'QY001','123456','QY001','企业名称1','企业地址1','http://localhost:8080/biyeshengshixiyujiuye/upload/qiye1.jpg','17703786901','1@qq.com',1,'企业详情1','2022-03-28 21:46:24'),(2,'QY002','123456','QY002','企业名称2','企业地址2','http://localhost:8080/biyeshengshixiyujiuye/upload/qiye2.jpg','17703786902','2@qq.com',2,'企业详情2','2022-03-28 21:46:24'),(3,'QY003','123456','QY003','企业名称3','企业地址3','http://localhost:8080/biyeshengshixiyujiuye/upload/qiye3.jpg','17703786903','3@qq.com',2,'企业详情3','2022-03-28 21:46:24');
 
 /*Table structure for table `shixi` */
 
@@ -163,19 +178,20 @@ CREATE TABLE `shixi` (
   `qiye_id` int(11) DEFAULT NULL COMMENT '企业',
   `shixi_name` varchar(200) DEFAULT NULL COMMENT '实习名称 Search111  ',
   `shixi_types` int(11) NOT NULL COMMENT '实习类型 ',
-  `shixi_kaishi_time` timestamp NULL DEFAULT NULL COMMENT '实习开始时间',
-  `shixi_jieshu_time` timestamp NULL DEFAULT NULL COMMENT '实习结束时间',
+  `shixi_kaishi_time` date DEFAULT NULL COMMENT '实习开始日期',
+  `shixi_jieshu_time` date DEFAULT NULL COMMENT '实习结束日期',
   `shixi_jieguo_types` int(11) NOT NULL COMMENT '实习结果 Search111 ',
   `shixi_gangwei_name` varchar(200) DEFAULT NULL COMMENT '实习岗位',
   `shixi_content` text COMMENT '实习详情 ',
-  `insert_time` timestamp NULL DEFAULT NULL COMMENT '录入时间 ',
   `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_shixi_xuesheng_id` (`xuesheng_id`),
+  KEY `idx_shixi_qiye_id` (`qiye_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='实习信息';
 
 /*Data for the table `shixi` */
 
-insert  into `shixi`(`id`,`xuesheng_id`,`qiye_id`,`shixi_name`,`shixi_types`,`shixi_kaishi_time`,`shixi_jieshu_time`,`shixi_jieguo_types`,`shixi_gangwei_name`,`shixi_content`,`insert_time`,`create_time`) values (1,1,3,'实习名称1',1,'2022-03-28 21:46:24','2022-03-28 21:46:24',3,'实习岗位1','实习详情1','2022-03-28 21:46:24','2022-03-28 21:46:24'),(2,1,1,'实习名称2',2,'2022-03-28 21:46:24','2022-03-28 21:46:24',1,'实习岗位2','实习详情2','2022-03-28 21:46:24','2022-03-28 21:46:24'),(3,1,1,'实习名称3',1,'2022-03-28 21:46:24','2022-03-28 21:46:24',1,'实习岗位3','实习详情3','2022-03-28 21:46:24','2022-03-28 21:46:24'),(4,1,2,'实习名称4',1,'2022-03-28 21:46:24','2022-03-28 21:46:24',2,'实习岗位4','实习详情4','2022-03-28 21:46:24','2022-03-28 21:46:24'),(5,1,3,'实习名称5',1,'2022-03-28 21:46:24','2022-03-28 21:46:24',3,'实习岗位5','实习详情5','2022-03-28 21:46:24','2022-03-28 21:46:24'),(6,2,1,'学生2的企业1的实习信息',1,'2022-03-29 09:14:09','2022-03-31 00:00:00',1,'一般职员','<p>萨阿德哥桑撒</p>','2022-03-29 09:14:30','2022-03-29 09:14:30'),(7,4,2,'学生4的实习',2,'2023-05-10 10:00:00','2023-08-10 10:00:00',1,'前端开发','实习详情7','2023-05-10 10:00:00','2023-05-10 10:00:00'),(8,5,1,'学生5的实习',1,'2023-06-15 09:00:00','2023-09-15 09:00:00',2,'后端开发','实习详情8','2023-06-15 09:00:00','2023-06-15 09:00:00'),(9,6,3,'学生6的实习',2,'2023-07-01 08:00:00','2023-10-01 08:00:00',1,'测试工程师','实习详情9','2023-07-01 08:00:00','2023-07-01 08:00:00'),(10,7,2,'学生7的实习',1,'2023-04-20 14:00:00','2023-07-20 14:00:00',3,'产品经理','实习详情10','2023-04-20 14:00:00','2023-04-20 14:00:00'),(11,3,1,'学生3的实习',2,'2025-03-01 09:00:00','2025-06-01 09:00:00',1,'Java开发','实习详情11','2025-03-01 09:00:00','2025-03-01 09:00:00'),(12,8,2,'学生8的实习',1,'2025-04-10 10:00:00','2025-07-10 10:00:00',2,'UI设计','实习详情12','2025-04-10 10:00:00','2025-04-10 10:00:00'),(13,9,3,'学生9的实习',2,'2025-05-15 08:00:00','2025-08-15 08:00:00',1,'数据分析','实习详情13','2025-05-15 08:00:00','2025-05-15 08:00:00'),(14,10,1,'学生10的实习',1,'2025-06-01 09:00:00','2025-09-01 09:00:00',2,'运维工程师','实习详情14','2025-06-01 09:00:00','2025-06-01 09:00:00'),(15,11,2,'学生11的实习',2,'2025-07-01 10:00:00','2025-10-01 10:00:00',1,'算法工程师','实习详情15','2025-07-01 10:00:00','2025-07-01 10:00:00');
+insert  into `shixi`(`id`,`xuesheng_id`,`qiye_id`,`shixi_name`,`shixi_types`,`shixi_kaishi_time`,`shixi_jieshu_time`,`shixi_jieguo_types`,`shixi_gangwei_name`,`shixi_content`,`create_time`) values (1,1,3,'实习名称1',1,'2022-03-28','2022-06-28',3,'实习岗位1','实习详情1','2022-03-28 21:46:24'),(2,1,1,'实习名称2',2,'2022-03-28','2022-06-28',1,'实习岗位2','实习详情2','2022-03-28 21:46:24'),(3,1,1,'实习名称3',1,'2022-07-01','2022-09-30',1,'实习岗位3','实习详情3','2022-03-28 21:46:24'),(4,1,2,'实习名称4',1,'2022-03-28','2022-06-28',2,'实习岗位4','实习详情4','2022-03-28 21:46:24'),(5,1,3,'实习名称5',1,'2022-07-01','2022-09-30',3,'实习岗位5','实习详情5','2022-03-28 21:46:24'),(6,2,1,'学生2的企业1的实习信息',1,'2022-03-29','2022-03-31',1,'一般职员','<p>萨阿德哥桑撒</p>','2022-03-29 09:14:30'),(7,4,2,'学生4的实习',2,'2023-05-10','2023-08-10',1,'前端开发','实习详情7','2023-05-10 10:00:00'),(8,5,1,'学生5的实习',1,'2023-06-15','2023-09-15',2,'后端开发','实习详情8','2023-06-15 09:00:00'),(9,6,3,'学生6的实习',2,'2023-07-01','2023-10-01',1,'测试工程师','实习详情9','2023-07-01 08:00:00'),(10,7,2,'学生7的实习',1,'2023-04-20','2023-07-20',3,'产品经理','实习详情10','2023-04-20 14:00:00'),(11,3,1,'学生3的实习',2,'2025-03-01','2025-06-01',1,'Java开发','实习详情11','2025-03-01 09:00:00'),(12,8,2,'学生8的实习',1,'2025-04-10','2025-07-10',2,'UI设计','实习详情12','2025-04-10 10:00:00'),(13,9,3,'学生9的实习',2,'2025-05-15','2025-08-15',1,'数据分析','实习详情13','2025-05-15 08:00:00'),(14,10,1,'学生10的实习',1,'2025-06-01','2025-09-01',2,'运维工程师','实习详情14','2025-06-01 09:00:00'),(15,11,2,'学生11的实习',2,'2025-07-01','2025-10-01',1,'算法工程师','实习详情15','2025-07-01 10:00:00');
 
 /*Table structure for table `token` */
 
@@ -195,7 +211,7 @@ CREATE TABLE `token` (
 
 /*Data for the table `token` */
 
-insert  into `token`(`id`,`userid`,`username`,`tablename`,`role`,`token`,`addtime`,`expiratedtime`) values (1,6,'admin','users','管理员','1h6qij82klsexddjfemplwnmdle0r88r','2022-03-29 09:08:23','2022-03-29 10:18:55'),(2,1,'a1','laoshi','老师','8qs6v394h7tgb7ebtvjmoc69ij50fply','2022-03-29 09:12:47','2022-03-29 10:12:48'),(3,1,'a1','qiye','企业','8xz0lbqznlx7vgcvxiu371c6u0c8elxk','2022-03-29 09:13:26','2022-03-29 10:13:26'),(4,1,'a1','xuesheng','学生','lkru0n0255sqt9r0gjc9wwxnrwvhsexd','2022-03-29 09:14:57','2022-03-29 10:14:57');
+insert  into `token`(`id`,`userid`,`username`,`tablename`,`role`,`token`,`addtime`,`expiratedtime`) values (1,6,'admin','users','管理员','1h6qij82klsexddjfemplwnmdle0r88r','2022-03-29 09:08:23','2022-03-29 10:18:55'),(2,1,'T001','laoshi','老师','8qs6v394h7tgb7ebtvjmoc69ij50fply','2022-03-29 09:12:47','2022-03-29 10:12:48'),(3,1,'QY001','qiye','企业','8xz0lbqznlx7vgcvxiu371c6u0c8elxk','2022-03-29 09:13:26','2022-03-29 10:13:26'),(4,1,'20210001','xuesheng','学生','lkru0n0255sqt9r0gjc9wwxnrwvhsexd','2022-03-29 09:14:57','2022-03-29 10:14:57');
 
 /*Table structure for table `users` */
 
@@ -220,8 +236,9 @@ DROP TABLE IF EXISTS `xuesheng`;
 
 CREATE TABLE `xuesheng` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `username` varchar(200) DEFAULT NULL COMMENT '账户',
+  `username` varchar(200) NOT NULL COMMENT '账户',
   `password` varchar(200) DEFAULT NULL COMMENT '密码',
+  `xuesheng_xuehao` varchar(50) NOT NULL COMMENT '学生学号 Search111 ',
   `xuesheng_name` varchar(200) DEFAULT NULL COMMENT '学生姓名 Search111 ',
   `xuesheng_phone` varchar(200) DEFAULT NULL COMMENT '学生手机号',
   `xuesheng_id_number` varchar(200) DEFAULT NULL COMMENT '学生身份证号',
@@ -232,12 +249,16 @@ CREATE TABLE `xuesheng` (
   `ruxue_year` int(11) DEFAULT NULL COMMENT '入学年份 Search111 ',
   `xuesheng_email` varchar(200) DEFAULT NULL COMMENT '电子邮箱',
   `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_xuesheng_username` (`username`),
+  UNIQUE KEY `uk_xuesheng_xuehao` (`xuesheng_xuehao`),
+  UNIQUE KEY `uk_xuesheng_phone` (`xuesheng_phone`),
+  UNIQUE KEY `uk_xuesheng_id_number` (`xuesheng_id_number`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='学生';
 
 /*Data for the table `xuesheng` */
 
-insert  into `xuesheng`(`id`,`username`,`password`,`xuesheng_name`,`xuesheng_phone`,`xuesheng_id_number`,`xuesheng_photo`,`sex_types`,`yuanxi_types`,`banji_types`,`ruxue_year`,`xuesheng_email`,`create_time`) values (1,'a1','123456','学生姓名1','17703786901','410224199610232001','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng1.jpg',2,3,2,2021,'1@qq.com','2022-03-28 21:46:24'),(2,'a2','123456','学生姓名2','17703786902','410224199610232002','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng2.jpg',2,2,3,2021,'2@qq.com','2022-03-28 21:46:24'),(3,'a3','123456','学生姓名3','17703786903','410224199610232003','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng3.jpg',2,3,1,2022,'3@qq.com','2022-03-28 21:46:24'),(4,'a4','123456','学生姓名4','17703786904','410224199610232004','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng4.jpg',1,1,2,2021,'4@qq.com','2022-03-28 21:46:24'),(5,'a5','123456','学生姓名5','17703786905','410224199610232005','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng5.jpg',2,2,1,2021,'5@qq.com','2022-03-28 21:46:24'),(6,'a6','123456','学生姓名6','17703786906','410224199610232006','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng6.jpg',1,3,3,2021,'6@qq.com','2022-03-28 21:46:24'),(7,'a7','123456','学生姓名7','17703786907','410224199610232007','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng7.jpg',2,1,2,2021,'7@qq.com','2022-03-28 21:46:24'),(8,'a8','123456','学生姓名8','17703786908','410224199610232008','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng8.jpg',1,2,3,2022,'8@qq.com','2022-03-28 21:46:24'),(9,'a9','123456','学生姓名9','17703786909','410224199610232009','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng9.jpg',2,3,1,2022,'9@qq.com','2022-03-28 21:46:24'),(10,'a10','123456','学生姓名10','17703786910','410224199610232010','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng10.jpg',1,1,2,2022,'10@qq.com','2022-03-28 21:46:24'),(11,'a11','123456','学生姓名11','17703786911','410224199610232011','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng11.jpg',2,2,3,2023,'11@qq.com','2022-03-28 21:46:24'),(12,'a12','123456','学生姓名12','17703786912','410224199610232012','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng12.jpg',1,3,1,2023,'12@qq.com','2022-03-28 21:46:24');
+insert  into `xuesheng`(`id`,`username`,`password`,`xuesheng_xuehao`,`xuesheng_name`,`xuesheng_phone`,`xuesheng_id_number`,`xuesheng_photo`,`sex_types`,`yuanxi_types`,`banji_types`,`ruxue_year`,`xuesheng_email`,`create_time`) values (1,'20210001','123456','20210001','学生姓名1','17703786901','410224199610232001','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng1.jpg',2,3,2,2021,'1@qq.com','2022-03-28 21:46:24'),(2,'20210002','123456','20210002','学生姓名2','17703786902','410224199610232002','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng2.jpg',2,2,3,2021,'2@qq.com','2022-03-28 21:46:24'),(3,'20220003','123456','20220003','学生姓名3','17703786903','410224199610232003','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng3.jpg',2,3,1,2022,'3@qq.com','2022-03-28 21:46:24'),(4,'20210004','123456','20210004','学生姓名4','17703786904','410224199610232004','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng4.jpg',1,1,2,2021,'4@qq.com','2022-03-28 21:46:24'),(5,'20210005','123456','20210005','学生姓名5','17703786905','410224199610232005','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng5.jpg',2,2,1,2021,'5@qq.com','2022-03-28 21:46:24'),(6,'20210006','123456','20210006','学生姓名6','17703786906','410224199610232006','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng6.jpg',1,3,3,2021,'6@qq.com','2022-03-28 21:46:24'),(7,'20210007','123456','20210007','学生姓名7','17703786907','410224199610232007','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng7.jpg',2,1,2,2021,'7@qq.com','2022-03-28 21:46:24'),(8,'20220008','123456','20220008','学生姓名8','17703786908','410224199610232008','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng8.jpg',1,2,3,2022,'8@qq.com','2022-03-28 21:46:24'),(9,'20220009','123456','20220009','学生姓名9','17703786909','410224199610232009','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng9.jpg',2,3,1,2022,'9@qq.com','2022-03-28 21:46:24'),(10,'20220010','123456','20220010','学生姓名10','17703786910','410224199610232010','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng10.jpg',1,1,2,2022,'10@qq.com','2022-03-28 21:46:24'),(11,'20230011','123456','20230011','学生姓名11','17703786911','410224199610232011','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng11.jpg',2,2,3,2023,'11@qq.com','2022-03-28 21:46:24'),(12,'20230012','123456','20230012','学生姓名12','17703786912','410224199610232012','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng12.jpg',1,3,1,2023,'12@qq.com','2022-03-28 21:46:24');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

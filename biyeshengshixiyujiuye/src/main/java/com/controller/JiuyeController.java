@@ -107,13 +107,13 @@ public class JiuyeController {
                 //级联表
                 QiyeEntity qiye = qiyeService.selectById(jiuye.getQiyeId());
                 if(qiye != null){
-                    BeanUtils.copyProperties( qiye , view ,new String[]{ "id", "createTime", "insertTime", "updateTime"});//把级联的数据添加到view中,并排除id和创建时间字段
+                    BeanUtils.copyProperties( qiye , view ,new String[]{ "id", "createTime", "updateTime"});//把级联的数据添加到view中,并排除id和创建时间字段
                     view.setQiyeId(qiye.getId());
                 }
                 //级联表
                 XueshengEntity xuesheng = xueshengService.selectById(jiuye.getXueshengId());
                 if(xuesheng != null){
-                    BeanUtils.copyProperties( xuesheng , view ,new String[]{ "id", "createTime", "insertTime", "updateTime"});//把级联的数据添加到view中,并排除id和创建时间字段
+                    BeanUtils.copyProperties( xuesheng , view ,new String[]{ "id", "createTime", "updateTime"});//把级联的数据添加到view中,并排除id和创建时间字段
                     view.setXueshengId(xuesheng.getId());
                 }
             //修改对应字典表字段
@@ -158,7 +158,6 @@ public class JiuyeController {
         logger.info("sql语句:"+queryWrapper.getSqlSegment());
         JiuyeEntity jiuyeEntity = jiuyeService.selectOne(queryWrapper);
         if(jiuyeEntity==null){
-            jiuye.setInsertTime(new Date());
             jiuye.setCreateTime(new Date());
             jiuyeService.insert(jiuye);
             return R.ok();
@@ -260,7 +259,6 @@ public class JiuyeController {
 //                            jiuyeEntity.setJiuyeGangweiName(data.get(0));                    //入职岗位 要改的
 //                            jiuyeEntity.setJiuyeFile(data.get(0));                    //相关文件 要改的
 //                            jiuyeEntity.setJiuyeContent("");//详情和图片
-//                            jiuyeEntity.setInsertTime(date);//时间
 //                            jiuyeEntity.setCreateTime(date);//时间
                             jiuyeList.add(jiuyeEntity);
 

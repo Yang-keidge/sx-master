@@ -87,9 +87,9 @@ public class ShixiEntity<T> implements Serializable {
 
 
     /**
-     * 实习开始时间
+     * 实习开始日期
      */
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd")
 	@DateTimeFormat
     @TableField(value = "shixi_kaishi_time")
 
@@ -97,9 +97,9 @@ public class ShixiEntity<T> implements Serializable {
 
 
     /**
-     * 实习结束时间
+     * 实习结束日期
      */
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd")
 	@DateTimeFormat
     @TableField(value = "shixi_jieshu_time")
 
@@ -128,16 +128,6 @@ public class ShixiEntity<T> implements Serializable {
     @TableField(value = "shixi_content")
 
     private String shixiContent;
-
-
-    /**
-     * 录入时间
-     */
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
-	@DateTimeFormat
-    @TableField(value = "insert_time",fill = FieldFill.INSERT)
-
-    private Date insertTime;
 
 
     /**
@@ -281,19 +271,6 @@ public class ShixiEntity<T> implements Serializable {
         this.shixiContent = shixiContent;
     }
     /**
-	 * 设置：录入时间
-	 */
-    public Date getInsertTime() {
-        return insertTime;
-    }
-    /**
-	 * 获取：录入时间
-	 */
-
-    public void setInsertTime(Date insertTime) {
-        this.insertTime = insertTime;
-    }
-    /**
 	 * 设置：创建时间
 	 */
     public Date getCreateTime() {
@@ -320,7 +297,6 @@ public class ShixiEntity<T> implements Serializable {
             ", shixiJieguoTypes=" + shixiJieguoTypes +
             ", shixiGangweiName=" + shixiGangweiName +
             ", shixiContent=" + shixiContent +
-            ", insertTime=" + insertTime +
             ", createTime=" + createTime +
         "}";
     }

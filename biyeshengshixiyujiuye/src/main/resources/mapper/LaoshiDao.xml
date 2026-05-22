@@ -7,6 +7,7 @@
         a.id as id
         ,a.username as username
         ,a.password as password
+        ,a.laoshi_gonghao as laoshiGonghao
         ,a.laoshi_name as laoshiName
         ,a.laoshi_phone as laoshiPhone
         ,a.laoshi_id_number as laoshiIdNumber
@@ -35,6 +36,9 @@
             </if>
             <if test=" params.password != '' and params.password != null and params.password != 'null' ">
                 and a.password like CONCAT('%',#{params.password},'%')
+            </if>
+            <if test=" params.laoshiGonghao != '' and params.laoshiGonghao != null and params.laoshiGonghao != 'null' ">
+                and a.laoshi_gonghao like CONCAT('%',#{params.laoshiGonghao},'%')
             </if>
             <if test=" params.laoshiName != '' and params.laoshiName != null and params.laoshiName != 'null' ">
                 and a.laoshi_name like CONCAT('%',#{params.laoshiName},'%')

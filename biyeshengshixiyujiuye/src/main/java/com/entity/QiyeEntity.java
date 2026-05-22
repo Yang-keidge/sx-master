@@ -71,6 +71,14 @@ public class QiyeEntity<T> implements Serializable {
 
 
     /**
+     * 企业编号
+     */
+    @TableField(value = "qiye_bianhao")
+
+    private String qiyeBianhao;
+
+
+    /**
      * 企业名称
      */
     @TableField(value = "qiye_name")
@@ -174,6 +182,19 @@ public class QiyeEntity<T> implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    /**
+	 * 设置：企业编号
+	 */
+    public String getQiyeBianhao() {
+        return qiyeBianhao;
+    }
+    /**
+	 * 获取：企业编号
+	 */
+
+    public void setQiyeBianhao(String qiyeBianhao) {
+        this.qiyeBianhao = qiyeBianhao;
     }
     /**
 	 * 设置：企业名称
@@ -286,6 +307,7 @@ public class QiyeEntity<T> implements Serializable {
             "id=" + id +
             ", username=" + username +
             ", password=" + password +
+            ", qiyeBianhao=" + qiyeBianhao +
             ", qiyeName=" + qiyeName +
             ", qiyeAddress=" + qiyeAddress +
             ", qiyePhoto=" + qiyePhoto +
