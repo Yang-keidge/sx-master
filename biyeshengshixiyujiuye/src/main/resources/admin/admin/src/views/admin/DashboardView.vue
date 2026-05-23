@@ -205,27 +205,39 @@
 <script setup>
 import { computed, defineComponent, h, onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
-import { ArrowDown, ArrowUp } from 'lucide-vue-next'
-import { quickActions } from '../../data/adminNavigation'
 import {
-  chartMonths as fallbackChartMonths,
-  employmentRecords,
-  internshipRecords,
-  internshipResultDistribution,
-  internshipTypeDistribution,
-  statCards
-} from '../../data/adminDashboard'
+  ArrowDown,
+  ArrowUp,
+  BadgeCheck,
+  BriefcaseBusiness,
+  Building2,
+  ChartPie,
+  GraduationCap,
+  UserRound
+} from 'lucide-vue-next'
+import { quickActions } from '../../data/adminNavigation'
 import { fetchDashboardSummary } from '../../services/dashboard'
 
 const summary = ref(null)
 const loadError = ref('')
+const defaultChartMonths = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+const distributionColors = ['#3f5fff', '#7185f6', '#58d2ae', '#b8dce9', '#b8c1d3']
+const metricCards = [
+  { label: '学生总数', icon: UserRound, tone: 'blue' },
+  { label: '企业总数', icon: Building2, tone: 'green' },
+  { label: '教师总数', icon: GraduationCap, tone: 'purple' },
+  { label: '实习学生数', icon: BriefcaseBusiness, tone: 'sky' },
+  { label: '就业学生数', icon: BadgeCheck, tone: 'orange' },
+  { label: '就业率（已毕业）', icon: ChartPie, tone: 'blue' }
+]
 
 onMounted(async () => {
   try {
     summary.value = await fetchDashboardSummary()
     loadError.value = ''
-  } catch (error) {
-    loadError.value = '当前显示静态示例数据'
+  } catch {
+    summary.value = null
+    loadError.value = '首页数据加载失败，请检查后端服务'
   }
 })
 
@@ -269,8 +281,7 @@ const todayText = computed(() => {
 })
 
 const dashboardStatCards = computed(() => {
-  const base = summary.value?.base
-  if (!base) return statCards
+  const base = summary.value?.base || {}
 
   return [
     makeStatCard(0, base.studentCount, base.studentMonthChange),
@@ -283,14 +294,14 @@ const dashboardStatCards = computed(() => {
 })
 
 const typeDistribution = computed(() =>
-  formatDistribution(summary.value?.shixiType, internshipTypeDistribution)
+  formatDistribution(summary.value?.shixiType)
 )
 
 const resultDistribution = computed(() =>
-  formatDistribution(summary.value?.shixiResult, internshipResultDistribution)
+  formatDistribution(summary.value?.shixiResult)
 )
 
-const trendMonths = computed(() => summary.value?.monthTrend?.xData || fallbackChartMonths)
+const trendMonths = computed(() => summary.value?.monthTrend?.xData || defaultChartMonths)
 const trendYear = computed(() => summary.value?.monthTrend?.year || new Date().getFullYear())
 const typeTotal = computed(() => formatNumber(distributionTotal(summary.value?.shixiType)))
 const resultTotal = computed(() => formatNumber(distributionTotal(summary.value?.shixiResult)))
@@ -301,7 +312,7 @@ const trendValues = computed(() => {
     return values.map((value) => Number(value) || 0)
   }
 
-  return [90, 160, 330, 470, 560, 610, 720, 690, 610, 580, 420, 650]
+  return defaultChartMonths.map(() => 0)
 })
 
 const trendMax = computed(() => {
@@ -319,15 +330,7 @@ const trendAreaPath = computed(() => buildTrendPath(trendValues.value, trendMax.
 
 const dashboardInternshipRecords = computed(() => {
   if (!summary.value) {
-    return internshipRecords.map((item) => ({
-      name: item[0],
-      number: item[1],
-      photo: item[2],
-      company: item[3],
-      position: item[4],
-      startDate: item[5],
-      status: item[6]
-    }))
+    return []
   }
 
   return (summary.value.latestShixi || []).map((item) => ({
@@ -343,14 +346,7 @@ const dashboardInternshipRecords = computed(() => {
 
 const dashboardEmploymentRecords = computed(() => {
   if (!summary.value) {
-    return employmentRecords.map((item) => ({
-      name: item[0],
-      number: item[1],
-      photo: item[2],
-      company: item[3],
-      position: item[4],
-      startDate: item[5]
-    }))
+    return []
   }
 
   return (summary.value.latestJiuye || []).map((item) => ({
@@ -390,7 +386,7 @@ function normalizePhotoUrl(photo) {
 }
 
 function makeStatCard(index, value, change, suffix = '') {
-  const source = statCards[index]
+  const source = metricCards[index]
   const numericChange = Number(change) || 0
 
   return {
@@ -402,20 +398,20 @@ function makeStatCard(index, value, change, suffix = '') {
   }
 }
 
-function formatDistribution(list, fallback) {
-  if (!Array.isArray(list)) return fallback
+function formatDistribution(list) {
+  if (!Array.isArray(list) || !list.length) return []
 
   const total = list.reduce((sum, item) => sum + (Number(item.value) || 0), 0)
   return list.map((item, index) => ({
-    label: item.name || fallback[index]?.label || '未分类',
+    label: item.name || '未分类',
     value: total > 0 ? `${(((Number(item.value) || 0) / total) * 100).toFixed(1)}%` : '0.0%',
-    color: fallback[index]?.color || '#b8c1d3'
+    color: distributionColors[index % distributionColors.length]
   }))
 }
 
 function distributionTotal(list) {
   if (!Array.isArray(list)) {
-    return 2458
+    return 0
   }
 
   return list.reduce((sum, item) => sum + (Number(item.value) || 0), 0)

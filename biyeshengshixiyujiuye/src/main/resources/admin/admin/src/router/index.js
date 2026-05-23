@@ -169,14 +169,6 @@ router.beforeEach((to) => {
     return currentUser.role === '管理员' ? { name: 'admin.dashboard' } : { name: 'login' }
   }
 
-  if (to.meta.guestOnly && token && currentUser?.role === '管理员') {
-    return { name: 'admin.dashboard' }
-  }
-
-  if (to.meta.guestOnly && token && currentUser?.role === '企业') {
-    return { name: 'company.dashboard' }
-  }
-
   return true
 })
 
