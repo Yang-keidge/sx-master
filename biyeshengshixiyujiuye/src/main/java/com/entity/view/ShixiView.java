@@ -105,6 +105,10 @@ public class ShixiView extends ShixiEntity implements Serializable {
 				*/
 				private String banjiValue;
 			/**
+			* 入学年份
+			*/
+			private Integer ruxueYear;
+			/**
 			* 电子邮箱
 			*/
 			private String xueshengEmail;
@@ -412,6 +416,19 @@ public class ShixiView extends ShixiEntity implements Serializable {
 						public void setBanjiValue(String banjiValue) {
 							this.banjiValue = banjiValue;
 						}
+
+					/**
+					* 获取： 入学年份
+					*/
+					public Integer getRuxueYear() {
+						return ruxueYear;
+					}
+					/**
+					* 设置： 入学年份
+					*/
+					public void setRuxueYear(Integer ruxueYear) {
+						this.ruxueYear = ruxueYear;
+					}
 
 					/**
 					* 获取： 电子邮箱

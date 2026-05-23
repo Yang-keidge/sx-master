@@ -1,9 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/LoginView.vue'
 import AdminLayout from '../layouts/AdminLayout.vue'
+import CompanyLayout from '../layouts/CompanyLayout.vue'
 import DashboardView from '../views/admin/DashboardView.vue'
+import CompanyDashboardView from '../views/company/DashboardView.vue'
+import CompanyProfileView from '../views/company/ProfileView.vue'
 import PlaceholderView from '../views/admin/PlaceholderView.vue'
 import CrudModuleView from '../views/admin/crud/ModuleView.vue'
+import CompanyCrudModuleView from '../views/company/crud/ModuleView.vue'
 
 const placeholder = (path, name, title, group) => ({
   path,
@@ -30,6 +34,21 @@ const moduleRoute = (path, name, title, group, moduleName, alias) => ({
     group,
     requiresAuth: true,
     role: 'admin'
+  }
+})
+
+const companyModuleRoute = (path, name, title, group, moduleName) => ({
+  path,
+  name,
+  component: CompanyCrudModuleView,
+  props: {
+    moduleName
+  },
+  meta: {
+    title,
+    group,
+    requiresAuth: true,
+    role: 'company'
   }
 })
 
@@ -89,6 +108,44 @@ const router = createRouter({
         placeholder('statistics', 'admin.statistics', '数据统计', 'system'),
         placeholder('logs', 'admin.logs', '系统日志', 'system')
       ]
+    },
+    {
+      path: '/company',
+      component: CompanyLayout,
+      redirect: '/company/dashboard',
+      meta: {
+        requiresAuth: true,
+        role: 'company'
+      },
+      children: [
+        {
+          path: 'dashboard',
+          name: 'company.dashboard',
+          component: CompanyDashboardView,
+          meta: {
+            title: '首页',
+            group: 'workbench',
+            requiresAuth: true,
+            role: 'company'
+          }
+        },
+        {
+          path: 'profile',
+          name: 'company.profile',
+          component: CompanyProfileView,
+          meta: {
+            title: '企业信息',
+            group: 'business',
+            requiresAuth: true,
+            role: 'company'
+          }
+        },
+        companyModuleRoute('internships', 'company.internships', '实习管理', 'business', 'internships'),
+        companyModuleRoute('announcements', 'company.announcements', '招聘公告', 'business', 'announcements'),
+        companyModuleRoute('internship-data', 'company.internshipData', '实习数据', 'data', 'internshipData'),
+        companyModuleRoute('employment-data', 'company.employmentData', '就业数据', 'data', 'employmentData'),
+        companyModuleRoute('comments', 'company.comments', '公告评论', 'interaction', 'comments')
+      ]
     }
   ],
   scrollBehavior() {
@@ -105,11 +162,19 @@ router.beforeEach((to) => {
   }
 
   if (to.meta.role === 'admin' && token && currentUser?.role && currentUser.role !== '管理员') {
-    return { name: 'login' }
+    return currentUser.role === '企业' ? { name: 'company.dashboard' } : { name: 'login' }
+  }
+
+  if (to.meta.role === 'company' && token && currentUser?.role && currentUser.role !== '企业') {
+    return currentUser.role === '管理员' ? { name: 'admin.dashboard' } : { name: 'login' }
   }
 
   if (to.meta.guestOnly && token && currentUser?.role === '管理员') {
     return { name: 'admin.dashboard' }
+  }
+
+  if (to.meta.guestOnly && token && currentUser?.role === '企业') {
+    return { name: 'company.dashboard' }
   }
 
   return true

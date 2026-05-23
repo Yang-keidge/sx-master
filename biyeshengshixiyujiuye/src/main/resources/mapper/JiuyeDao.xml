@@ -33,6 +33,7 @@
         ,xuesheng.xuesheng_photo as xueshengPhoto
         ,xuesheng.yuanxi_types as yuanxiTypes
         ,xuesheng.banji_types as banjiTypes
+        ,xuesheng.ruxue_year as ruxueYear
         ,xuesheng.xuesheng_email as xueshengEmail
 
         FROM jiuye  a

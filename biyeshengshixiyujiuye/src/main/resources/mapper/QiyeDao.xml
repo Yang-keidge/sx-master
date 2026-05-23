@@ -32,6 +32,9 @@
                 #{item}
                 </foreach>
             </if>
+            <if test="params.qiyeId != null and params.qiyeId != ''">
+                and a.id = #{params.qiyeId}
+            </if>
             <if test=" params.username != '' and params.username != null and params.username != 'null' ">
                 and a.username like CONCAT('%',#{params.username},'%')
             </if>
