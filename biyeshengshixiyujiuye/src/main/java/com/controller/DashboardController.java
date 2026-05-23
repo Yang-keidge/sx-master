@@ -73,4 +73,13 @@ public class DashboardController {
         List<Map<String, Object>> data = dashboardService.getCompanyTop();
         return R.ok().put("data", data);
     }
+
+    /**
+     * 管理端首页聚合数据
+     */
+    @GetMapping("/summary")
+    public R summary() {
+        Map<String, Object> data = dashboardService.getSummary();
+        return R.ok().put("data", data);
+    }
 }

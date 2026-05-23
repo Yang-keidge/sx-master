@@ -30,7 +30,22 @@ public interface DashboardDao {
     List<Map<String, Object>> selectMonthTrend(@Param("year") String year);
 
     /**
+     * 查询最近有实习数据的年份
+     */
+    String selectLatestShixiYear();
+
+    /**
      * 查询企业招聘 TOP10
      */
     List<Map<String, Object>> selectCompanyTop();
+
+    /**
+     * 查询最新实习记录
+     */
+    List<Map<String, Object>> selectLatestShixi();
+
+    /**
+     * 查询最新就业记录
+     */
+    List<Map<String, Object>> selectLatestJiuye();
 }

@@ -1,0 +1,361 @@
+- generic [ref=e58]:
+  - complementary [ref=e59]:
+    - link "返回首页" [ref=e60] [cursor=pointer]:
+      - /url: /admin/dashboard
+      - img [ref=e62]
+      - generic [ref=e65]:
+        - strong [ref=e66]: 实习就业管理系统
+        - text: 管理员
+    - navigation "管理员菜单" [ref=e67]:
+      - generic [ref=e68]:
+        - link "首页" [ref=e69] [cursor=pointer]:
+          - /url: /admin/dashboard
+          - img [ref=e70]
+          - generic [ref=e73]: 首页
+        - link "数据看板" [ref=e74] [cursor=pointer]:
+          - /url: /admin/analytics
+          - img [ref=e75]
+          - generic [ref=e77]: 数据看板
+      - generic [ref=e78]:
+        - heading "基础信息管理" [level=2] [ref=e79]
+        - link "学生管理" [ref=e80] [cursor=pointer]:
+          - /url: /admin/students
+          - img [ref=e81]
+          - generic [ref=e85]: 学生管理
+        - link "教师管理" [ref=e86] [cursor=pointer]:
+          - /url: /admin/teachers
+          - img [ref=e87]
+          - generic [ref=e90]: 教师管理
+        - link "企业管理" [ref=e91] [cursor=pointer]:
+          - /url: /admin/companies
+          - img [ref=e92]
+          - generic [ref=e96]: 企业管理
+      - generic [ref=e97]:
+        - heading "业务管理" [level=2] [ref=e98]
+        - link "实习管理" [ref=e99] [cursor=pointer]:
+          - /url: /admin/internships
+          - img [ref=e100]
+          - generic [ref=e104]: 实习管理
+        - link "就业管理" [ref=e105] [cursor=pointer]:
+          - /url: /admin/employment
+          - img [ref=e106]
+          - generic [ref=e110]: 就业管理
+        - link "公告管理" [ref=e111] [cursor=pointer]:
+          - /url: /admin/announcements
+          - img [ref=e112]
+          - generic [ref=e115]: 公告管理
+        - link "公告评论" [ref=e116] [cursor=pointer]:
+          - /url: /admin/announcement-comments
+          - img [ref=e117]
+          - generic [ref=e119]: 公告评论
+      - generic [ref=e120]:
+        - heading "系统管理" [level=2] [ref=e121]
+        - link "字典管理" [ref=e122] [cursor=pointer]:
+          - /url: /admin/dictionaries
+          - img [ref=e123]
+          - generic [ref=e125]: 字典管理
+        - link "系统配置" [ref=e126] [cursor=pointer]:
+          - /url: /admin/settings
+          - img [ref=e127]
+          - generic [ref=e130]: 系统配置
+        - link "文件管理" [ref=e131] [cursor=pointer]:
+          - /url: /admin/files
+          - img [ref=e132]
+          - generic [ref=e134]: 文件管理
+        - link "数据统计" [ref=e135] [cursor=pointer]:
+          - /url: /admin/statistics
+          - img [ref=e136]
+          - generic [ref=e139]: 数据统计
+          - img [ref=e140]
+        - link "系统日志" [ref=e142] [cursor=pointer]:
+          - /url: /admin/logs
+          - img [ref=e143]
+          - generic [ref=e146]: 系统日志
+    - button "收起菜单" [ref=e147] [cursor=pointer]:
+      - img [ref=e148]
+      - generic [ref=e151]: 收起菜单
+  - generic [ref=e152]:
+    - banner [ref=e153]:
+      - generic [ref=e154]:
+        - button "通知" [ref=e155] [cursor=pointer]:
+          - img [ref=e156]
+          - generic [ref=e159]: "12"
+        - button "设置" [ref=e160] [cursor=pointer]:
+          - img [ref=e161]
+        - button "管 管理员" [ref=e164] [cursor=pointer]:
+          - generic [ref=e165]: 管
+          - strong [ref=e166]: 管理员
+          - img [ref=e167]
+    - main [ref=e169]:
+      - generic [ref=e171]:
+        - heading "欢迎回来，管理员" [level=1] [ref=e172]
+        - paragraph [ref=e173]: 今天是 2026年5月23日，星期六
+      - region "快捷入口" [ref=e174]:
+        - link "学生管理" [ref=e175] [cursor=pointer]:
+          - /url: /admin/students
+          - img [ref=e177]
+          - strong [ref=e181]: 学生管理
+        - link "实习管理" [ref=e182] [cursor=pointer]:
+          - /url: /admin/internships
+          - img [ref=e184]
+          - strong [ref=e188]: 实习管理
+        - link "就业管理" [ref=e189] [cursor=pointer]:
+          - /url: /admin/employment
+          - img [ref=e191]
+          - strong [ref=e195]: 就业管理
+        - link "公告管理" [ref=e196] [cursor=pointer]:
+          - /url: /admin/announcements
+          - img [ref=e198]
+          - strong [ref=e201]: 公告管理
+        - link "数据统计" [ref=e202] [cursor=pointer]:
+          - /url: /admin/statistics
+          - img [ref=e204]
+          - strong [ref=e206]: 数据统计
+        - link "文件上传" [ref=e207] [cursor=pointer]:
+          - /url: /admin/files
+          - img [ref=e209]
+          - strong [ref=e221]: 文件上传
+      - region "核心指标" [ref=e222]:
+        - article [ref=e223]:
+          - generic [ref=e224]:
+            - paragraph [ref=e225]: 学生总数
+            - strong [ref=e226]: "12"
+            - generic [ref=e227]:
+              - text: 较上月
+              - img [ref=e228]
+              - text: "+0"
+          - img [ref=e231]
+        - article [ref=e234]:
+          - generic [ref=e235]:
+            - paragraph [ref=e236]: 企业总数
+            - strong [ref=e237]: "6"
+            - generic [ref=e238]:
+              - text: 较上月
+              - img [ref=e239]
+              - text: "+0"
+          - img [ref=e242]
+        - article [ref=e246]:
+          - generic [ref=e247]:
+            - paragraph [ref=e248]: 教师总数
+            - strong [ref=e249]: "3"
+            - generic [ref=e250]:
+              - text: 较上月
+              - img [ref=e251]
+              - text: "+0"
+          - img [ref=e254]
+        - article [ref=e257]:
+          - generic [ref=e258]:
+            - paragraph [ref=e259]: 实习学生数
+            - strong [ref=e260]: "10"
+            - generic [ref=e261]:
+              - text: 较上月
+              - img [ref=e262]
+              - text: "+0"
+          - img [ref=e265]
+        - article [ref=e269]:
+          - generic [ref=e270]:
+            - paragraph [ref=e271]: 就业学生数
+            - strong [ref=e272]: "6"
+            - generic [ref=e273]:
+              - text: 较上月
+              - img [ref=e274]
+              - text: "+0"
+          - img [ref=e277]
+        - article [ref=e280]:
+          - generic [ref=e281]:
+            - paragraph [ref=e282]: 就业率（已毕业）
+            - strong [ref=e283]: 100.0%
+            - generic [ref=e284]:
+              - text: 较上月
+              - img [ref=e285]
+              - text: +0.0%
+          - img [ref=e288]
+      - generic [ref=e291]:
+        - article [ref=e292]:
+          - heading "实习类型分布" [level=2] [ref=e293]
+          - generic [ref=e294]:
+            - generic [ref=e296]:
+              - generic [ref=e297]: 总计
+              - strong [ref=e298]: "10"
+            - list [ref=e299]:
+              - listitem [ref=e300]:
+                - strong [ref=e302]: 学校统一安排实习
+                - emphasis [ref=e303]: 30.0%
+              - listitem [ref=e304]:
+                - strong [ref=e306]: 自主联系实习
+                - emphasis [ref=e307]: 20.0%
+              - listitem [ref=e308]:
+                - strong [ref=e310]: 校企合作实习
+                - emphasis [ref=e311]: 50.0%
+              - listitem [ref=e312]:
+                - strong [ref=e314]: 顶岗实习
+                - emphasis [ref=e315]: 0.0%
+        - article [ref=e316]:
+          - heading "实习结果分布" [level=2] [ref=e317]
+          - generic [ref=e318]:
+            - generic [ref=e320]:
+              - generic [ref=e321]: 总计
+              - strong [ref=e322]: "10"
+            - list [ref=e323]:
+              - listitem [ref=e324]:
+                - strong [ref=e326]: 优秀
+                - emphasis [ref=e327]: 60.0%
+              - listitem [ref=e328]:
+                - strong [ref=e330]: 良好
+                - emphasis [ref=e331]: 40.0%
+              - listitem [ref=e332]:
+                - strong [ref=e334]: 合格
+                - emphasis [ref=e335]: 0.0%
+        - article [ref=e336]:
+          - heading "实习趋势（2025年）" [level=2] [ref=e337]
+          - generic [ref=e338]:
+            - generic [ref=e339]:
+              - generic [ref=e340]: "10"
+              - generic [ref=e341]: "8"
+              - generic [ref=e342]: "5"
+              - generic [ref=e343]: "3"
+              - generic [ref=e344]: "0"
+            - img "年度实习趋势折线图" [ref=e346]
+            - generic [ref=e349]:
+              - generic [ref=e350]: 1月
+              - generic [ref=e351]: 2月
+              - generic [ref=e352]: 3月
+              - generic [ref=e353]: 4月
+              - generic [ref=e354]: 5月
+              - generic [ref=e355]: 6月
+              - generic [ref=e356]: 7月
+              - generic [ref=e357]: 8月
+              - generic [ref=e358]: 9月
+              - generic [ref=e359]: 10月
+              - generic [ref=e360]: 11月
+              - generic [ref=e361]: 12月
+      - generic [ref=e362]:
+        - article [ref=e363]:
+          - generic [ref=e364]:
+            - heading "最新实习记录" [level=2] [ref=e365]
+            - link "查看更多" [ref=e366] [cursor=pointer]:
+              - /url: /admin/internships
+          - table [ref=e368]:
+            - rowgroup [ref=e376]:
+              - row "学生姓名 学号 企业名称 实习岗位 开始日期 状态" [ref=e377]:
+                - columnheader "学生姓名" [ref=e378]
+                - columnheader "学号" [ref=e379]
+                - columnheader "企业名称" [ref=e380]
+                - columnheader "实习岗位" [ref=e381]
+                - columnheader "开始日期" [ref=e382]
+                - columnheader "状态" [ref=e383]
+            - rowgroup [ref=e384]:
+              - row "马 马俊杰 20220010 洛阳智造装备有限公司 机械设计实习生 2025-07-15 已结束" [ref=e385]:
+                - cell "马 马俊杰" [ref=e386]:
+                  - generic [ref=e387]:
+                    - generic [ref=e388]: 马
+                    - generic [ref=e389]: 马俊杰
+                - cell "20220010" [ref=e390]
+                - cell "洛阳智造装备有限公司" [ref=e391]
+                - cell "机械设计实习生" [ref=e392]
+                - cell "2025-07-15" [ref=e393]
+                - cell "已结束" [ref=e394]:
+                  - generic [ref=e395]: 已结束
+              - row "何 何欣然 20220009 河南中原化工科技有限公司 质检实习生 2025-07-10 已结束" [ref=e396]:
+                - cell "何 何欣然" [ref=e397]:
+                  - generic [ref=e398]:
+                    - generic [ref=e399]: 何
+                    - generic [ref=e400]: 何欣然
+                - cell "20220009" [ref=e401]
+                - cell "河南中原化工科技有限公司" [ref=e402]
+                - cell "质检实习生" [ref=e403]
+                - cell "2025-07-10" [ref=e404]
+                - cell "已结束" [ref=e405]:
+                  - generic [ref=e406]: 已结束
+              - row "郭 郭宇航 20220008 河南数科信息技术有限公司 后端开发实习生 2025-07-01 已结束" [ref=e407]:
+                - cell "郭 郭宇航" [ref=e408]:
+                  - generic [ref=e409]:
+                    - generic [ref=e410]: 郭
+                    - generic [ref=e411]: 郭宇航
+                - cell "20220008" [ref=e412]
+                - cell "河南数科信息技术有限公司" [ref=e413]
+                - cell "后端开发实习生" [ref=e414]
+                - cell "2025-07-01" [ref=e415]
+                - cell "已结束" [ref=e416]:
+                  - generic [ref=e417]: 已结束
+              - row "陈 陈思远 20220003 河南中原化工科技有限公司 工艺助理实习生 2025-07-01 已结束" [ref=e418]:
+                - cell "陈 陈思远" [ref=e419]:
+                  - generic [ref=e420]:
+                    - generic [ref=e421]: 陈
+                    - generic [ref=e422]: 陈思远
+                - cell "20220003" [ref=e423]
+                - cell "河南中原化工科技有限公司" [ref=e424]
+                - cell "工艺助理实习生" [ref=e425]
+                - cell "2025-07-01" [ref=e426]
+                - cell "已结束" [ref=e427]:
+                  - generic [ref=e428]: 已结束
+              - row "周 周浩然 20210006 洛阳智造装备有限公司 设备调试实习生 2024-07-15 已结束" [ref=e429]:
+                - cell "周 周浩然" [ref=e430]:
+                  - generic [ref=e431]:
+                    - generic [ref=e432]: 周
+                    - generic [ref=e433]: 周浩然
+                - cell "20210006" [ref=e434]
+                - cell "洛阳智造装备有限公司" [ref=e435]
+                - cell "设备调试实习生" [ref=e436]
+                - cell "2024-07-15" [ref=e437]
+                - cell "已结束" [ref=e438]:
+                  - generic [ref=e439]: 已结束
+        - article [ref=e440]:
+          - generic [ref=e441]:
+            - heading "最新就业记录" [level=2] [ref=e442]
+            - link "查看更多" [ref=e443] [cursor=pointer]:
+              - /url: /admin/employment
+          - table [ref=e445]:
+            - rowgroup [ref=e452]:
+              - row "学生姓名 学号 企业名称 入职岗位 入职日期" [ref=e453]:
+                - columnheader "学生姓名" [ref=e454]
+                - columnheader "学号" [ref=e455]
+                - columnheader "企业名称" [ref=e456]
+                - columnheader "入职岗位" [ref=e457]
+                - columnheader "入职日期" [ref=e458]
+            - rowgroup [ref=e459]:
+              - row "孙 孙若曦 20210007 郑州星河网络科技有限公司 软件测试工程师 2025-07-22" [ref=e460]:
+                - cell "孙 孙若曦" [ref=e461]:
+                  - generic [ref=e462]:
+                    - generic [ref=e463]: 孙
+                    - generic [ref=e464]: 孙若曦
+                - cell "20210007" [ref=e465]
+                - cell "郑州星河网络科技有限公司" [ref=e466]
+                - cell "软件测试工程师" [ref=e467]
+                - cell "2025-07-22" [ref=e468]
+              - row "周 周浩然 20210006 洛阳智造装备有限公司 设备工程师 2025-07-20" [ref=e469]:
+                - cell "周 周浩然" [ref=e470]:
+                  - generic [ref=e471]:
+                    - generic [ref=e472]: 周
+                    - generic [ref=e473]: 周浩然
+                - cell "20210006" [ref=e474]
+                - cell "洛阳智造装备有限公司" [ref=e475]
+                - cell "设备工程师" [ref=e476]
+                - cell "2025-07-20" [ref=e477]
+              - row "刘 刘佳怡 20210005 河南华信财务咨询有限公司 财务助理 2025-07-15" [ref=e478]:
+                - cell "刘 刘佳怡" [ref=e479]:
+                  - generic [ref=e480]:
+                    - generic [ref=e481]: 刘
+                    - generic [ref=e482]: 刘佳怡
+                - cell "20210005" [ref=e483]
+                - cell "河南华信财务咨询有限公司" [ref=e484]
+                - cell "财务助理" [ref=e485]
+                - cell "2025-07-15" [ref=e486]
+              - row "赵 赵子涵 20210004 河南中原化工科技有限公司 化工分析员 2025-07-10" [ref=e487]:
+                - cell "赵 赵子涵" [ref=e488]:
+                  - generic [ref=e489]:
+                    - generic [ref=e490]: 赵
+                    - generic [ref=e491]: 赵子涵
+                - cell "20210004" [ref=e492]
+                - cell "河南中原化工科技有限公司" [ref=e493]
+                - cell "化工分析员" [ref=e494]
+                - cell "2025-07-10" [ref=e495]
+              - row "王 王雨晴 20210002 郑州云启软件有限公司 Java开发工程师 2025-07-05" [ref=e496]:
+                - cell "王 王雨晴" [ref=e497]:
+                  - generic [ref=e498]:
+                    - generic [ref=e499]: 王
+                    - generic [ref=e500]: 王雨晴
+                - cell "20210002" [ref=e501]
+                - cell "郑州云启软件有限公司" [ref=e502]
+                - cell "Java开发工程师" [ref=e503]
+                - cell "2025-07-05" [ref=e504]

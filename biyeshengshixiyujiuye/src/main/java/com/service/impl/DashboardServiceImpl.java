@@ -30,6 +30,7 @@ public class DashboardServiceImpl implements DashboardService {
         Long jiuyeCount = ((Number) baseData.get("jiuyeCount")).longValue();
         Long notGraduatedShixiCount = ((Number) baseData.get("notGraduatedShixiCount")).longValue();
         Long graduatedJiuyeCount = ((Number) baseData.get("graduatedJiuyeCount")).longValue();
+        Long previousGraduatedJiuyeCount = getLong(baseData, "previousGraduatedJiuyeCount");
 
         // 计算已毕业就业率 = 已毕业就业人数 / 已毕业总人数
         BigDecimal employmentRate = BigDecimal.ZERO;
@@ -39,6 +40,19 @@ public class DashboardServiceImpl implements DashboardService {
                     .divide(new BigDecimal(graduatedCount), 1, RoundingMode.HALF_UP);
         }
         baseData.put("employmentRate", employmentRate);
+
+        BigDecimal previousEmploymentRate = BigDecimal.ZERO;
+        if (graduatedCount != null && graduatedCount > 0 && previousGraduatedJiuyeCount != null) {
+            previousEmploymentRate = new BigDecimal(previousGraduatedJiuyeCount)
+                    .multiply(new BigDecimal(100))
+                    .divide(new BigDecimal(graduatedCount), 1, RoundingMode.HALF_UP);
+        }
+        baseData.put("employmentRateChange", employmentRate.subtract(previousEmploymentRate));
+        baseData.put("studentMonthChange", getLong(baseData, "studentCurrentMonthCount") - getLong(baseData, "studentPreviousMonthCount"));
+        baseData.put("qiyeMonthChange", getLong(baseData, "qiyeCurrentMonthCount") - getLong(baseData, "qiyePreviousMonthCount"));
+        baseData.put("laoshiMonthChange", getLong(baseData, "laoshiCurrentMonthCount") - getLong(baseData, "laoshiPreviousMonthCount"));
+        baseData.put("shixiMonthChange", getLong(baseData, "shixiCurrentMonthCount") - getLong(baseData, "shixiPreviousMonthCount"));
+        baseData.put("jiuyeMonthChange", getLong(baseData, "jiuyeCurrentMonthCount") - getLong(baseData, "jiuyePreviousMonthCount"));
 
         // 计算未毕业实习率 = 未毕业实习人数 / 未毕业总人数
         BigDecimal shixiRate = BigDecimal.ZERO;
@@ -67,6 +81,14 @@ public class DashboardServiceImpl implements DashboardService {
         String year = new SimpleDateFormat("yyyy").format(new Date());
         List<Map<String, Object>> list = dashboardDao.selectMonthTrend(year);
 
+        if (isEmptyTrend(list)) {
+            String latestYear = dashboardDao.selectLatestShixiYear();
+            if (latestYear != null && latestYear.length() > 0) {
+                year = latestYear;
+                list = dashboardDao.selectMonthTrend(year);
+            }
+        }
+
         String[] xData = new String[12];
         Integer[] yData = new Integer[12];
         for (int i = 0; i < 12; i++) {
@@ -86,6 +108,7 @@ public class DashboardServiceImpl implements DashboardService {
         }
 
         Map<String, Object> result = new HashMap<>();
+        result.put("year", year);
         result.put("xData", Arrays.asList(xData));
         result.put("yData", Arrays.asList(yData));
         return result;
@@ -94,5 +117,40 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public List<Map<String, Object>> getCompanyTop() {
         return dashboardDao.selectCompanyTop();
+    }
+
+    @Override
+    public Map<String, Object> getSummary() {
+        Map<String, Object> result = new HashMap<>();
+        result.put("base", getBaseData());
+        result.put("shixiType", getShixiTypeStats());
+        result.put("shixiResult", getShixiResultStats());
+        result.put("monthTrend", getMonthTrend());
+        result.put("companyTop", getCompanyTop());
+        result.put("latestShixi", dashboardDao.selectLatestShixi());
+        result.put("latestJiuye", dashboardDao.selectLatestJiuye());
+        return result;
+    }
+
+    private Long getLong(Map<String, Object> data, String key) {
+        Object value = data.get(key);
+        if (value == null) {
+            return 0L;
+        }
+        return ((Number) value).longValue();
+    }
+
+    private boolean isEmptyTrend(List<Map<String, Object>> list) {
+        if (list == null || list.isEmpty()) {
+            return true;
+        }
+
+        for (Map<String, Object> item : list) {
+            Object totalObj = item.get("total");
+            if (totalObj != null && ((Number) totalObj).intValue() > 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }

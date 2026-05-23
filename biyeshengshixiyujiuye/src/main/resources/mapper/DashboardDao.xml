@@ -12,9 +12,20 @@
             (SELECT COUNT(DISTINCT xuesheng_id) FROM jiuye) AS jiuyeCount,
             (SELECT COUNT(DISTINCT xuesheng_id) FROM shixi WHERE xuesheng_id IN (SELECT id FROM xuesheng WHERE CONCAT(ruxue_year + 4, '-06-01') &gt; CURDATE())) AS notGraduatedShixiCount,
             (SELECT COUNT(DISTINCT xuesheng_id) FROM jiuye WHERE xuesheng_id IN (SELECT id FROM xuesheng WHERE CONCAT(ruxue_year + 4, '-06-01') &lt;= CURDATE())) AS graduatedJiuyeCount,
+            (SELECT COUNT(DISTINCT xuesheng_id) FROM jiuye WHERE create_time &lt; DATE_FORMAT(CURDATE(), '%Y-%m-01') AND xuesheng_id IN (SELECT id FROM xuesheng WHERE CONCAT(ruxue_year + 4, '-06-01') &lt;= CURDATE())) AS previousGraduatedJiuyeCount,
             (SELECT COUNT(*) FROM qiye) AS qiyeCount,
             (SELECT COUNT(*) FROM laoshi) AS laoshiCount,
-            (SELECT COUNT(*) FROM shixi WHERE MONTH(create_time) = MONTH(NOW()) AND YEAR(create_time) = YEAR(NOW())) AS monthShixiCount
+            (SELECT COUNT(*) FROM shixi WHERE MONTH(create_time) = MONTH(NOW()) AND YEAR(create_time) = YEAR(NOW())) AS monthShixiCount,
+            (SELECT COUNT(*) FROM xuesheng WHERE create_time &gt;= DATE_FORMAT(CURDATE(), '%Y-%m-01') AND create_time &lt; DATE_ADD(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH)) AS studentCurrentMonthCount,
+            (SELECT COUNT(*) FROM xuesheng WHERE create_time &gt;= DATE_SUB(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH) AND create_time &lt; DATE_FORMAT(CURDATE(), '%Y-%m-01')) AS studentPreviousMonthCount,
+            (SELECT COUNT(*) FROM qiye WHERE create_time &gt;= DATE_FORMAT(CURDATE(), '%Y-%m-01') AND create_time &lt; DATE_ADD(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH)) AS qiyeCurrentMonthCount,
+            (SELECT COUNT(*) FROM qiye WHERE create_time &gt;= DATE_SUB(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH) AND create_time &lt; DATE_FORMAT(CURDATE(), '%Y-%m-01')) AS qiyePreviousMonthCount,
+            (SELECT COUNT(*) FROM laoshi WHERE create_time &gt;= DATE_FORMAT(CURDATE(), '%Y-%m-01') AND create_time &lt; DATE_ADD(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH)) AS laoshiCurrentMonthCount,
+            (SELECT COUNT(*) FROM laoshi WHERE create_time &gt;= DATE_SUB(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH) AND create_time &lt; DATE_FORMAT(CURDATE(), '%Y-%m-01')) AS laoshiPreviousMonthCount,
+            (SELECT COUNT(*) FROM shixi WHERE create_time &gt;= DATE_FORMAT(CURDATE(), '%Y-%m-01') AND create_time &lt; DATE_ADD(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH)) AS shixiCurrentMonthCount,
+            (SELECT COUNT(*) FROM shixi WHERE create_time &gt;= DATE_SUB(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH) AND create_time &lt; DATE_FORMAT(CURDATE(), '%Y-%m-01')) AS shixiPreviousMonthCount,
+            (SELECT COUNT(*) FROM jiuye WHERE create_time &gt;= DATE_FORMAT(CURDATE(), '%Y-%m-01') AND create_time &lt; DATE_ADD(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH)) AS jiuyeCurrentMonthCount,
+            (SELECT COUNT(*) FROM jiuye WHERE create_time &gt;= DATE_SUB(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH) AND create_time &lt; DATE_FORMAT(CURDATE(), '%Y-%m-01')) AS jiuyePreviousMonthCount
     </select>
 
     <!-- 实习类型统计 -->
@@ -53,6 +64,15 @@
         ORDER BY CAST(monthNum AS SIGNED)
     </select>
 
+    <!-- 最近有实习数据的年份 -->
+    <select id="selectLatestShixiYear" resultType="string">
+        SELECT YEAR(create_time)
+        FROM shixi
+        WHERE create_time IS NOT NULL
+        ORDER BY create_time DESC
+        LIMIT 1
+    </select>
+
     <!-- 企业招聘 TOP10 -->
     <select id="selectCompanyTop" resultType="map">
         SELECT
@@ -64,6 +84,43 @@
         GROUP BY q.qiye_name
         ORDER BY value DESC
         LIMIT 10
+    </select>
+
+    <!-- 最新实习记录 -->
+    <select id="selectLatestShixi" resultType="map">
+        SELECT
+            IFNULL(x.xuesheng_name, '') AS studentName,
+            IFNULL(x.xuesheng_xuehao, '') AS studentNumber,
+            IFNULL(x.xuesheng_photo, '') AS studentPhoto,
+            IFNULL(q.qiye_name, '') AS companyName,
+            IFNULL(s.shixi_gangwei_name, '') AS positionName,
+            DATE_FORMAT(s.shixi_kaishi_time, '%Y-%m-%d') AS startDate,
+            CASE
+                WHEN s.shixi_kaishi_time IS NOT NULL AND s.shixi_kaishi_time &gt; CURDATE() THEN '未开始'
+                WHEN s.shixi_jieshu_time IS NOT NULL AND s.shixi_jieshu_time &lt; CURDATE() THEN '已结束'
+                ELSE '进行中'
+            END AS status
+        FROM shixi s
+        LEFT JOIN xuesheng x ON s.xuesheng_id = x.id
+        LEFT JOIN qiye q ON s.qiye_id = q.id
+        ORDER BY s.create_time DESC, s.id DESC
+        LIMIT 5
+    </select>
+
+    <!-- 最新就业记录 -->
+    <select id="selectLatestJiuye" resultType="map">
+        SELECT
+            IFNULL(x.xuesheng_name, '') AS studentName,
+            IFNULL(x.xuesheng_xuehao, '') AS studentNumber,
+            IFNULL(x.xuesheng_photo, '') AS studentPhoto,
+            IFNULL(q.qiye_name, '') AS companyName,
+            IFNULL(j.jiuye_gangwei_name, '') AS positionName,
+            DATE_FORMAT(j.jiuye_kaishi_time, '%Y-%m-%d') AS startDate
+        FROM jiuye j
+        LEFT JOIN xuesheng x ON j.xuesheng_id = x.id
+        LEFT JOIN qiye q ON j.qiye_id = q.id
+        ORDER BY j.create_time DESC, j.id DESC
+        LIMIT 5
     </select>
 
 </mapper>

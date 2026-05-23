@@ -28,16 +28,6 @@
 | **FastJSON** | 1.2.8 | JSON 序列化/反序列化 |
 | **Thymeleaf** | — | 静态资源渲染模板引擎（主要用于前后端同构部署时的页面路由） |
 
-### 前端
-
-| 技术 | 版本 | 说明 |
-|------|------|------|
-| **Vue** | 2.6.10 | 前端核心框架 |
-| **Element UI** | 2.13.0 | UI 组件库，提供表单、表格、弹窗等丰富组件 |
-| **ECharts** | 4.6.0 | 数据可视化图表库 |
-| **Axios** | 0.19.2 | HTTP 请求库 |
-| **vue-router** | 3.1.5 | 前端路由管理 |
-| **vue-amap** | 0.5.10 | 高德地图集成，用于地理位置选择与展示 |
 
 ### 工具与中间件
 
@@ -235,17 +225,6 @@ mvn spring-boot:run
 
 后端服务启动于 **http://localhost:8080/biyeshengshixiyujiuye**
 
-### 4. 启动前端（开发模式）
-
-```bash
-cd biyeshengshixiyujiuye/src/main/resources/admin/admin
-
-# 安装依赖（使用 cnpm 加速）
-cnpm install
-
-# 启动开发服务器（端口 8081，自动代理后端 API）
-cnpm run serve
-```
 
 前端开发服务器启动于 **http://localhost:8081**，自动将 `/biyeshengshixiyujiuye` 前缀的 API 请求代理至 `localhost:8080`。
 

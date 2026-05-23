@@ -32,4 +32,9 @@ public interface DashboardService {
      * 获取企业招聘 TOP10
      */
     List<Map<String, Object>> getCompanyTop();
+
+    /**
+     * 获取管理端首页聚合数据
+     */
+    Map<String, Object> getSummary();
 }

@@ -119,6 +119,7 @@
 
 <script setup>
 import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import {
   ChevronDown,
   Eye,
@@ -130,6 +131,8 @@ import {
   UsersRound
 } from 'lucide-vue-next'
 import { loginByRole } from '../services/auth'
+
+const router = useRouter()
 
 const roles = [
   { label: '学生', value: 'student' },
@@ -270,7 +273,13 @@ async function submitLogin() {
       })
     )
     persistRememberedLogin()
-    setMessage('success', '登录成功，正在进入系统')
+    if (form.role === 'admin') {
+      setMessage('success', '登录成功，正在进入系统')
+      await router.push({ name: 'admin.dashboard' })
+      return
+    }
+
+    setMessage('success', '登录成功，该角色工作台后续实现')
   } catch (error) {
     setMessage('error', error.message || '登录失败，请稍后重试')
   } finally {
