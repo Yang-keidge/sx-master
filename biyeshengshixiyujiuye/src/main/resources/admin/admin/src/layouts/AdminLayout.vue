@@ -57,11 +57,19 @@
           <button class="topbar-icon" type="button" title="设置" aria-label="设置">
             <Settings :size="21" stroke-width="2" />
           </button>
-          <button class="profile-button" type="button">
-            <span class="avatar">管</span>
-            <strong>管理员</strong>
-            <ChevronDown :size="17" stroke-width="2" />
-          </button>
+          <div class="profile-dropdown">
+            <button class="profile-button" type="button" aria-haspopup="menu">
+              <span class="avatar">管</span>
+              <strong>管理员</strong>
+              <ChevronDown :size="17" stroke-width="2" />
+            </button>
+            <div class="profile-menu" role="menu">
+              <button class="profile-menu-item" type="button" role="menuitem" @click="logout">
+                <LogOut :size="16" stroke-width="2" />
+                <span>退出登录</span>
+              </button>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -71,9 +79,17 @@
 </template>
 
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import { Bell, ChevronDown, ChevronsLeft, GraduationCap, Settings } from 'lucide-vue-next'
+import { RouterLink, RouterView, useRouter } from 'vue-router'
+import { Bell, ChevronDown, ChevronsLeft, GraduationCap, LogOut, Settings } from 'lucide-vue-next'
 import { sidebarSections } from '../data/adminNavigation'
+
+const router = useRouter()
+
+function logout() {
+  localStorage.removeItem('Token')
+  localStorage.removeItem('currentUser')
+  router.replace({ name: 'login' })
+}
 </script>
 
 <style scoped>
@@ -261,6 +277,55 @@ import { sidebarSections } from '../data/adminNavigation'
   color: #26324a;
   font-size: 15px;
   font-weight: 800;
+}
+
+.profile-dropdown {
+  position: relative;
+}
+
+.profile-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 20;
+  min-width: 132px;
+  padding: 6px;
+  border: 1px solid #dfe5ef;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 14px 28px rgba(42, 58, 92, 0.12);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease;
+}
+
+.profile-dropdown:hover .profile-menu,
+.profile-dropdown:focus-within .profile-menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.profile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: 6px;
+  background: transparent;
+  color: #536078;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.profile-menu-item:hover {
+  background: #f0f4fb;
+  color: #3657ff;
 }
 
 .avatar {

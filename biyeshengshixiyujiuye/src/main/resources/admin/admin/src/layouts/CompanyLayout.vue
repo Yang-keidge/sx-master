@@ -29,13 +29,21 @@
           <span>企业端</span>
         </div>
 
-        <div class="profile-wrap">
-          <span class="avatar-wrap">
-            <img v-if="companyPhoto" :src="companyPhoto" alt="" />
-            <span v-else>{{ companyInitial }}</span>
-          </span>
-          <strong>{{ companyName }}</strong>
-          <ChevronDown :size="17" stroke-width="2" />
+        <div class="profile-dropdown">
+          <button class="profile-wrap" type="button" aria-haspopup="menu">
+            <span class="avatar-wrap">
+              <img v-if="companyPhoto" :src="companyPhoto" alt="" />
+              <span v-else>{{ companyInitial }}</span>
+            </span>
+            <strong>{{ companyName }}</strong>
+            <ChevronDown :size="17" stroke-width="2" />
+          </button>
+          <div class="profile-menu" role="menu">
+            <button class="profile-menu-item" type="button" role="menuitem" @click="logout">
+              <LogOut :size="16" stroke-width="2" />
+              <span>退出登录</span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -46,12 +54,13 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
-import { ChevronDown, GraduationCap } from 'lucide-vue-next'
+import { RouterLink, RouterView, useRouter } from 'vue-router'
+import { ChevronDown, GraduationCap, LogOut } from 'lucide-vue-next'
 import { companySidebarSections } from '../data/companyNavigation'
 import { session } from '../api/company'
 import { normalizeAssetUrl } from '../api/request'
 
+const router = useRouter()
 const company = ref(null)
 
 onMounted(async () => {
@@ -90,6 +99,12 @@ function updateStoredUser(data) {
       tableName: 'qiye'
     })
   )
+}
+
+function logout() {
+  localStorage.removeItem('Token')
+  localStorage.removeItem('currentUser')
+  router.replace({ name: 'login' })
 }
 </script>
 
@@ -218,9 +233,60 @@ function updateStoredUser(data) {
   display: flex;
   align-items: center;
   gap: 10px;
+  padding: 0;
+  background: transparent;
   color: #26324a;
   font-size: 15px;
   font-weight: 800;
+}
+
+.profile-dropdown {
+  position: relative;
+}
+
+.profile-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 20;
+  min-width: 132px;
+  padding: 6px;
+  border: 1px solid #dfe5ef;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 14px 28px rgba(42, 58, 92, 0.12);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease;
+}
+
+.profile-dropdown:hover .profile-menu,
+.profile-dropdown:focus-within .profile-menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.profile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: 6px;
+  background: transparent;
+  color: #536078;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.profile-menu-item:hover {
+  background: #f0f4fb;
+  color: #3657ff;
 }
 
 .avatar-wrap {
