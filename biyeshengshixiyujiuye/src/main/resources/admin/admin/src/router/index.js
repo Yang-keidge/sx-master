@@ -2,12 +2,17 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/LoginView.vue'
 import AdminLayout from '../layouts/AdminLayout.vue'
 import CompanyLayout from '../layouts/CompanyLayout.vue'
+import StudentLayout from '../layouts/StudentLayout.vue'
 import DashboardView from '../views/admin/DashboardView.vue'
 import CompanyDashboardView from '../views/company/DashboardView.vue'
 import CompanyProfileView from '../views/company/ProfileView.vue'
+import StudentDashboardView from '../views/student/DashboardView.vue'
+import StudentProfileView from '../views/student/ProfileView.vue'
+import StudentPasswordView from '../views/student/PasswordView.vue'
 import PlaceholderView from '../views/admin/PlaceholderView.vue'
 import CrudModuleView from '../views/admin/crud/ModuleView.vue'
 import CompanyCrudModuleView from '../views/company/crud/ModuleView.vue'
+import StudentCrudModuleView from '../views/student/crud/ModuleView.vue'
 
 const placeholder = (path, name, title, group) => ({
   path,
@@ -49,6 +54,21 @@ const companyModuleRoute = (path, name, title, group, moduleName) => ({
     group,
     requiresAuth: true,
     role: 'company'
+  }
+})
+
+const studentModuleRoute = (path, name, title, group, moduleName) => ({
+  path,
+  name,
+  component: StudentCrudModuleView,
+  props: {
+    moduleName
+  },
+  meta: {
+    title,
+    group,
+    requiresAuth: true,
+    role: 'student'
   }
 })
 
@@ -142,9 +162,56 @@ const router = createRouter({
         },
         companyModuleRoute('internships', 'company.internships', '实习管理', 'business', 'internships'),
         companyModuleRoute('announcements', 'company.announcements', '招聘公告', 'business', 'announcements'),
-        companyModuleRoute('internship-data', 'company.internshipData', '实习数据', 'data', 'internshipData'),
-        companyModuleRoute('employment-data', 'company.employmentData', '就业数据', 'data', 'employmentData'),
+        companyModuleRoute('employment-data', 'company.employmentData', '就业管理', 'business', 'employmentData'),
         companyModuleRoute('comments', 'company.comments', '公告评论', 'interaction', 'comments')
+      ]
+    },
+    {
+      path: '/student',
+      component: StudentLayout,
+      redirect: '/student/dashboard',
+      meta: {
+        requiresAuth: true,
+        role: 'student'
+      },
+      children: [
+        {
+          path: 'dashboard',
+          name: 'student.dashboard',
+          component: StudentDashboardView,
+          meta: {
+            title: '首页',
+            group: 'workbench',
+            requiresAuth: true,
+            role: 'student'
+          }
+        },
+        {
+          path: 'profile',
+          name: 'student.profile',
+          component: StudentProfileView,
+          meta: {
+            title: '个人信息',
+            group: 'profile',
+            requiresAuth: true,
+            role: 'student'
+          }
+        },
+        {
+          path: 'password',
+          name: 'student.password',
+          component: StudentPasswordView,
+          meta: {
+            title: '修改密码',
+            group: 'profile',
+            requiresAuth: true,
+            role: 'student'
+          }
+        },
+        studentModuleRoute('internships', 'student.internships', '我的实习', 'business', 'internships'),
+        studentModuleRoute('employment', 'student.employment', '我的就业', 'business', 'employment'),
+        studentModuleRoute('announcements', 'student.announcements', '公告信息', 'service', 'announcements'),
+        studentModuleRoute('comments', 'student.comments', '我的评论', 'interaction', 'comments')
       ]
     }
   ],
@@ -161,12 +228,22 @@ router.beforeEach((to) => {
     return { name: 'login' }
   }
 
-  if (to.meta.role === 'admin' && token && currentUser?.role && currentUser.role !== '管理员') {
-    return currentUser.role === '企业' ? { name: 'company.dashboard' } : { name: 'login' }
-  }
+  if (to.meta.role && token && currentUser?.role) {
+    const requiredRole = {
+      admin: '管理员',
+      company: '企业',
+      student: '学生'
+    }[to.meta.role]
 
-  if (to.meta.role === 'company' && token && currentUser?.role && currentUser.role !== '企业') {
-    return currentUser.role === '管理员' ? { name: 'admin.dashboard' } : { name: 'login' }
+    if (requiredRole && currentUser.role !== requiredRole) {
+      const fallbackRoute = {
+        管理员: 'admin.dashboard',
+        企业: 'company.dashboard',
+        学生: 'student.dashboard'
+      }[currentUser.role]
+
+      return fallbackRoute ? { name: fallbackRoute } : { name: 'login' }
+    }
   }
 
   return true

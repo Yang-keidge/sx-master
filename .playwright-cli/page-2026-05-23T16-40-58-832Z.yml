@@ -1,0 +1,181 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - link "返回企业首页" [ref=e5] [cursor=pointer]:
+      - /url: /company/dashboard
+      - img [ref=e7]
+      - generic [ref=e10]:
+        - strong [ref=e11]: 实习就业管理系统
+        - text: 企业端
+    - navigation "企业端菜单" [ref=e12]:
+      - link "首页" [ref=e14] [cursor=pointer]:
+        - /url: /company/dashboard
+        - img [ref=e15]
+        - generic [ref=e18]: 首页
+      - generic [ref=e19]:
+        - heading "企业管理" [level=2] [ref=e20]
+        - link "企业信息" [ref=e21] [cursor=pointer]:
+          - /url: /company/profile
+          - img [ref=e22]
+          - generic [ref=e26]: 企业信息
+        - link "实习管理" [ref=e27] [cursor=pointer]:
+          - /url: /company/internships
+          - img [ref=e28]
+          - generic [ref=e32]: 实习管理
+        - link "就业管理" [ref=e33] [cursor=pointer]:
+          - /url: /company/employment-data
+          - img [ref=e34]
+          - generic [ref=e38]: 就业管理
+        - link "招聘公告" [ref=e39] [cursor=pointer]:
+          - /url: /company/announcements
+          - img [ref=e40]
+          - generic [ref=e43]: 招聘公告
+      - generic [ref=e44]:
+        - heading "互动交流" [level=2] [ref=e45]
+        - link "公告评论" [ref=e46] [cursor=pointer]:
+          - /url: /company/comments
+          - img [ref=e47]
+          - generic [ref=e49]: 公告评论
+  - generic [ref=e50]:
+    - banner [ref=e51]:
+      - generic [ref=e52]:
+        - button "企 企业用户" [ref=e53] [cursor=pointer]:
+          - generic [ref=e55]: 企
+          - strong [ref=e56]: 企业用户
+          - img [ref=e57]
+        - menu:
+          - menuitem "退出登录":
+            - img
+            - generic: 退出登录
+    - main [ref=e59]:
+      - generic [ref=e61]:
+        - heading "就业管理" [level=1] [ref=e62]
+        - paragraph [ref=e63]: 维护本企业就业学生、岗位和入职日期数据。
+      - generic [ref=e65]:
+        - generic [ref=e66]:
+          - generic [ref=e67]: 学生姓名
+          - textbox "学生姓名" [ref=e71]:
+            - /placeholder: 请输入学生姓名
+        - generic [ref=e73]:
+          - generic [ref=e74]: 学号
+          - textbox "学号" [ref=e78]:
+            - /placeholder: 请输入学号
+        - generic [ref=e80]:
+          - generic [ref=e81]: 岗位
+          - textbox "岗位" [ref=e85]:
+            - /placeholder: 请输入岗位
+        - generic [ref=e88]:
+          - button "查询" [ref=e89] [cursor=pointer]:
+            - generic [ref=e90]: 查询
+          - button "重置" [ref=e91] [cursor=pointer]:
+            - generic [ref=e92]: 重置
+      - generic [ref=e93]:
+        - generic [ref=e94]:
+          - generic [ref=e95]:
+            - button "新增" [ref=e96] [cursor=pointer]:
+              - generic [ref=e97]: 新增
+            - generic [ref=e98]:
+              - generic [ref=e100]:
+                - generic:
+                  - combobox [ref=e102]
+                  - generic [ref=e103]: 一级排序
+                - img [ref=e106] [cursor=pointer]
+              - generic [ref=e109]:
+                - generic:
+                  - combobox [disabled] [ref=e111]
+                  - generic [ref=e112]: 升序
+                - generic:
+                  - generic:
+                    - img
+              - generic [ref=e114]:
+                - generic:
+                  - combobox [ref=e116]
+                  - generic [ref=e117]: 二级排序
+                - img [ref=e120] [cursor=pointer]
+              - generic [ref=e123]:
+                - generic:
+                  - combobox [disabled] [ref=e125]
+                  - generic [ref=e126]: 升序
+                - generic:
+                  - generic:
+                    - img
+          - generic [ref=e128]: 共 0 条
+        - generic [ref=e220]:
+          - table [ref=e222]:
+            - rowgroup [ref=e234]:
+              - row "序号 头像 学生姓名 学号 我的班级 入职岗位 入职日期 就业备注 创建时间 操作" [ref=e235]:
+                - columnheader "序号" [ref=e236]:
+                  - generic [ref=e237]: 序号
+                - columnheader "头像" [ref=e238]:
+                  - generic [ref=e239]: 头像
+                - columnheader "学生姓名" [ref=e240]:
+                  - generic [ref=e241]: 学生姓名
+                - columnheader "学号" [ref=e242]:
+                  - generic [ref=e243]: 学号
+                - columnheader "我的班级" [ref=e244]:
+                  - generic [ref=e245]: 我的班级
+                - columnheader "入职岗位" [ref=e246]:
+                  - generic [ref=e247]: 入职岗位
+                - columnheader "入职日期" [ref=e248]:
+                  - generic [ref=e249]: 入职日期
+                - columnheader "就业备注" [ref=e250]:
+                  - generic [ref=e251]: 就业备注
+                - columnheader "创建时间" [ref=e252]:
+                  - generic [ref=e253]: 创建时间
+                - columnheader "操作" [ref=e254]:
+                  - generic [ref=e255]: 操作
+          - generic [ref=e259]:
+            - table:
+              - rowgroup
+            - generic [ref=e262]:
+              - img [ref=e264]
+              - paragraph [ref=e281]: 暂无数据
+        - generic [ref=e193]:
+          - generic [ref=e194]: Total 0
+          - generic [ref=e197] [cursor=pointer]:
+            - generic:
+              - combobox [ref=e199]
+              - generic [ref=e200]: 10/page
+            - img [ref=e203]
+          - button "Go to previous page" [disabled] [ref=e205]:
+            - generic:
+              - img
+          - list [ref=e206]:
+            - listitem "page 1" [ref=e207]: "1"
+          - button "Go to next page" [disabled] [ref=e208]:
+            - generic:
+              - img
+          - generic [ref=e209]:
+            - generic [ref=e210]: Go to
+            - spinbutton "Page" [ref=e213]: "1"
+    - dialog "新增就业" [ref=e283]:
+      - generic [active] [ref=e284]:
+        - banner [ref=e285]:
+          - heading "新增就业" [level=2] [ref=e286]
+          - button "Close this dialog" [ref=e287] [cursor=pointer]:
+            - img [ref=e289]
+        - generic [ref=e292]:
+          - generic [ref=e293]:
+            - generic [ref=e294]: "*学生"
+            - generic [ref=e297]:
+              - generic:
+                - combobox "*学生" [ref=e299]
+                - generic [ref=e300]: 请选择学生
+              - img [ref=e303] [cursor=pointer]
+          - generic [ref=e305]:
+            - generic [ref=e306]: "*入职岗位"
+            - textbox "*入职岗位" [ref=e310]:
+              - /placeholder: 请输入入职岗位
+          - generic [ref=e312]:
+            - generic [ref=e313]: "*入职日期"
+            - generic [ref=e316]:
+              - img [ref=e319]
+              - combobox "*入职日期" [ref=e321]
+          - generic [ref=e322]:
+            - generic [ref=e323]: 就业备注
+            - textbox "就业备注" [ref=e326]:
+              - /placeholder: 请输入就业备注
+        - contentinfo [ref=e327]:
+          - button "取消" [ref=e328] [cursor=pointer]:
+            - generic [ref=e329]: 取消
+          - button "保存" [ref=e330] [cursor=pointer]:
+            - generic [ref=e331]: 保存

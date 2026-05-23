@@ -21,10 +21,6 @@ function dictionaryColumn(prop, label, dictionary, valueProp, extra = {}) {
   return { prop, label, dictionary, valueProp, ...extra }
 }
 
-function readonlySearch(params) {
-  return params
-}
-
 async function loadStudentOptions() {
   const result = await studentApi.page({ page: 1, limit: 1000, orderBy: 'id' })
   return (result.data?.list || []).map((item) => ({
@@ -195,29 +191,16 @@ export const companyModuleConfigs = {
     detailFields: internshipDetailFields
   },
 
-  internshipData: {
-    title: '实习数据',
-    subtitle: '查看本企业实习学生数据，可按学生、岗位、类型和结果筛选。',
-    entityName: '实习',
-    api: internshipApi,
-    canCreate: false,
-    canEdit: false,
-    canDelete: false,
-    transformSearch: readonlySearch,
-    searchFields: internshipSearchFields,
-    columns: internshipColumns,
-    formFields: [],
-    detailFields: internshipDetailFields
-  },
-
   employmentData: {
-    title: '就业数据',
-    subtitle: '查看本企业就业学生、岗位和入职日期数据。',
+    title: '就业管理',
+    subtitle: '维护本企业就业学生、岗位和入职日期数据。',
     entityName: '就业',
     api: employmentApi,
-    canCreate: false,
     canEdit: false,
     canDelete: false,
+    optionLoaders: {
+      students: loadStudentOptions
+    },
     searchFields: [field('xueshengName', '学生姓名'), field('xueshengXuehao', '学号'), field('jiuyeGangweiName', '岗位')],
     columns: [
       field('xueshengPhoto', '头像', 'image', { fallbackProp: 'xueshengName', width: 72 }),
@@ -232,7 +215,13 @@ export const companyModuleConfigs = {
       field('jiuyeContent', '就业备注', 'multiline', { minWidth: 220 }),
       createTimeColumn
     ],
-    formFields: [],
+    formFields: [
+      field('xueshengId', '学生', 'remoteSelect', { source: 'students', required: true }),
+      field('jiuyeGangweiName', '入职岗位', 'input', { required: true }),
+      field('jiuyeKaishiTime', '入职日期', 'date', { required: true }),
+      field('jiuyeContent', '就业备注', 'textarea', { wide: true, rows: 5 })
+    ],
+    transformPayload: withCurrentCompany,
     detailFields: [
       field('xueshengName', '学生姓名'),
       field('xueshengXuehao', '学号'),
