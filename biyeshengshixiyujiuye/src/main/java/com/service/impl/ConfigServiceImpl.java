@@ -25,9 +25,18 @@ import com.utils.Query;
 public class ConfigServiceImpl extends ServiceImpl<ConfigDao, ConfigEntity> implements ConfigService {
 	@Override
 	public PageUtils queryPage(Map<String, Object> params) {
+		EntityWrapper<ConfigEntity> wrapper = new EntityWrapper<ConfigEntity>();
+		Object name = params.get("name");
+		Object value = params.get("value");
+		if (name != null && !"".equals(String.valueOf(name)) && !"null".equals(String.valueOf(name))) {
+			wrapper.like("name", String.valueOf(name));
+		}
+		if (value != null && !"".equals(String.valueOf(value)) && !"null".equals(String.valueOf(value))) {
+			wrapper.like("value", String.valueOf(value));
+		}
 		Page<ConfigEntity> page = this.selectPage(
                 new Query<ConfigEntity>(params).getPage(),
-                new EntityWrapper<ConfigEntity>()
+                wrapper
         );
         return new PageUtils(page);
 	}

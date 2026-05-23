@@ -70,6 +70,12 @@ public class LaoshiModel implements Serializable {
 
 
     /**
+     * 院系
+     */
+    private Integer yuanxiTypes;
+
+
+    /**
      * 电子邮箱
      */
     private String laoshiEmail;
@@ -194,6 +200,20 @@ public class LaoshiModel implements Serializable {
 	 */
     public void setSexTypes(Integer sexTypes) {
         this.sexTypes = sexTypes;
+    }
+    /**
+	 * 获取：院系
+	 */
+    public Integer getYuanxiTypes() {
+        return yuanxiTypes;
+    }
+
+
+    /**
+	 * 设置：院系
+	 */
+    public void setYuanxiTypes(Integer yuanxiTypes) {
+        this.yuanxiTypes = yuanxiTypes;
     }
     /**
 	 * 获取：电子邮箱

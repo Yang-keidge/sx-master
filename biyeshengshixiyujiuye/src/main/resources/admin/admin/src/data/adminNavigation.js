@@ -12,7 +12,6 @@ import {
   Home,
   Megaphone,
   MessageSquareText,
-  Settings,
   UserRound,
   UsersRound
 } from 'lucide-vue-next'
@@ -21,8 +20,7 @@ export const sidebarSections = [
   {
     title: '',
     items: [
-      { label: '首页', routeName: 'admin.dashboard', icon: Home },
-      { label: '数据看板', routeName: 'admin.analytics', icon: BarChart3 }
+      { label: '首页', routeName: 'admin.dashboard', icon: Home }
     ]
   },
   {
@@ -46,7 +44,6 @@ export const sidebarSections = [
     title: '系统管理',
     items: [
       { label: '字典管理', routeName: 'admin.dictionaries', icon: BookOpenText },
-      { label: '系统配置', routeName: 'admin.settings', icon: Settings },
       { label: '文件管理', routeName: 'admin.files', icon: Folder, hidden: true },
       { label: '数据统计', routeName: 'admin.statistics', icon: ChartPie, trailingIcon: ChevronDown, hidden: true },
       { label: '系统日志', routeName: 'admin.logs', icon: FileText, hidden: true }

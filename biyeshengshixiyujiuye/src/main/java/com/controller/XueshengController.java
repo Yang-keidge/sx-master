@@ -127,6 +127,10 @@ public class XueshengController {
         if(StringUtils.isBlank(xuesheng.getUsername())){
             xuesheng.setUsername(xuesheng.getXueshengXuehao());
         }
+        R relationCheck = validateDepartmentClassRelation(xuesheng);
+        if(relationCheck != null) {
+            return relationCheck;
+        }
 
         Wrapper<XueshengEntity> queryWrapper = new EntityWrapper<XueshengEntity>()
             .eq("username", xuesheng.getUsername())
@@ -165,6 +169,10 @@ public class XueshengController {
         }
         if(StringUtils.isBlank(xuesheng.getUsername())){
             xuesheng.setUsername(xuesheng.getXueshengXuehao());
+        }
+        R relationCheck = validateDepartmentClassRelation(xuesheng);
+        if(relationCheck != null) {
+            return relationCheck;
         }
         //根据字段查询是否有相同数据
         Wrapper<XueshengEntity> queryWrapper = new EntityWrapper<XueshengEntity>()
@@ -432,6 +440,43 @@ public class XueshengController {
     public R logout(HttpServletRequest request) {
         request.getSession().invalidate();
         return R.ok("退出成功");
+    }
+
+    private R validateDepartmentClassRelation(XueshengEntity xuesheng) {
+        if (xuesheng.getYuanxiTypes() == null || xuesheng.getBanjiTypes() == null) {
+            return R.error(511, "请选择院系和班级");
+        }
+
+        DictionaryEntity classDictionary = dictionaryService.selectOne(
+                new EntityWrapper<DictionaryEntity>().eq("dic_code", "banji_types").eq("code_index", xuesheng.getBanjiTypes())
+        );
+        if (classDictionary == null) {
+            return R.error(511, "班级不存在");
+        }
+
+        Integer superId = classDictionary.getSuperId();
+        if (superId != null && !superId.equals(xuesheng.getYuanxiTypes())) {
+            return R.error(511, "班级和院系不匹配");
+        }
+
+        if (superId == null && !matchesLegacyDepartmentMapping(xuesheng.getYuanxiTypes(), xuesheng.getBanjiTypes())) {
+            return R.error(511, "班级和院系不匹配");
+        }
+
+        return null;
+    }
+
+    private boolean matchesLegacyDepartmentMapping(Integer yuanxiTypes, Integer banjiTypes) {
+        if (yuanxiTypes == null || banjiTypes == null) {
+            return false;
+        }
+        Map<Integer, List<Integer>> mapping = new HashMap<>();
+        mapping.put(1, Arrays.asList(1, 2, 7, 11));
+        mapping.put(2, Arrays.asList(3, 6, 8));
+        mapping.put(3, Arrays.asList(4, 10));
+        mapping.put(4, Arrays.asList(5, 9));
+        List<Integer> classList = mapping.get(yuanxiTypes);
+        return classList != null && classList.contains(banjiTypes);
     }
 
 

@@ -114,11 +114,16 @@ public class DictionaryController {
         if(false)
             return R.error(511,"永远不会进入");
 
+        R relationCheck = validateDictionaryParent(dictionary);
+        if(relationCheck != null){
+            return relationCheck;
+        }
+
         Wrapper<DictionaryEntity> queryWrapper = new EntityWrapper<DictionaryEntity>()
             .eq("dic_code", dictionary.getDicCode())
             .eq("index_name", dictionary.getIndexName())
             ;
-        if(dictionary.getDicCode().contains("_erji_types")){
+        if(hasParentDictionary(dictionary)){
             queryWrapper.eq("super_id",dictionary.getSuperId());
         }
 
@@ -156,6 +161,10 @@ public class DictionaryController {
         String role = String.valueOf(request.getSession().getAttribute("role"));
 //        if(false)
 //            return R.error(511,"永远不会进入");
+        R relationCheck = validateDictionaryParent(dictionary);
+        if(relationCheck != null){
+            return relationCheck;
+        }
         //根据字段查询是否有相同数据
         Wrapper<DictionaryEntity> queryWrapper = new EntityWrapper<DictionaryEntity>()
             .notIn("id",dictionary.getId())
@@ -163,7 +172,7 @@ public class DictionaryController {
             .eq("index_name", dictionary.getIndexName())
             ;
 
-        if(dictionary.getDicCode().contains("_erji_types")){
+        if(hasParentDictionary(dictionary)){
             queryWrapper.eq("super_id",dictionary.getSuperId());
         }
         logger.info("sql语句:"+queryWrapper.getSqlSegment());
@@ -212,11 +221,32 @@ public class DictionaryController {
                 .orderDesc(descs);
         logger.info("sql语句:"+queryWrapper.getSqlSegment());
         List<DictionaryEntity> dictionaryEntityList = dictionaryService.selectList(queryWrapper);
-        if(dictionaryEntityList != null ){
+        if(dictionaryEntityList != null && dictionaryEntityList.size() > 0 ){
             return R.ok().put("maxCodeIndex",dictionaryEntityList.get(0).getCodeIndex()+1);
         }else{
             return R.ok().put("maxCodeIndex",1);
         }
+    }
+
+    private boolean hasParentDictionary(DictionaryEntity dictionary) {
+        return dictionary.getDicCode() != null
+                && (dictionary.getDicCode().contains("_erji_types") || "banji_types".equals(dictionary.getDicCode()));
+    }
+
+    private R validateDictionaryParent(DictionaryEntity dictionary) {
+        if (!"banji_types".equals(dictionary.getDicCode())) {
+            return null;
+        }
+        if (dictionary.getSuperId() == null) {
+            return R.error(511, "班级必须选择所属院系");
+        }
+        DictionaryEntity parent = dictionaryService.selectOne(
+                new EntityWrapper<DictionaryEntity>().eq("dic_code", "yuanxi_types").eq("code_index", dictionary.getSuperId())
+        );
+        if (parent == null) {
+            return R.error(511, "所属院系不存在");
+        }
+        return null;
     }
 
     /**

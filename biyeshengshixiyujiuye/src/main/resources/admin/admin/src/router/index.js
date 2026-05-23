@@ -3,11 +3,28 @@ import LoginView from '../views/LoginView.vue'
 import AdminLayout from '../layouts/AdminLayout.vue'
 import DashboardView from '../views/admin/DashboardView.vue'
 import PlaceholderView from '../views/admin/PlaceholderView.vue'
+import CrudModuleView from '../views/admin/crud/ModuleView.vue'
 
 const placeholder = (path, name, title, group) => ({
   path,
   name,
   component: PlaceholderView,
+  meta: {
+    title,
+    group,
+    requiresAuth: true,
+    role: 'admin'
+  }
+})
+
+const moduleRoute = (path, name, title, group, moduleName, alias) => ({
+  path,
+  alias: alias ? [alias] : [],
+  name,
+  component: CrudModuleView,
+  props: {
+    moduleName
+  },
   meta: {
     title,
     group,
@@ -52,15 +69,22 @@ const router = createRouter({
           }
         },
         placeholder('analytics', 'admin.analytics', '数据看板', 'workbench'),
-        placeholder('students', 'admin.students', '学生管理', 'basic'),
-        placeholder('teachers', 'admin.teachers', '教师管理', 'basic'),
-        placeholder('companies', 'admin.companies', '企业管理', 'basic'),
-        placeholder('internships', 'admin.internships', '实习管理', 'business'),
-        placeholder('employment', 'admin.employment', '就业管理', 'business'),
-        placeholder('announcements', 'admin.announcements', '公告管理', 'business'),
-        placeholder('announcement-comments', 'admin.announcementComments', '公告评论', 'business'),
-        placeholder('dictionaries', 'admin.dictionaries', '字典管理', 'system'),
-        placeholder('settings', 'admin.settings', '系统配置', 'system'),
+        moduleRoute('students', 'admin.students', '学生管理', 'basic', 'students', 'student'),
+        moduleRoute('teachers', 'admin.teachers', '教师管理', 'basic', 'teachers', 'teacher'),
+        moduleRoute('companies', 'admin.companies', '企业管理', 'basic', 'companies', 'company'),
+        moduleRoute('internships', 'admin.internships', '实习管理', 'business', 'internships', 'internship'),
+        moduleRoute('employment', 'admin.employment', '就业管理', 'business', 'employment'),
+        moduleRoute('announcements', 'admin.announcements', '公告管理', 'business', 'announcements', 'announcement'),
+        moduleRoute(
+          'announcement-comments',
+          'admin.announcementComments',
+          '公告评论',
+          'business',
+          'announcementComments',
+          'comment'
+        ),
+        moduleRoute('dictionaries', 'admin.dictionaries', '字典管理', 'system', 'dictionaries', 'dictionary'),
+        moduleRoute('settings', 'admin.settings', '系统配置', 'system', 'settings', 'config'),
         placeholder('files', 'admin.files', '文件管理', 'system'),
         placeholder('statistics', 'admin.statistics', '数据统计', 'system'),
         placeholder('logs', 'admin.logs', '系统日志', 'system')

@@ -23,6 +23,11 @@ public class LaoshiView extends LaoshiEntity implements Serializable {
 		*/
 		private String sexValue;
 
+		/**
+		* 院系的值
+		*/
+		private String yuanxiValue;
+
 
 
 	public LaoshiView() {
@@ -51,6 +56,19 @@ public class LaoshiView extends LaoshiEntity implements Serializable {
 			*/
 			public void setSexValue(String sexValue) {
 				this.sexValue = sexValue;
+			}
+
+			/**
+			* 获取： 院系的值
+			*/
+			public String getYuanxiValue() {
+				return yuanxiValue;
+			}
+			/**
+			* 设置： 院系的值
+			*/
+			public void setYuanxiValue(String yuanxiValue) {
+				this.yuanxiValue = yuanxiValue;
 			}
 
 

@@ -15,6 +15,7 @@
         ,a.sex_types as sexTypes
         ,a.yuanxi_types as yuanxiTypes
         ,a.banji_types as banjiTypes
+        ,a.ruxue_year as ruxueYear
         ,a.xuesheng_email as xueshengEmail
         ,a.create_time as createTime
     </sql>
@@ -59,6 +60,25 @@
             </if>
             <if test="params.banjiTypes != null and params.banjiTypes != ''">
                 and a.banji_types = #{params.banjiTypes}
+            </if>
+            <if test="params.ruxueYear != null and params.ruxueYear != ''">
+                and a.ruxue_year = #{params.ruxueYear}
+            </if>
+            <if test="params.graduationStatus != null and params.graduationStatus == 'graduated'">
+                and a.ruxue_year is not null
+                and CURDATE() >= STR_TO_DATE(CONCAT(a.ruxue_year + 4, '-06-01'), '%Y-%m-%d')
+            </if>
+            <if test="params.graduationStatus != null and params.graduationStatus == 'notGraduated'">
+                and (
+                    a.ruxue_year is null
+                    or CURDATE() &lt; STR_TO_DATE(CONCAT(a.ruxue_year + 4, '-06-01'), '%Y-%m-%d')
+                )
+            </if>
+            <if test="params.internshipStatus != null and params.internshipStatus == 'in'">
+                and exists (select 1 from shixi s where s.xuesheng_id = a.id)
+            </if>
+            <if test="params.internshipStatus != null and params.internshipStatus == 'notIn'">
+                and not exists (select 1 from shixi s where s.xuesheng_id = a.id)
             </if>
             <if test=" params.xueshengEmail != '' and params.xueshengEmail != null and params.xueshengEmail != 'null' ">
                 and a.xuesheng_email like CONCAT('%',#{params.xueshengEmail},'%')
