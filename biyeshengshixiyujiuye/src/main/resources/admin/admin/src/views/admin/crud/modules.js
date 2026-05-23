@@ -353,7 +353,7 @@ export const moduleConfigs = {
 
   employment: {
     title: '就业管理',
-    subtitle: '维护毕业生入职企业、岗位、入职日期与相关附件。',
+    subtitle: '维护毕业生入职企业、岗位和入职日期。',
     entityName: '就业',
     api: employmentApi,
     batchImport: true,
@@ -368,7 +368,6 @@ export const moduleConfigs = {
       field('qiyeName', '企业名称', 'input', { minWidth: 180 }),
       field('jiuyeGangweiName', '入职岗位', 'input', { minWidth: 160 }),
       field('jiuyeKaishiTime', '入职日期', 'date', { width: 118 }),
-      field('jiuyeFile', '附件', 'file', { width: 116 }),
       createTimeColumn
     ],
     formFields: [
@@ -376,7 +375,6 @@ export const moduleConfigs = {
       field('qiyeId', '企业', 'remoteSelect', { source: 'companies', required: true }),
       field('jiuyeGangweiName', '入职岗位', 'input', { required: true }),
       field('jiuyeKaishiTime', '入职日期', 'date', { required: true }),
-      field('jiuyeFile', '相关文件', 'file', { accept: '.pdf,.doc,.docx' }),
       field('jiuyeContent', '就业备注', 'textarea', { wide: true, rows: 5 })
     ],
     detailFields: [
@@ -385,7 +383,6 @@ export const moduleConfigs = {
       field('qiyeName', '企业名称'),
       field('jiuyeGangweiName', '入职岗位'),
       field('jiuyeKaishiTime', '入职日期', 'date'),
-      field('jiuyeFile', '相关文件', 'file'),
       field('jiuyeContent', '就业备注', 'multiline'),
       createTimeColumn
     ]
