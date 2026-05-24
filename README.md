@@ -1,290 +1,184 @@
-# 基于Spring Boot的毕业生实习与就业管理系统
+# 基于 Spring Boot 的毕业生实习与就业管理系统
 
----
+## 项目简介
 
-## 🚀 项目简介
+本项目是面向高校毕业实习与就业管理场景的 Web 系统，覆盖学生、教师、企业和管理员四类角色。系统围绕学生档案、教师档案、企业信息、实习记录、就业记录、公告发布、公告评论、字典维护、文件上传和数据看板提供完整管理能力。
 
-本系统是一个面向**高校、企业和学生**三端的实习与就业全生命周期管理平台，旨在解决传统实习管理中信息不对称、审批流程繁琐、数据统计困难等痛点。
+后端采用 Spring Boot + MyBatis-Plus + MySQL，前端采用 Vue 3 + Vite + Element Plus。系统通过自定义 Token 拦截器完成多角色鉴权，前端按角色提供独立工作台和业务菜单。
 
-系统支持**学生、教师、企业、管理员**四种角色登录，提供实习信息登记与跟踪、就业信息管理、多端公告发布、数据可视化统计等核心功能。通过自定义 Token 鉴权拦截器实现多角色权限隔离，结合百度 AI 人脸比对实现身份核验，同时集成 Apache POI 提供 Excel 批量导入能力，覆盖从实习申请到就业归档的完整业务闭环。
+完整项目文档见 [docs/project-documentation.md](docs/project-documentation.md)。
 
-**适用场景**：高校毕业实习管理、校企合作对接、就业信息跟踪与统计分析。
+## 技术栈
 
----
+| 层级 | 技术 | 说明 |
+| --- | --- | --- |
+| 后端 | Spring Boot 2.2.2.RELEASE | Web 服务、内嵌 Tomcat |
+| 后端 | MyBatis-Plus 2.3 | ORM、分页、基础 CRUD |
+| 后端 | MySQL 5.7+ | 业务数据存储 |
+| 后端 | Apache POI 3.9 | Excel 批量导入 |
+| 后端 | Baidu AI SDK 4.4.1 | 人脸比对接口支持 |
+| 前端 | Vue 3.4 + Vite 5 | 管理端单页应用 |
+| 前端 | Element Plus | 表单、表格、弹窗等 UI 组件 |
+| 前端 | Axios | API 请求封装 |
+| 前端 | lucide-vue-next | 菜单和操作图标 |
 
-## 🛠️ 技术选型
+## 核心功能
 
-### 后端
+- 多角色登录：管理员、学生、老师、企业。
+- 基础档案管理：学生、教师、企业信息维护，支持字典映射和批量导入。
+- 实习管理：维护学生实习企业、实习岗位、实习周期、实习类型和实习结果。
+- 就业管理：维护毕业生入职企业、岗位、入职日期和就业备注。
+- 公告与评论：管理员、老师、企业可发布公告；学生、老师、企业可参与评论。
+- 字典管理：维护性别、院系、专业、班级、企业行业、公告类型、实习类型、实习结果等枚举。
+- 文件上传下载：支持头像、企业图片、就业附件等文件资源。
+- 数据看板：提供学生、实习、就业、企业和月度趋势等统计接口。
+- 角色工作台：不同角色进入独立前端布局和菜单，限制可见模块与操作范围。
 
-| 技术 | 版本 | 说明 |
-|------|------|------|
-| **Spring Boot** | 2.2.2.RELEASE | 核心框架，提供自动配置、内嵌 Tomcat、快速开发能力 |
-| **MyBatis-Plus** | 2.3 | ORM 框架，简化单表 CRUD，提供分页插件与逻辑删除支持（**注意：本项目使用 2.x 遗留 API，不支持 3.x LambdaQueryWrapper**） |
-| **MySQL** | 5.7+ | 关系型数据库，存储业务数据与字典配置 |
-| **Apache Shiro** | 1.3.2 | 引入但未直接使用，鉴权由自定义 `AuthorizationInterceptor` + Token 表实现 |
-| **Apache POI** | 3.9 | Excel 导入/导出，支持学生信息批量导入 |
-| **Baidu AI SDK** | 4.4.1 | 人脸比对功能，基于百度云 API 实现身份核验 |
-| **Hutool** | 4.0.12 | Java 工具类库，简化日期、字符串等操作 |
-| **FastJSON** | 1.2.8 | JSON 序列化/反序列化 |
-| **Thymeleaf** | — | 静态资源渲染模板引擎（主要用于前后端同构部署时的页面路由） |
+## 项目结构
 
-
-### 工具与中间件
-
-| 技术 | 说明 |
-|------|------|
-| **Maven** | 项目构建与依赖管理 |
-| **Spring Boot DevTools** | 开发热部署，代码修改后自动重启 |
-| **Spring Boot Log** | 集成日志，DAO 层 SQL 调试输出 (`logging.level.com.dao=debug`) |
-
----
-
-## 📦 核心功能模块
-
-### 1. 多角色用户管理
-
-- **四类角色**：管理员（`users`）、学生（`xuesheng`）、教师（`laoshi`）、企业（`qiye`），每类角色拥有独立的数据表与登录接口
-- **自定义 Token 鉴权**：通过 `AuthorizationInterceptor` 拦截请求，校验 HTTP Header 中的 `Token` 字段，将 `userId`、`role`、`tableName`、`username` 写入 Session；使用 `@IgnoreAuth` 注解开放免登录接口
-- **数据隔离**：各角色仅能访问自身数据（如学生只能查看/修改自己的实习与就业记录）
-
-### 2. 实习信息管理（Shixi）
-
-- 学生创建实习记录，关联企业与岗位信息，设定实习起止时间
-- 教师可查看所带学生的实习情况，跟踪实习结果（优秀/一般/差评）
-- 企业可维护本企业的实习岗位信息，发布实习与招聘公告
-
-### 3. 就业信息管理（Jiuye）
-
-- 记录学生就业信息，包括入职企业、岗位名称、入职时间、合同附件等
-- 支持文件上传与下载，就业记录的增删改查均基于角色权限过滤
-
-### 4. 公告管理
-
-- **统一公告**（`gonggao`）：教师、企业、管理员共用一张公告表，通过发布者身份区分来源
-- 管理员可发布系统公告，企业可发布招聘信息与实习推荐，教师可发布教学通知与就业提醒
-- 公告类型通过字典系统动态管理，支持教学通知、就业提醒、招聘信息、实习推荐、系统公告等分类
-
-### 5. 数据字典系统
-
-- `DictionaryEntity` + `DictionaryServletContextListener` 在应用启动时将所有字典数据加载到 `ServletContext`，实现全局枚举值的快速映射
-- 支持字段类型：性别、院系、班级、公告类型、企业行业、实习类型、实习结果等
-- 控制层提供完整的 CRUD 与批量导入接口
-
-### 6. 统计与可视化
-
-- `CommonController` 提供通用统计接口：分组统计（`/group`）、数值求和（`/cal`）、柱状图数据（`/barSum`, `/barCount`）、日期维度统计等
-- 前端通过 ECharts 渲染可视化图表，支持实习数据、就业数据的多维分析
-
-### 7. 文件与图片管理
-
-- `FileController` 处理文件上传，存储至 `classpath:static/upload/`，以时间戳命名防冲突
-- 支持头像、企业图片、就业附件等多种文件类型，上传大小限制可配置（默认 1000MB）
-
-### 8. 人脸比对
-
-- 集成百度 AI 人脸识别 SDK，通过 `CommonController.matchFace` 接口实现双人脸比对
-- API Key 与 Secret Key 存储在 `config` 数据库表中，运行时按需读取
-- 配合高德地图 API（`/location`）提供地理位置服务
-
-### 9. Excel 批量导入
-
-- 各主要实体（学生、就业等）均支持通过 Apache POI 从 `.xls` 文件批量导入数据
-- 接口路径：`/{entity}/batchInsert`
-
-### 10. 管理员后台前端
-
-- 内嵌的 Vue2 + Element UI 管理端已完成，覆盖学生、教师、企业、实习、就业、公告与字典等主要后台模块
-- 就业管理页按当前界面规范展示，不再在列表、表单和详情中显示附件列
-- 管理端源码位于 `src/main/resources/admin/admin/`
-
----
-
-## 📂 项目目录结构
-
-```
-biyeshengshixiyujiuye/
-├── db.sql                                    # 数据库初始化脚本（建表+种子数据）
-├── pom.xml                                   # Maven 依赖配置
-├── src/
-│   ├── main/
-│   │   ├── java/com/
-│   │   │   ├── annotation/                   # 自定义注解
-│   │   │   │   ├── IgnoreAuth.java           #   免鉴权注解（跳过Token校验）
-│   │   │   │   ├── LoginUser.java            #   登录用户参数注入
-│   │   │   │   └── APPLoginUser.java         #   App端登录用户注入
-│   │   │   ├── config/                       # 配置类
-│   │   │   │   ├── InterceptorConfig.java     #   拦截器注册 + 静态资源映射
-│   │   │   │   ├── MybatisPlusConfig.java     #   MyBatis-Plus 分页插件配置
-│   │   │   │   └── MyMetaObjectHandler.java   #   字段自动填充（createTime）
-│   │   │   ├── controller/                   # 控制层（REST API）
-│   │   │   │   ├── CommonController.java      #   通用接口（统计/图表/人脸/定位）
-│   │   │   │   ├── ConfigController.java      #   系统配置管理
-│   │   │   │   ├── DictionaryController.java  #   数据字典管理
-│   │   │   │   ├── FileController.java         #   文件上传/下载
-│   │   │   │   ├── JiuyeController.java       #   就业信息管理
-│   │   │   │   ├── UsersController.java        #   管理员登录/CRUD
-│   │   │   │   └── XueshengController.java     #   学生登录/注册/CRUD
-│   │   │   ├── dao/                           # 数据访问层（MyBatis-Plus Mapper）
-│   │   │   ├── entity/                        # 实体类
-│   │   │   │   ├── XueshengEntity.java        #   学生实体
-│   │   │   │   ├── LaoshiEntity.java           #   教师实体
-│   │   │   │   ├── QiyeEntity.java            #   企业实体
-│   │   │   │   ├── ShixiEntity.java            #   实习记录实体
-│   │   │   │   ├── JiuyeEntity.java            #   就业记录实体
-│   │   │   │   ├── GonggaoEntity.java          #   统一公告实体
-│   │   │   │   ├── DictionaryEntity.java       #   数据字典实体
-│   │   │   │   ├── TokenEntity.java            #   鉴权令牌实体
-│   │   │   │   ├── UsersEntity.java            #   管理员实体
-│   │   │   │   ├── ConfigEntity.java           #   系统配置实体
-│   │   │   │   ├── EIException.java            #   自定义业务异常
-│   │   │   │   ├── model/                      #   业务模型（接收前端参数）
-│   │   │   │   ├── vo/                         #   视图对象（返回前端数据）
-│   │   │   │   └── view/                       #   数据库视图对象
-│   │   │   ├── interceptor/                    # 拦截器
-│   │   │   │   └── AuthorizationInterceptor.java  # Token鉴权拦截器
-│   │   │   ├── ServletContextListener/         # 监听器
-│   │   │   │   └── DictionaryServletContextListener.java  # 启动时加载字典
-│   │   │   ├── service/                        # 服务接口
-│   │   │   │   └── impl/                       #   服务实现类
-│   │   │   ├── thread/                         # 异步线程
-│   │   │   │   └── MyThreadMethod.java         #   后台定时任务（预留）
-│   │   │   ├── utils/                          # 工具类
-│   │   │   │   ├── BaiduUtil.java              #   百度API认证
-│   │   │   │   ├── PoiUtil.java                #   Excel导入工具
-│   │   │   │   ├── R.java                      #   统一响应封装
-│   │   │   │   ├── PageUtils.java              #   分页封装
-│   │   │   │   ├── MPUtil.java                 #   MyBatis-Plus查询工具
-│   │   │   │   └── ...                         #   其他工具类
-│   │   │   └── biyeshengshixiyujiuyeApplication.java  # Spring Boot 启动类
-│   │   └── resources/
-│   │       ├── application.yml                 # 主配置文件
-│   │       ├── mapper/                         # MyBatis XML映射文件
-│   │       │   ├── XueshengDao.xml
-│   │       │   ├── JiuyeDao.xml
-│   │       │   └── ...
-│   │       ├── static/                          # 静态资源（上传文件目录）
-│   │       └── admin/admin/                     # 前端Vue2项目（内嵌）
-│   │           ├── package.json                 # 前端依赖配置
-│   │           ├── vue.config.js                # Vue CLI配置（代理/API前缀）
-│   │           └── src/                          # 前端源码
-│   │               ├── App.vue                  # 根组件
-│   │               ├── main.js                  # 入口文件
-│   │               ├── router/                   # 路由配置
-│   │               ├── views/                    # 页面组件
-│   │               └── utils/                    # 前端工具
-│   └── test/                                    # 测试目录（当前为空）
-├── db.sql                                       # 数据库初始化脚本
-└── README.md                                    # 项目说明文档
+```text
+.
+├── README.md
+├── db.sql
+├── Makefile
+├── docs/
+│   ├── project-documentation.md
+│   ├── design.md
+│   └── ...
+└── biyeshengshixiyujiuye/
+    ├── pom.xml
+    └── src/main/
+        ├── java/com/
+        │   ├── controller/      # REST 接口
+        │   ├── service/         # 服务接口与实现
+        │   ├── dao/             # MyBatis Mapper
+        │   ├── entity/          # 实体、VO、View、Model
+        │   ├── interceptor/     # Token 鉴权拦截器
+        │   ├── config/          # Spring 和 MyBatis 配置
+        │   └── utils/           # 通用工具类
+        └── resources/
+            ├── application.yml
+            ├── mapper/          # XML SQL 映射
+            ├── static/upload/   # 示例上传资源
+            └── admin/admin/     # Vue 3 + Vite 前端
 ```
 
----
+## 快速启动
 
-## 🏃‍♂️ 快速启动
+### 环境要求
 
-### 环境准备
+| 依赖 | 建议版本 | 说明 |
+| --- | --- | --- |
+| JDK | 1.8 | 后端编译运行环境 |
+| Maven | 3.6+ | 后端依赖和构建 |
+| MySQL | 5.7+ | 数据库 |
+| Node.js | 18+ | 前端 Vite 开发和构建 |
+| npm 或 cnpm | 最新稳定版 | 前端依赖安装 |
 
-| 依赖 | 最低版本 | 推荐版本 | 说明 |
-|------|---------|---------|------|
-| **JDK** | 1.8 | 1.8 | 项目基于 Java 8 编译，不兼容更高版本语法 |
-| **Maven** | 3.3+ | 3.6+ | 后端构建工具 |
-| **MySQL** | 5.7 | 5.7+ | 数据库，需设置字符集为 `utf8mb4` |
-| **Node.js** | 10.x | 12.x+ | 前端构建环境 |
-| **cnpm** | — | 最新 | 淘宝 NPM 镜像，加速依赖安装 |
-
-### 1. 数据库初始化
+### 1. 初始化数据库
 
 ```bash
-# 登录 MySQL
-mysql -u root -p
-
-# 执行初始化脚本（包含建库、建表、种子数据）
-source /path/to/db.sql;
+mysql -u root -p < db.sql
 ```
 
-脚本将自动创建数据库 `biyeshengshixiyujiuye` 并导入所有表结构与初始数据。
+脚本会创建并使用数据库 `biyeshengshixiyujiuye`，同时写入基础字典和示例业务数据。
 
-> **默认账号**：管理员 `admin` / `admin`，其余角色密码均为 `123456`
-
-### 2. 修改后端配置
+### 2. 修改数据库配置
 
 编辑 `biyeshengshixiyujiuye/src/main/resources/application.yml`：
 
 ```yaml
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/biyeshengshixiyujiuye?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
-    username: root          # 修改为你的数据库用户名
-    password: 123456        # 修改为你的数据库密码
+    url: jdbc:mysql://127.0.0.1:3306/biyeshengshixiyujiuye?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: 123456
 ```
 
 ### 3. 启动后端
 
 ```bash
 cd biyeshengshixiyujiuye
-
-# 编译打包（可选，首次运行建议先编译）
-mvn clean package -DskipTests
-
-# 启动 Spring Boot（开发模式）
 mvn spring-boot:run
 ```
 
-后端服务启动于 **http://localhost:8080/biyeshengshixiyujiuye**
+后端默认地址：
 
+```text
+http://localhost:8080/biyeshengshixiyujiuye
+```
 
-前端开发服务器启动于 **http://localhost:8081**，自动将 `/biyeshengshixiyujiuye` 前缀的 API 请求代理至 `localhost:8080`。
-
-### 5. 生产构建
+### 4. 启动前端
 
 ```bash
-# 前端构建
 cd biyeshengshixiyujiuye/src/main/resources/admin/admin
-cnpm run build
-# 构建产物输出至 dist/，可部署至 Nginx 或放入 Spring Boot static 目录
+npm install
+npm run dev
 ```
+
+前端默认地址：
+
+```text
+http://localhost:8081
+```
+
+也可以使用项目根目录的 Makefile 在 Git Bash 中启动：
+
+```bash
+make install
+make dev
+```
+
+## 默认账号
+
+| 角色 | 账号 | 密码 |
+| --- | --- | --- |
+| 管理员 | admin | admin |
+| 学生 | 20210001 | 123456 |
+| 老师 | T2020001 | 123456 |
+| 企业 | QY001 | 123456 |
+
+更多示例账号可在 `db.sql` 中查看。
+
+## 常用命令
 
 ```bash
 # 后端打包
 cd biyeshengshixiyujiuye
 mvn clean package -DskipTests
-# 产物：target/biyeshengshixiyujiuye-0.0.1-SNAPSHOT.jar
-java -jar target/biyeshengshixiyujiuye-0.0.1-SNAPSHOT.jar
+
+# 前端开发
+cd biyeshengshixiyujiuye/src/main/resources/admin/admin
+npm run dev
+
+# 前端构建
+npm run build
+
+# 前端预览构建结果
+npm run preview
 ```
 
----
+## 接口约定
 
-## 🔒 部署与优化建议
+- 统一上下文路径：`/biyeshengshixiyujiuye`
+- 登录后请求头携带：`Token: <登录返回 token>`
+- 通用响应结构：`code`、`msg`、`data`
+- 主要业务接口前缀：`/users`、`/xuesheng`、`/laoshi`、`/qiye`、`/shixi`、`/jiuye`、`/gonggao`、`/gonggaoComment`、`/dictionary`、`/config`、`/dashboard`
 
-### 生产环境配置
+## 文档索引
 
-- **配置分离**：建议使用 Spring Profile（`application-prod.yml`）分离生产配置，避免将数据库密码等敏感信息硬编码在代码仓库中
-- **端口与上下文**：生产环境建议修改默认端口（`8080`）和上下文路径（`/biyeshengshixiyujiuye`），降低被扫描风险
-- **文件上传限制**：当前 `max-file-size` 设为 `1000MB`，生产环境建议根据实际需求缩小限制，防止恶意大文件攻击
+- [完整项目文档](docs/project-documentation.md)：系统定位、架构、角色权限、接口、部署和维护说明。
+- [前端设计说明](docs/design.md)：前端重设计相关记录。
+- [列表重设计说明](docs/list-redesign.md)：列表和业务表格设计记录。
 
-### 安全加固
+## 部署建议
 
-- **密码存储**：当前密码以明文存储，生产环境应使用 **BCrypt** 或 **MD5+Salt** 加密
-- **Token 过期**：`TokenEntity` 已有 `expiratedtime` 字段但未做严格强制刷新，建议增加 Token 自动续期与强制过期策略
-- **CORS 配置**：`AuthorizationInterceptor` 中设置了全开放 CORS 头 (`Access-Control-Allow-Origin: *`)，生产环境应限制为可信域名
-- **SQL 注入**：`SQLFilter` 工具类已做基础过滤，但仍建议对所有动态查询参数做入参校验
-- **文件上传**：文件上传路径白名单机制需补充，防止路径穿越攻击
+- 生产环境建议使用独立的 `application-prod.yml` 管理数据库、端口、上下文路径和外部服务密钥。
+- 当前示例数据中密码为明文，正式部署前应改为 BCrypt 或其他安全散列方案。
+- 当前 CORS 策略较宽松，生产环境应限制为可信前端域名。
+- 上传目录和文件类型建议补充白名单校验，并由 Nginx 或对象存储统一托管。
+- DAO 日志当前为 `debug`，生产环境建议调整为 `info` 或 `warn`。
 
-### 性能优化
+## 许可证
 
-- **数据库连接池**：默认使用 HikariCP，建议根据并发量调整 `maximum-pool-size` 和 `minimum-idle`
-- **字典缓存**：当前 `DictionaryServletContextListener` 在启动时将字典加载到内存，避免了每次查询数据库，但更新字典后需重启应用才生效，建议引入 Redis 做分布式缓存
-- **日志级别**：DAO 层当前设置为 `debug` 级别（输出完整 SQL），生产环境应切换为 `warn` 或 `info`
-- **静态资源**：生产环境建议使用 **Nginx** 托管前端静态资源与上传文件，Spring Boot 仅提供 API 服务
-
-### 架构演进方向
-
-- **认证升级**：将自定义 Token 拦截器升级为 **Spring Security + JWT** 标准方案，支持 OAuth2 集成
-- **ORM 升级**：MyBatis-Plus 2.x 已停止维护，建议升级至 **3.x** 版本，使用 `LambdaQueryWrapper` 替换 `EntityWrapper`
-- **接口规范**：引入 **Swagger/OpenAPI** 生成接口文档，统一 `R` 响应格式，增加全局异常处理
-- **消息通知**：集成邮件/短信通知模块，替代当前空实现的 `MyThreadMethod` 后台线程
-
----
-
-## 📝 许可证
-
-本项目仅供学习与参考使用。
+本项目仅供学习、课程设计和二次开发参考使用。
