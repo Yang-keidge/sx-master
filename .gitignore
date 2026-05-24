@@ -17,3 +17,10 @@ biyeshengshixiyujiuye/src/main/resources/admin/admin/.playwright-cli/
 
 # Logs
 *.log
+
+# Playwright
+.playwright-cli/
+
+# Dashboard logs
+backend-dashboard.err.log
+backend-dashboard.log
