@@ -127,6 +127,14 @@ public class XueshengEntity<T> implements Serializable {
 
 
     /**
+     * 专业
+     */
+    @TableField(value = "zhuanye_types")
+
+    private Integer zhuanyeTypes;
+
+
+    /**
      * 班级
      */
     @TableField(value = "banji_types")
@@ -291,6 +299,19 @@ public class XueshengEntity<T> implements Serializable {
         this.yuanxiTypes = yuanxiTypes;
     }
     /**
+	 * 设置：专业
+	 */
+    public Integer getZhuanyeTypes() {
+        return zhuanyeTypes;
+    }
+    /**
+	 * 获取：专业
+	 */
+
+    public void setZhuanyeTypes(Integer zhuanyeTypes) {
+        this.zhuanyeTypes = zhuanyeTypes;
+    }
+    /**
 	 * 设置：班级
 	 */
     public Integer getBanjiTypes() {
@@ -356,6 +377,7 @@ public class XueshengEntity<T> implements Serializable {
             ", xueshengPhoto=" + xueshengPhoto +
             ", sexTypes=" + sexTypes +
             ", yuanxiTypes=" + yuanxiTypes +
+            ", zhuanyeTypes=" + zhuanyeTypes +
             ", banjiTypes=" + banjiTypes +
             ", xueshengEmail=" + xueshengEmail +
             ", createTime=" + createTime +

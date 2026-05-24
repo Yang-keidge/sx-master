@@ -92,6 +92,14 @@ public class LaoshiVO implements Serializable {
 
 
     /**
+     * 专业
+     */
+
+    @TableField(value = "zhuanye_types")
+    private Integer zhuanyeTypes;
+
+
+    /**
      * 电子邮箱
      */
 
@@ -243,6 +251,21 @@ public class LaoshiVO implements Serializable {
 
     public void setYuanxiTypes(Integer yuanxiTypes) {
         this.yuanxiTypes = yuanxiTypes;
+    }
+    /**
+	 * 设置：专业
+	 */
+    public Integer getZhuanyeTypes() {
+        return zhuanyeTypes;
+    }
+
+
+    /**
+	 * 获取：专业
+	 */
+
+    public void setZhuanyeTypes(Integer zhuanyeTypes) {
+        this.zhuanyeTypes = zhuanyeTypes;
     }
     /**
 	 * 设置：电子邮箱

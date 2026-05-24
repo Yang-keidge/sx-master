@@ -89,6 +89,14 @@ public class JiuyeView extends JiuyeEntity implements Serializable {
 				*/
 				private String yuanxiValue;
 			/**
+			* 专业
+			*/
+			private Integer zhuanyeTypes;
+				/**
+				* 专业的值
+				*/
+				private String zhuanyeValue;
+			/**
 			* 班级
 			*/
 			private Integer banjiTypes;
@@ -356,6 +364,33 @@ public class JiuyeView extends JiuyeEntity implements Serializable {
 						*/
 						public void setYuanxiValue(String yuanxiValue) {
 							this.yuanxiValue = yuanxiValue;
+						}
+
+					/**
+					* 获取： 专业
+					*/
+					public Integer getZhuanyeTypes() {
+						return zhuanyeTypes;
+					}
+					/**
+					* 设置： 专业
+					*/
+					public void setZhuanyeTypes(Integer zhuanyeTypes) {
+						this.zhuanyeTypes = zhuanyeTypes;
+					}
+
+
+						/**
+						* 获取： 专业的值
+						*/
+						public String getZhuanyeValue() {
+							return zhuanyeValue;
+						}
+						/**
+						* 设置： 专业的值
+						*/
+						public void setZhuanyeValue(String zhuanyeValue) {
+							this.zhuanyeValue = zhuanyeValue;
 						}
 
 					/**

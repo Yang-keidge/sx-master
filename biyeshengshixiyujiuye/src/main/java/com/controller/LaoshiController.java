@@ -94,6 +94,10 @@ public class LaoshiController {
         if(StringUtils.isBlank(laoshi.getUsername())){
             laoshi.setUsername(laoshi.getLaoshiGonghao());
         }
+        R relationCheck = validateDepartmentMajorRelation(laoshi);
+        if(relationCheck != null) {
+            return relationCheck;
+        }
 
         Wrapper<LaoshiEntity> queryWrapper = new EntityWrapper<LaoshiEntity>()
             .eq("username", laoshi.getUsername())
@@ -125,6 +129,10 @@ public class LaoshiController {
         }
         if(StringUtils.isBlank(laoshi.getUsername())){
             laoshi.setUsername(laoshi.getLaoshiGonghao());
+        }
+        R relationCheck = validateDepartmentMajorRelation(laoshi);
+        if(relationCheck != null) {
+            return relationCheck;
         }
 
         Wrapper<LaoshiEntity> queryWrapper = new EntityWrapper<LaoshiEntity>()
@@ -267,6 +275,10 @@ public class LaoshiController {
     @IgnoreAuth
     @PostMapping(value = "/register")
     public R register(@RequestBody LaoshiEntity laoshi){
+        R relationCheck = validateDepartmentMajorRelation(laoshi);
+        if(relationCheck != null) {
+            return relationCheck;
+        }
         Wrapper<LaoshiEntity> queryWrapper = new EntityWrapper<LaoshiEntity>()
             .eq("username", laoshi.getUsername())
             .or()
@@ -326,5 +338,25 @@ public class LaoshiController {
     public R logout(HttpServletRequest request) {
         request.getSession().invalidate();
         return R.ok("退出成功");
+    }
+
+    private R validateDepartmentMajorRelation(LaoshiEntity laoshi) {
+        if (laoshi.getYuanxiTypes() == null || laoshi.getZhuanyeTypes() == null) {
+            return R.error(511, "请选择院系和专业");
+        }
+
+        DictionaryEntity majorDictionary = dictionaryService.selectOne(
+                new EntityWrapper<DictionaryEntity>().eq("dic_code", "zhuanye_types").eq("code_index", laoshi.getZhuanyeTypes())
+        );
+        if (majorDictionary == null) {
+            return R.error(511, "专业不存在");
+        }
+
+        Integer majorSuperId = majorDictionary.getSuperId();
+        if (majorSuperId != null && !majorSuperId.equals(laoshi.getYuanxiTypes())) {
+            return R.error(511, "专业和院系不匹配");
+        }
+
+        return null;
     }
 }

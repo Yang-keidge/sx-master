@@ -27,6 +27,10 @@ public class XueshengView extends XueshengEntity implements Serializable {
 		*/
 		private String yuanxiValue;
 		/**
+		* 专业的值
+		*/
+		private String zhuanyeValue;
+		/**
 		* 班级的值
 		*/
 		private String banjiValue;
@@ -71,6 +75,18 @@ public class XueshengView extends XueshengEntity implements Serializable {
 			*/
 			public void setYuanxiValue(String yuanxiValue) {
 				this.yuanxiValue = yuanxiValue;
+			}
+			/**
+			* 获取： 专业的值
+			*/
+			public String getZhuanyeValue() {
+				return zhuanyeValue;
+			}
+			/**
+			* 设置： 专业的值
+			*/
+			public void setZhuanyeValue(String zhuanyeValue) {
+				this.zhuanyeValue = zhuanyeValue;
 			}
 			/**
 			* 获取： 班级的值

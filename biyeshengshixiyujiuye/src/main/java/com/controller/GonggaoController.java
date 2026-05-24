@@ -53,6 +53,10 @@ public class GonggaoController {
             params.put("fabuzheId", request.getSession().getAttribute("userId"));
             params.put("fabuzheRole", request.getSession().getAttribute("role"));
         }
+        if ("true".equals(String.valueOf(params.get("notMine")))) {
+            params.put("excludeFabuzheId", request.getSession().getAttribute("userId"));
+            params.put("excludeFabuzheRole", request.getSession().getAttribute("role"));
+        }
         PageUtils page = gonggaoService.queryPage(params);
 
         List<GonggaoView> list = (List<GonggaoView>) page.getList();

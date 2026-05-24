@@ -71,6 +71,12 @@ public class GonggaoCommentController {
             params.put("pinglunrenId", request.getSession().getAttribute("userId"));
             params.put("pinglunrenRole", request.getSession().getAttribute("role"));
         }
+        if ("true".equals(String.valueOf(params.get("receivedOnly")))) {
+            params.put("gonggaoFabuzheId", request.getSession().getAttribute("userId"));
+            params.put("gonggaoFabuzheRole", request.getSession().getAttribute("role"));
+            params.put("excludePinglunrenId", request.getSession().getAttribute("userId"));
+            params.put("excludePinglunrenRole", request.getSession().getAttribute("role"));
+        }
         PageUtils page = gonggaoCommentService.queryPage(params);
         return R.ok().put("data", page);
     }

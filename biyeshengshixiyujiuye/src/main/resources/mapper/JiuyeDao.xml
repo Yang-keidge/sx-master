@@ -32,6 +32,7 @@
         ,xuesheng.xuesheng_id_number as xueshengIdNumber
         ,xuesheng.xuesheng_photo as xueshengPhoto
         ,xuesheng.yuanxi_types as yuanxiTypes
+        ,xuesheng.zhuanye_types as zhuanyeTypes
         ,xuesheng.banji_types as banjiTypes
         ,xuesheng.ruxue_year as ruxueYear
         ,xuesheng.xuesheng_email as xueshengEmail
@@ -113,6 +114,10 @@
             </if>
             <if test="params.yuanxiTypes != null  and params.yuanxiTypes != ''">
                 and xuesheng.yuanxi_types = #{params.yuanxiTypes}
+            </if>
+
+            <if test="params.zhuanyeTypes != null  and params.zhuanyeTypes != ''">
+                and xuesheng.zhuanye_types = #{params.zhuanyeTypes}
             </if>
 
             <if test="params.banjiTypes != null  and params.banjiTypes != ''">

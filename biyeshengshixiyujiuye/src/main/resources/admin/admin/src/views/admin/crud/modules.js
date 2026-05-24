@@ -10,6 +10,7 @@ import * as teacherApi from '../../../api/teacher'
 
 const sexSelect = { type: 'select', dictionary: 'sex_types' }
 const yuanxiSelect = { type: 'select', dictionary: 'yuanxi_types' }
+const zhuanyeSelect = { type: 'select', dictionary: 'zhuanye_types' }
 const banjiSelect = { type: 'select', dictionary: 'banji_types' }
 const industrySelect = { type: 'select', dictionary: 'qiye_types' }
 const internshipTypeSelect = { type: 'select', dictionary: 'shixi_types' }
@@ -36,6 +37,7 @@ const internshipStatusOptions = [
 const dictionaryTypeOptions = [
   { label: '性别类型', value: 'sex_types', dicName: '性别类型' },
   { label: '院系', value: 'yuanxi_types', dicName: '院系' },
+  { label: '专业', value: 'zhuanye_types', dicName: '专业' },
   { label: '班级', value: 'banji_types', dicName: '班级' },
   { label: '公告类型', value: 'gonggao_types', dicName: '公告类型' },
   { label: '企业行业', value: 'qiye_types', dicName: '行业' },
@@ -43,11 +45,15 @@ const dictionaryTypeOptions = [
   { label: '实习结果', value: 'shixi_jieguo_types', dicName: '实习结果' }
 ]
 
-const departmentClassMap = {
-  1: [1, 2, 7, 11],
-  2: [3, 6, 8],
-  3: [4, 10],
-  4: [5, 9]
+const majorClassMap = {
+  1: [1, 7],
+  2: [2, 11],
+  3: [3, 8],
+  4: [4],
+  5: [5],
+  6: [6],
+  7: [9],
+  8: [10]
 }
 
 const createTimeColumn = { prop: 'createTime', label: '创建时间', type: 'datetime', minWidth: 168 }
@@ -68,21 +74,44 @@ function dictionaryColumn(prop, label, dictionary, valueProp, extra = {}) {
   return { prop, label, dictionary, valueProp, ...extra }
 }
 
-function filterClassByDepartment(option, model) {
+function filterMajorByDepartment(option, model) {
   const departmentId = model.yuanxiTypes
   if (!departmentId) return false
   const parentId = option.raw?.superId
   if (parentId !== null && parentId !== undefined && parentId !== '') {
     return String(parentId) === String(departmentId)
   }
-  return (departmentClassMap[departmentId] || []).some((classId) => String(classId) === String(option.value))
+  return true
 }
 
-function classNeedsDepartment(model) {
+function filterClassByMajor(option, model) {
+  const majorId = model.zhuanyeTypes
+  if (!majorId) return false
+  const parentId = option.raw?.superId
+  if (parentId !== null && parentId !== undefined && parentId !== '') {
+    return String(parentId) === String(majorId)
+  }
+  return (majorClassMap[majorId] || []).some((classId) => String(classId) === String(option.value))
+}
+
+function majorNeedsDepartment(model) {
   return !model.yuanxiTypes
 }
 
-function clearClassWhenDepartmentChanges({ form }) {
+function classNeedsMajor(model) {
+  return !model.zhuanyeTypes
+}
+
+function clearMajorAndClassWhenDepartmentChanges({ form }) {
+  if (form.zhuanyeTypes) {
+    form.zhuanyeTypes = ''
+  }
+  if (form.banjiTypes) {
+    form.banjiTypes = ''
+  }
+}
+
+function clearClassWhenMajorChanges({ form }) {
   if (form.banjiTypes) {
     form.banjiTypes = ''
   }
@@ -92,14 +121,28 @@ function findDictionaryType(dicCode) {
   return dictionaryTypeOptions.find((item) => item.value === dicCode)
 }
 
+function isMajorDictionary(form) {
+  return form.dicCode === 'zhuanye_types'
+}
+
 function isClassDictionary(form) {
   return form.dicCode === 'banji_types'
+}
+
+function needsParentDictionary(form) {
+  return isMajorDictionary(form) || isClassDictionary(form)
+}
+
+function parentDictionaryType(form) {
+  if (isClassDictionary(form)) return zhuanyeSelect.dictionary
+  if (isMajorDictionary(form)) return yuanxiSelect.dictionary
+  return ''
 }
 
 async function handleDictionaryTypeChange({ form }) {
   const dictionaryType = findDictionaryType(form.dicCode)
   form.dicName = dictionaryType?.dicName || ''
-  form.superId = isClassDictionary(form) ? form.superId || '' : null
+  form.superId = needsParentDictionary(form) ? '' : null
   await fillNextCodeIndex(form)
 }
 
@@ -108,7 +151,7 @@ function normalizeDictionaryPayload(payload) {
   if (dictionaryType) {
     payload.dicName = dictionaryType.dicName
   }
-  if (payload.dicCode !== 'banji_types') {
+  if (payload.dicCode !== 'zhuanye_types' && payload.dicCode !== 'banji_types') {
     payload.superId = null
   }
   return payload
@@ -156,13 +199,21 @@ const studentFields = [
   field('yuanxiTypes', '院系', yuanxiSelect.type, {
     dictionary: yuanxiSelect.dictionary,
     required: true,
-    onChange: clearClassWhenDepartmentChanges
+    onChange: clearMajorAndClassWhenDepartmentChanges
+  }),
+  field('zhuanyeTypes', '专业', zhuanyeSelect.type, {
+    dictionary: zhuanyeSelect.dictionary,
+    optionFilter: filterMajorByDepartment,
+    disabledWhen: majorNeedsDepartment,
+    disabledHint: '请先选择院系',
+    onChange: clearClassWhenMajorChanges,
+    required: true
   }),
   field('banjiTypes', '班级', banjiSelect.type, {
     dictionary: banjiSelect.dictionary,
-    optionFilter: filterClassByDepartment,
-    disabledWhen: classNeedsDepartment,
-    disabledHint: '请先选择院系',
+    optionFilter: filterClassByMajor,
+    disabledWhen: classNeedsMajor,
+    disabledHint: '请先选择专业',
     required: true
   }),
   field('ruxueYear', '入学年份', 'year', { required: true }),
@@ -178,7 +229,18 @@ const teacherFields = [
   field('laoshiIdNumber', '身份证号', 'input', { required: true }),
   field('laoshiPhoto', '头像', 'image'),
   field('sexTypes', '性别', sexSelect.type, { dictionary: sexSelect.dictionary, required: true }),
-  field('yuanxiTypes', '院系', yuanxiSelect.type, { dictionary: yuanxiSelect.dictionary, required: true }),
+  field('yuanxiTypes', '院系', yuanxiSelect.type, {
+    dictionary: yuanxiSelect.dictionary,
+    required: true,
+    onChange: clearMajorAndClassWhenDepartmentChanges
+  }),
+  field('zhuanyeTypes', '专业', zhuanyeSelect.type, {
+    dictionary: zhuanyeSelect.dictionary,
+    optionFilter: filterMajorByDepartment,
+    disabledWhen: majorNeedsDepartment,
+    disabledHint: '请先选择院系',
+    required: true
+  }),
   field('laoshiEmail', '邮箱', 'input')
 ]
 
@@ -198,7 +260,7 @@ const companyFields = [
 export const moduleConfigs = {
   students: {
     title: '学生管理',
-    subtitle: '维护学生基础信息、头像、院系班级与入学年份。',
+    subtitle: '维护学生基础信息、头像、院系、专业、班级与入学年份。',
     entityName: '学生',
     api: studentApi,
     batchImport: true,
@@ -208,13 +270,20 @@ export const moduleConfigs = {
       field('xueshengPhone', '手机号'),
       field('yuanxiTypes', '院系', yuanxiSelect.type, {
         dictionary: yuanxiSelect.dictionary,
-        onChange: clearClassWhenDepartmentChanges
+        onChange: clearMajorAndClassWhenDepartmentChanges
+      }),
+      field('zhuanyeTypes', '专业', zhuanyeSelect.type, {
+        dictionary: zhuanyeSelect.dictionary,
+        optionFilter: filterMajorByDepartment,
+        disabledWhen: majorNeedsDepartment,
+        disabledHint: '请先选择院系',
+        onChange: clearClassWhenMajorChanges
       }),
       field('banjiTypes', '班级', banjiSelect.type, {
         dictionary: banjiSelect.dictionary,
-        optionFilter: filterClassByDepartment,
-        disabledWhen: classNeedsDepartment,
-        disabledHint: '请先选择院系'
+        optionFilter: filterClassByMajor,
+        disabledWhen: classNeedsMajor,
+        disabledHint: '请先选择专业'
       }),
       field('ruxueYear', '入学年份', 'year'),
       field('graduationStatus', '毕业状态', 'select', { options: graduationOptions }),
@@ -227,7 +296,8 @@ export const moduleConfigs = {
       dictionaryColumn('sexTypes', '性别', 'sex_types', 'sexValue', { type: 'tag', width: 92 }),
       field('xueshengPhone', '手机号', 'input', { minWidth: 140 }),
       dictionaryColumn('yuanxiTypes', '院系', 'yuanxi_types', 'yuanxiValue', { type: 'tag', minWidth: 120 }),
-      dictionaryColumn('banjiTypes', '班级', 'banji_types', 'banjiValue', { minWidth: 120 }),
+      dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue', { minWidth: 120 }),
+      dictionaryColumn('banjiTypes', '班级', 'banji_types', 'banjiValue', { minWidth: 132 }),
       field('ruxueYear', '入学年份', 'input', { width: 108 }),
       field('xueshengEmail', '邮箱', 'input', { minWidth: 180 })
     ],
@@ -237,7 +307,7 @@ export const moduleConfigs = {
 
   teachers: {
     title: '教师管理',
-    subtitle: '维护教师账号、工号、院系、联系方式与头像信息。',
+    subtitle: '维护教师账号、工号、院系、专业、联系方式与头像信息。',
     entityName: '教师',
     api: teacherApi,
     batchImport: true,
@@ -245,7 +315,16 @@ export const moduleConfigs = {
       field('laoshiGonghao', '工号'),
       field('laoshiName', '姓名'),
       field('laoshiPhone', '手机号'),
-      field('yuanxiTypes', '院系', yuanxiSelect.type, { dictionary: yuanxiSelect.dictionary })
+      field('yuanxiTypes', '院系', yuanxiSelect.type, {
+        dictionary: yuanxiSelect.dictionary,
+        onChange: clearMajorAndClassWhenDepartmentChanges
+      }),
+      field('zhuanyeTypes', '专业', zhuanyeSelect.type, {
+        dictionary: zhuanyeSelect.dictionary,
+        optionFilter: filterMajorByDepartment,
+        disabledWhen: majorNeedsDepartment,
+        disabledHint: '请先选择院系'
+      })
     ],
     columns: [
       field('laoshiPhoto', '头像', 'image', { fallbackProp: 'laoshiName', width: 72 }),
@@ -253,6 +332,7 @@ export const moduleConfigs = {
       field('laoshiName', '姓名', 'input', { minWidth: 110 }),
       dictionaryColumn('sexTypes', '性别', 'sex_types', 'sexValue', { type: 'tag', width: 92 }),
       dictionaryColumn('yuanxiTypes', '院系', 'yuanxi_types', 'yuanxiValue', { type: 'tag', minWidth: 140 }),
+      dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue', { minWidth: 120 }),
       field('laoshiPhone', '手机号', 'input', { minWidth: 140 }),
       field('laoshiEmail', '邮箱', 'input', { minWidth: 180 }),
       createTimeColumn
@@ -308,6 +388,8 @@ export const moduleConfigs = {
     columns: [
       field('xueshengName', '学生姓名', 'input', { minWidth: 120 }),
       field('xueshengXuehao', '学号', 'input', { minWidth: 128 }),
+      dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue', { minWidth: 120 }),
+      dictionaryColumn('banjiTypes', '班级', 'banji_types', 'banjiValue', { minWidth: 132 }),
       field('qiyeName', '企业名称', 'input', { minWidth: 180 }),
       field('shixiName', '实习名称', 'input', { minWidth: 180 }),
       dictionaryColumn('shixiTypes', '实习类型', 'shixi_types', 'shixiValue', { type: 'tag', minWidth: 116 }),
@@ -339,6 +421,8 @@ export const moduleConfigs = {
     detailFields: [
       field('xueshengName', '学生姓名'),
       field('xueshengXuehao', '学号'),
+      dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue'),
+      dictionaryColumn('banjiTypes', '班级', 'banji_types', 'banjiValue'),
       field('qiyeName', '企业名称'),
       field('shixiName', '实习名称'),
       dictionaryColumn('shixiTypes', '实习类型', 'shixi_types', 'shixiValue'),
@@ -365,6 +449,8 @@ export const moduleConfigs = {
     columns: [
       field('xueshengName', '学生姓名', 'input', { minWidth: 120 }),
       field('xueshengXuehao', '学号', 'input', { minWidth: 128 }),
+      dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue', { minWidth: 120 }),
+      dictionaryColumn('banjiTypes', '班级', 'banji_types', 'banjiValue', { minWidth: 132 }),
       field('qiyeName', '企业名称', 'input', { minWidth: 180 }),
       field('jiuyeGangweiName', '入职岗位', 'input', { minWidth: 160 }),
       field('jiuyeKaishiTime', '入职日期', 'date', { width: 118 }),
@@ -380,6 +466,8 @@ export const moduleConfigs = {
     detailFields: [
       field('xueshengName', '学生姓名'),
       field('xueshengXuehao', '学号'),
+      dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue'),
+      dictionaryColumn('banjiTypes', '班级', 'banji_types', 'banjiValue'),
       field('qiyeName', '企业名称'),
       field('jiuyeGangweiName', '入职岗位'),
       field('jiuyeKaishiTime', '入职日期', 'date'),
@@ -476,7 +564,10 @@ export const moduleConfigs = {
       field('dicName', '字典名称', 'input', { minWidth: 140 }),
       field('codeIndex', 'codeIndex', 'input', { width: 112 }),
       field('indexName', 'indexName', 'input', { minWidth: 150 }),
-      dictionaryColumn('superId', '所属院系', 'yuanxi_types', 'superValue', { minWidth: 140 }),
+      dictionaryColumn('superId', '所属上级', parentDictionaryType, 'superValue', {
+        extraDictionaries: [yuanxiSelect.dictionary, zhuanyeSelect.dictionary],
+        minWidth: 140
+      }),
       createTimeColumn
     ],
     formFields: [
@@ -488,11 +579,12 @@ export const moduleConfigs = {
       field('dicName', '字典名称', 'input', { required: true, disabled: true }),
       field('codeIndex', 'codeIndex', 'number', { required: true, min: 1 }),
       field('indexName', 'indexName', 'input', { required: true }),
-      field('superId', '所属院系', 'select', {
-        dictionary: yuanxiSelect.dictionary,
-        requiredWhen: isClassDictionary,
-        disabledWhen: (form) => !isClassDictionary(form),
-        disabledHint: '仅班级需要选择所属院系'
+      field('superId', '所属上级', 'select', {
+        dictionary: parentDictionaryType,
+        extraDictionaries: [yuanxiSelect.dictionary, zhuanyeSelect.dictionary],
+        requiredWhen: needsParentDictionary,
+        disabledWhen: (form) => !needsParentDictionary(form),
+        disabledHint: '仅专业和班级需要选择所属上级'
       }),
       field('beizhu', '备注', 'textarea', { wide: true, rows: 3 })
     ],
@@ -501,7 +593,9 @@ export const moduleConfigs = {
       field('dicName', '字典名称'),
       field('codeIndex', 'codeIndex'),
       field('indexName', 'indexName'),
-      dictionaryColumn('superId', '所属院系', 'yuanxi_types', 'superValue'),
+      dictionaryColumn('superId', '所属上级', parentDictionaryType, 'superValue', {
+        extraDictionaries: [yuanxiSelect.dictionary, zhuanyeSelect.dictionary]
+      }),
       field('beizhu', '备注', 'multiline'),
       createTimeColumn
     ]

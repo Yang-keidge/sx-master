@@ -14,6 +14,7 @@
         ,a.laoshi_photo as laoshiPhoto
         ,a.sex_types as sexTypes
         ,a.yuanxi_types as yuanxiTypes
+        ,a.zhuanye_types as zhuanyeTypes
         ,a.laoshi_email as laoshiEmail
         ,a.create_time as createTime
     </sql>
@@ -55,6 +56,9 @@
             </if>
             <if test="params.yuanxiTypes != null and params.yuanxiTypes != ''">
                 and a.yuanxi_types = #{params.yuanxiTypes}
+            </if>
+            <if test="params.zhuanyeTypes != null and params.zhuanyeTypes != ''">
+                and a.zhuanye_types = #{params.zhuanyeTypes}
             </if>
             <if test=" params.laoshiEmail != '' and params.laoshiEmail != null and params.laoshiEmail != 'null' ">
                 and a.laoshi_email like CONCAT('%',#{params.laoshiEmail},'%')

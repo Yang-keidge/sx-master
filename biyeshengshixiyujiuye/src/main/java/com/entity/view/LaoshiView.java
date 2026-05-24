@@ -27,6 +27,10 @@ public class LaoshiView extends LaoshiEntity implements Serializable {
 		* 院系的值
 		*/
 		private String yuanxiValue;
+		/**
+		* 专业的值
+		*/
+		private String zhuanyeValue;
 
 
 
@@ -69,6 +73,19 @@ public class LaoshiView extends LaoshiEntity implements Serializable {
 			*/
 			public void setYuanxiValue(String yuanxiValue) {
 				this.yuanxiValue = yuanxiValue;
+			}
+
+			/**
+			* 获取： 专业的值
+			*/
+			public String getZhuanyeValue() {
+				return zhuanyeValue;
+			}
+			/**
+			* 设置： 专业的值
+			*/
+			public void setZhuanyeValue(String zhuanyeValue) {
+				this.zhuanyeValue = zhuanyeValue;
 			}
 
 

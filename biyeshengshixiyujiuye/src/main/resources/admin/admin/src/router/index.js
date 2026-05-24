@@ -3,16 +3,21 @@ import LoginView from '../views/LoginView.vue'
 import AdminLayout from '../layouts/AdminLayout.vue'
 import CompanyLayout from '../layouts/CompanyLayout.vue'
 import StudentLayout from '../layouts/StudentLayout.vue'
+import TeacherLayout from '../layouts/TeacherLayout.vue'
 import DashboardView from '../views/admin/DashboardView.vue'
 import CompanyDashboardView from '../views/company/DashboardView.vue'
 import CompanyProfileView from '../views/company/ProfileView.vue'
 import StudentDashboardView from '../views/student/DashboardView.vue'
 import StudentProfileView from '../views/student/ProfileView.vue'
 import StudentPasswordView from '../views/student/PasswordView.vue'
+import TeacherDashboardView from '../views/teacher/DashboardView.vue'
+import TeacherProfileView from '../views/teacher/ProfileView.vue'
+import TeacherPasswordView from '../views/teacher/PasswordView.vue'
 import PlaceholderView from '../views/admin/PlaceholderView.vue'
 import CrudModuleView from '../views/admin/crud/ModuleView.vue'
 import CompanyCrudModuleView from '../views/company/crud/ModuleView.vue'
 import StudentCrudModuleView from '../views/student/crud/ModuleView.vue'
+import TeacherCrudModuleView from '../views/teacher/crud/ModuleView.vue'
 
 const placeholder = (path, name, title, group) => ({
   path,
@@ -69,6 +74,21 @@ const studentModuleRoute = (path, name, title, group, moduleName) => ({
     group,
     requiresAuth: true,
     role: 'student'
+  }
+})
+
+const teacherModuleRoute = (path, name, title, group, moduleName) => ({
+  path,
+  name,
+  component: TeacherCrudModuleView,
+  props: {
+    moduleName
+  },
+  meta: {
+    title,
+    group,
+    requiresAuth: true,
+    role: 'teacher'
   }
 })
 
@@ -213,6 +233,63 @@ const router = createRouter({
         studentModuleRoute('announcements', 'student.announcements', '公告信息', 'service', 'announcements'),
         studentModuleRoute('comments', 'student.comments', '我的评论', 'interaction', 'comments')
       ]
+    },
+    {
+      path: '/teacher',
+      component: TeacherLayout,
+      redirect: '/teacher/dashboard',
+      meta: {
+        requiresAuth: true,
+        role: 'teacher'
+      },
+      children: [
+        {
+          path: 'dashboard',
+          name: 'teacher.dashboard',
+          component: TeacherDashboardView,
+          meta: {
+            title: '首页',
+            group: 'workbench',
+            requiresAuth: true,
+            role: 'teacher'
+          }
+        },
+        {
+          path: 'profile',
+          name: 'teacher.profile',
+          component: TeacherProfileView,
+          meta: {
+            title: '个人信息',
+            group: 'profile',
+            requiresAuth: true,
+            role: 'teacher'
+          }
+        },
+        {
+          path: 'password',
+          name: 'teacher.password',
+          component: TeacherPasswordView,
+          meta: {
+            title: '修改密码',
+            group: 'profile',
+            requiresAuth: true,
+            role: 'teacher'
+          }
+        },
+        teacherModuleRoute('students', 'teacher.students', '学生管理', 'students', 'students'),
+        teacherModuleRoute('internships', 'teacher.internships', '实习情况', 'internship', 'internships'),
+        teacherModuleRoute('employment', 'teacher.employment', '就业情况', 'employment', 'employment'),
+        teacherModuleRoute('announcements', 'teacher.announcements', '我的公告', 'announcement', 'announcements'),
+        teacherModuleRoute(
+          'announcement-comments',
+          'teacher.announcementComments',
+          '公告评论',
+          'announcement',
+          'announcementComments'
+        ),
+        teacherModuleRoute('comments', 'teacher.comments', '我的评论', 'announcement', 'comments'),
+        teacherModuleRoute('other-announcements', 'teacher.otherAnnouncements', '其他公告', 'announcement', 'otherAnnouncements')
+      ]
     }
   ],
   scrollBehavior() {
@@ -232,14 +309,16 @@ router.beforeEach((to) => {
     const requiredRole = {
       admin: '管理员',
       company: '企业',
-      student: '学生'
+      student: '学生',
+      teacher: '老师'
     }[to.meta.role]
 
     if (requiredRole && currentUser.role !== requiredRole) {
       const fallbackRoute = {
         管理员: 'admin.dashboard',
         企业: 'company.dashboard',
-        学生: 'student.dashboard'
+        学生: 'student.dashboard',
+        老师: 'teacher.dashboard'
       }[currentUser.role]
 
       return fallbackRoute ? { name: fallbackRoute } : { name: 'login' }

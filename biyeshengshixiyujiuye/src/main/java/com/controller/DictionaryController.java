@@ -230,21 +230,24 @@ public class DictionaryController {
 
     private boolean hasParentDictionary(DictionaryEntity dictionary) {
         return dictionary.getDicCode() != null
-                && (dictionary.getDicCode().contains("_erji_types") || "banji_types".equals(dictionary.getDicCode()));
+                && (dictionary.getDicCode().contains("_erji_types")
+                    || "zhuanye_types".equals(dictionary.getDicCode())
+                    || "banji_types".equals(dictionary.getDicCode()));
     }
 
     private R validateDictionaryParent(DictionaryEntity dictionary) {
-        if (!"banji_types".equals(dictionary.getDicCode())) {
+        if (!"zhuanye_types".equals(dictionary.getDicCode()) && !"banji_types".equals(dictionary.getDicCode())) {
             return null;
         }
         if (dictionary.getSuperId() == null) {
-            return R.error(511, "班级必须选择所属院系");
+            return R.error(511, "zhuanye_types".equals(dictionary.getDicCode()) ? "专业必须选择所属院系" : "班级必须选择所属专业");
         }
+        String parentDicCode = "zhuanye_types".equals(dictionary.getDicCode()) ? "yuanxi_types" : "zhuanye_types";
         DictionaryEntity parent = dictionaryService.selectOne(
-                new EntityWrapper<DictionaryEntity>().eq("dic_code", "yuanxi_types").eq("code_index", dictionary.getSuperId())
+                new EntityWrapper<DictionaryEntity>().eq("dic_code", parentDicCode).eq("code_index", dictionary.getSuperId())
         );
         if (parent == null) {
-            return R.error(511, "所属院系不存在");
+            return R.error(511, "zhuanye_types".equals(dictionary.getDicCode()) ? "所属院系不存在" : "所属专业不存在");
         }
         return null;
     }

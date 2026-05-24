@@ -163,9 +163,10 @@ const comments = computed(() => summary.value?.comments || [])
 const studentName = computed(() => student.value.xueshengName || storedUser.value.username || '学生用户')
 const studentMeta = computed(() => {
   const department = student.value.yuanxiValue || '未设置院系'
+  const major = student.value.zhuanyeValue || '未设置专业'
   const className = formatStudentClass(student.value) || '未设置班级'
   const number = student.value.xueshengXuehao || storedUser.value.studentNumber || '-'
-  return `${department} · ${className} · ${number}`
+  return `${department} · ${major} · ${className} · ${number}`
 })
 
 const storedUser = computed(() => {

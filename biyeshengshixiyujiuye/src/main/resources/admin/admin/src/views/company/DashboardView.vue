@@ -27,16 +27,16 @@
 
     <section class="charts-grid">
       <article class="panel-card donut-panel">
-        <h2>实习学生院系分布</h2>
+        <h2>实习学生专业分布</h2>
         <div class="donut-layout">
-          <div class="donut-chart" :style="donutStyle(departmentDistribution)">
+          <div class="donut-chart" :style="donutStyle(majorDistribution)">
             <div class="donut-center">
               <span>总计</span>
               <strong>{{ internshipStudentCount }}</strong>
             </div>
           </div>
           <ul class="legend-list">
-            <li v-for="item in departmentDistribution" :key="item.label">
+            <li v-for="item in majorDistribution" :key="item.label">
               <span :style="{ background: item.color }"></span>
               <strong>{{ item.label }}</strong>
               <em>{{ item.percent }}</em>
@@ -161,7 +161,7 @@ const loadError = ref('')
 const { ensure, getLabel } = useDictionary()
 
 onMounted(async () => {
-  await Promise.all([ensure('yuanxi_types'), ensure('shixi_types'), ensure('gonggao_types')])
+  await Promise.all([ensure('zhuanye_types'), ensure('shixi_types'), ensure('gonggao_types')])
   try {
     summary.value = await fetchCompanyDashboardSummary()
     loadError.value = ''
@@ -255,9 +255,9 @@ const storedUserName = computed(() => {
   }
 })
 
-const departmentDistribution = computed(() =>
+const majorDistribution = computed(() =>
   buildDistribution(
-    internships.value.map((item) => item.yuanxiValue || getLabel('yuanxi_types', item.yuanxiTypes, '') || '未设置'),
+    internships.value.map((item) => item.zhuanyeValue || getLabel('zhuanye_types', item.zhuanyeTypes, '') || '未设置'),
     6
   )
 )

@@ -76,6 +76,12 @@ public class XueshengModel implements Serializable {
 
 
     /**
+     * 专业
+     */
+    private Integer zhuanyeTypes;
+
+
+    /**
      * 班级
      */
     private Integer banjiTypes;
@@ -220,6 +226,20 @@ public class XueshengModel implements Serializable {
 	 */
     public void setYuanxiTypes(Integer yuanxiTypes) {
         this.yuanxiTypes = yuanxiTypes;
+    }
+    /**
+	 * 获取：专业
+	 */
+    public Integer getZhuanyeTypes() {
+        return zhuanyeTypes;
+    }
+
+
+    /**
+	 * 设置：专业
+	 */
+    public void setZhuanyeTypes(Integer zhuanyeTypes) {
+        this.zhuanyeTypes = zhuanyeTypes;
     }
     /**
 	 * 获取：班级

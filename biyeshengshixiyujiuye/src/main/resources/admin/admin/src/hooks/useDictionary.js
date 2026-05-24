@@ -7,6 +7,7 @@ const loading = reactive({})
 const fallbackLabels = {
   sex_types: '性别',
   yuanxi_types: '院系',
+  zhuanye_types: '专业',
   banji_types: '班级',
   qiye_types: '行业',
   gonggao_types: '公告类型',

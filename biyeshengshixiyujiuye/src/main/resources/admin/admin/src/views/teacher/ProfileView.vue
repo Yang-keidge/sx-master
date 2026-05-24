@@ -3,7 +3,7 @@
     <section class="page-heading">
       <div>
         <h1>个人信息</h1>
-        <p>维护账号、学号、联系方式、院系、专业、班级与头像信息。</p>
+        <p>维护教师账号、工号、联系方式、院系、专业与头像信息。</p>
       </div>
     </section>
 
@@ -11,31 +11,31 @@
       <aside class="profile-summary">
         <span class="avatar-preview">
           <img v-if="avatarUrl" :src="avatarUrl" alt="" />
-          <span v-else>{{ studentInitial }}</span>
+          <span v-else>{{ teacherInitial }}</span>
         </span>
-        <strong>{{ form.xueshengName || '学生用户' }}</strong>
-        <p>{{ form.xueshengXuehao || '-' }}</p>
-        <small>{{ account.yuanxiValue || '未设置院系' }} · {{ account.zhuanyeValue || '未设置专业' }} · {{ account.banjiValue || '未设置班级' }}</small>
+        <strong>{{ form.laoshiName || '教师用户' }}</strong>
+        <p>{{ form.laoshiGonghao || '-' }}</p>
+        <small>{{ account.yuanxiValue || '未设置院系' }} · {{ account.zhuanyeValue || '未设置专业' }}</small>
       </aside>
 
       <el-form class="profile-form" :model="form" label-position="top">
         <el-form-item label="账号" required>
           <el-input v-model="form.username" clearable placeholder="请输入账号" />
         </el-form-item>
-        <el-form-item label="学号" required>
-          <el-input v-model="form.xueshengXuehao" clearable placeholder="请输入学号" />
+        <el-form-item label="工号" required>
+          <el-input v-model="form.laoshiGonghao" clearable placeholder="请输入工号" />
         </el-form-item>
         <el-form-item label="姓名" required>
-          <el-input v-model="form.xueshengName" clearable placeholder="请输入姓名" />
+          <el-input v-model="form.laoshiName" clearable placeholder="请输入姓名" />
         </el-form-item>
         <el-form-item label="手机号" required>
-          <el-input v-model="form.xueshengPhone" clearable placeholder="请输入手机号" />
+          <el-input v-model="form.laoshiPhone" clearable placeholder="请输入手机号" />
         </el-form-item>
         <el-form-item label="身份证号" required>
-          <el-input v-model="form.xueshengIdNumber" clearable placeholder="请输入身份证号" />
+          <el-input v-model="form.laoshiIdNumber" clearable placeholder="请输入身份证号" />
         </el-form-item>
         <el-form-item label="邮箱">
-          <el-input v-model="form.xueshengEmail" clearable placeholder="请输入邮箱" />
+          <el-input v-model="form.laoshiEmail" clearable placeholder="请输入邮箱" />
         </el-form-item>
         <el-form-item label="性别" required>
           <el-select v-model="form.sexTypes" clearable filterable placeholder="请选择性别">
@@ -48,20 +48,12 @@
           </el-select>
         </el-form-item>
         <el-form-item label="专业" required>
-          <el-select v-model="form.zhuanyeTypes" clearable filterable :disabled="!form.yuanxiTypes" placeholder="请选择专业" @change="handleMajorChange">
+          <el-select v-model="form.zhuanyeTypes" clearable filterable :disabled="!form.yuanxiTypes" placeholder="请选择专业">
             <el-option v-for="item in majorOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="班级" required>
-          <el-select v-model="form.banjiTypes" clearable filterable :disabled="!form.zhuanyeTypes" placeholder="请选择班级">
-            <el-option v-for="item in classOptions" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="入学年份" required>
-          <el-date-picker v-model="form.ruxueYear" type="year" value-format="YYYY" placeholder="请选择入学年份" />
-        </el-form-item>
         <el-form-item class="form-wide" label="头像">
-          <UploadControl v-model="form.xueshengPhoto" type="image" accept="image/*" />
+          <UploadControl v-model="form.laoshiPhoto" type="image" accept="image/*" />
         </el-form-item>
         <el-form-item class="form-actions">
           <el-button type="primary" :loading="submitting" @click="submitProfile">保存信息</el-button>
@@ -77,49 +69,34 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import UploadControl from '../../components/Upload/index.vue'
 import { normalizeAssetUrl } from '../../api/request'
-import { session, update } from '../../api/student'
+import { session, update } from '../../api/teacher'
 import { useDictionary } from '../../hooks/useDictionary'
-
-const majorClassMap = {
-  1: [1, 7],
-  2: [2, 11],
-  3: [3, 8],
-  4: [4],
-  5: [5],
-  6: [6],
-  7: [9],
-  8: [10]
-}
 
 const { ensure, getOptions } = useDictionary()
 const account = ref({})
 const submitting = ref(false)
 const form = reactive({
   username: '',
-  xueshengXuehao: '',
-  xueshengName: '',
-  xueshengPhone: '',
-  xueshengIdNumber: '',
-  xueshengPhoto: '',
+  laoshiGonghao: '',
+  laoshiName: '',
+  laoshiPhone: '',
+  laoshiIdNumber: '',
+  laoshiPhoto: '',
   sexTypes: '',
   yuanxiTypes: '',
   zhuanyeTypes: '',
-  banjiTypes: '',
-  ruxueYear: '',
-  xueshengEmail: ''
+  laoshiEmail: ''
 })
 
 const sexOptions = getOptions('sex_types')
 const yuanxiOptions = getOptions('yuanxi_types')
 const allMajorOptions = getOptions('zhuanye_types')
-const allClassOptions = getOptions('banji_types')
 const majorOptions = computed(() => allMajorOptions.value.filter((option) => filterMajorByDepartment(option, form.yuanxiTypes)))
-const classOptions = computed(() => allClassOptions.value.filter((option) => filterClassByMajor(option, form.zhuanyeTypes)))
-const avatarUrl = computed(() => normalizeAssetUrl(form.xueshengPhoto))
-const studentInitial = computed(() => (form.xueshengName || '学').slice(0, 1))
+const avatarUrl = computed(() => normalizeAssetUrl(form.laoshiPhoto))
+const teacherInitial = computed(() => (form.laoshiName || '师').slice(0, 1))
 
 onMounted(async () => {
-  await Promise.all([ensure('sex_types'), ensure('yuanxi_types'), ensure('zhuanye_types'), ensure('banji_types')])
+  await Promise.all([ensure('sex_types'), ensure('yuanxi_types'), ensure('zhuanye_types')])
   await loadProfile()
 })
 
@@ -142,11 +119,6 @@ function fillForm(data) {
 
 function handleDepartmentChange() {
   form.zhuanyeTypes = ''
-  form.banjiTypes = ''
-}
-
-function handleMajorChange() {
-  form.banjiTypes = ''
 }
 
 function filterMajorByDepartment(option, departmentId) {
@@ -156,15 +128,6 @@ function filterMajorByDepartment(option, departmentId) {
     return String(parentId) === String(departmentId)
   }
   return true
-}
-
-function filterClassByMajor(option, majorId) {
-  if (!majorId) return false
-  const parentId = option.raw?.superId
-  if (parentId !== null && parentId !== undefined && parentId !== '') {
-    return String(parentId) === String(majorId)
-  }
-  return (majorClassMap[majorId] || []).some((classId) => String(classId) === String(option.value))
 }
 
 async function submitProfile() {
@@ -188,17 +151,15 @@ function buildProfilePayload() {
   const payload = {
     id: account.value.id,
     username: form.username,
-    xueshengXuehao: form.xueshengXuehao,
-    xueshengName: form.xueshengName,
-    xueshengPhone: form.xueshengPhone,
-    xueshengIdNumber: form.xueshengIdNumber,
-    xueshengPhoto: form.xueshengPhoto,
+    laoshiGonghao: form.laoshiGonghao,
+    laoshiName: form.laoshiName,
+    laoshiPhone: form.laoshiPhone,
+    laoshiIdNumber: form.laoshiIdNumber,
+    laoshiPhoto: form.laoshiPhoto,
     sexTypes: form.sexTypes,
     yuanxiTypes: form.yuanxiTypes,
     zhuanyeTypes: form.zhuanyeTypes,
-    banjiTypes: form.banjiTypes,
-    ruxueYear: form.ruxueYear,
-    xueshengEmail: form.xueshengEmail
+    laoshiEmail: form.laoshiEmail
   }
 
   if (account.value.password) {
@@ -216,10 +177,10 @@ function updateStoredUser(data) {
     JSON.stringify({
       ...stored,
       userId: data.id || stored.userId,
-      username: data.xueshengName || stored.username,
-      studentNumber: data.xueshengXuehao || stored.studentNumber,
-      role: '学生',
-      tableName: 'xuesheng'
+      username: data.laoshiName || stored.username,
+      teacherNumber: data.laoshiGonghao || stored.teacherNumber,
+      role: '老师',
+      tableName: 'laoshi'
     })
   )
 }
@@ -234,15 +195,13 @@ function readStoredUser() {
 
 const requiredFields = [
   { prop: 'username', label: '账号' },
-  { prop: 'xueshengXuehao', label: '学号' },
-  { prop: 'xueshengName', label: '姓名' },
-  { prop: 'xueshengPhone', label: '手机号' },
-  { prop: 'xueshengIdNumber', label: '身份证号' },
+  { prop: 'laoshiGonghao', label: '工号' },
+  { prop: 'laoshiName', label: '姓名' },
+  { prop: 'laoshiPhone', label: '手机号' },
+  { prop: 'laoshiIdNumber', label: '身份证号' },
   { prop: 'sexTypes', label: '性别' },
   { prop: 'yuanxiTypes', label: '院系' },
-  { prop: 'zhuanyeTypes', label: '专业' },
-  { prop: 'banjiTypes', label: '班级' },
-  { prop: 'ruxueYear', label: '入学年份' }
+  { prop: 'zhuanyeTypes', label: '专业' }
 ]
 </script>
 
@@ -349,8 +308,7 @@ const requiredFields = [
   margin-bottom: 18px;
 }
 
-.profile-form :deep(.el-select),
-.profile-form :deep(.el-date-editor.el-input) {
+.profile-form :deep(.el-select) {
   width: 100%;
 }
 

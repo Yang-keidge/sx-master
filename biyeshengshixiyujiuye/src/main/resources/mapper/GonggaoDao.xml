@@ -39,6 +39,12 @@
             <if test="params.fabuzheId != null and params.fabuzheId != ''">
                 and a.fabuzhe_id = #{params.fabuzheId}
             </if>
+            <if test="params.excludeFabuzheId != null and params.excludeFabuzheId != ''">
+                and (
+                    a.fabuzhe_id != #{params.excludeFabuzheId}
+                    or a.fabuzhe_role != #{params.excludeFabuzheRole}
+                )
+            </if>
             <if test=" params.fabuzheRole != '' and params.fabuzheRole != null and params.fabuzheRole != 'null' ">
                 and a.fabuzhe_role = #{params.fabuzheRole}
             </if>

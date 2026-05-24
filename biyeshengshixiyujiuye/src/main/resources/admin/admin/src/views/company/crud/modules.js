@@ -65,7 +65,8 @@ const internshipColumns = [
   field('xueshengPhoto', '头像', 'image', { fallbackProp: 'xueshengName', width: 72 }),
   field('xueshengName', '学生姓名', 'input', { minWidth: 120 }),
   field('xueshengXuehao', '学号', 'input', { minWidth: 128 }),
-  field('studentClass', '我的班级', 'input', {
+  dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue', { minWidth: 120 }),
+  field('studentClass', '班级', 'input', {
     minWidth: 150,
     formatter: formatStudentClass
   }),
@@ -100,7 +101,8 @@ const internshipFormFields = [
 const internshipDetailFields = [
   field('xueshengName', '学生姓名'),
   field('xueshengXuehao', '学号'),
-  field('studentClass', '我的班级', 'input', { formatter: formatStudentClass }),
+  dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue'),
+  field('studentClass', '班级', 'input', { formatter: formatStudentClass }),
   field('xueshengPhone', '学生手机号'),
   field('xueshengEmail', '学生邮箱'),
   field('shixiName', '实习名称'),
@@ -206,7 +208,8 @@ export const companyModuleConfigs = {
       field('xueshengPhoto', '头像', 'image', { fallbackProp: 'xueshengName', width: 72 }),
       field('xueshengName', '学生姓名', 'input', { minWidth: 120 }),
       field('xueshengXuehao', '学号', 'input', { minWidth: 128 }),
-      field('studentClass', '我的班级', 'input', {
+      dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue', { minWidth: 120 }),
+      field('studentClass', '班级', 'input', {
         minWidth: 150,
         formatter: formatStudentClass
       }),
@@ -225,7 +228,8 @@ export const companyModuleConfigs = {
     detailFields: [
       field('xueshengName', '学生姓名'),
       field('xueshengXuehao', '学号'),
-      field('studentClass', '我的班级', 'input', { formatter: formatStudentClass }),
+      dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue'),
+      field('studentClass', '班级', 'input', { formatter: formatStudentClass }),
       field('xueshengPhone', '学生手机号'),
       field('xueshengEmail', '学生邮箱'),
       field('jiuyeGangweiName', '入职岗位'),

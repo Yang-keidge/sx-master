@@ -75,7 +75,7 @@ public class JiuyeController {
         else if("学生".equals(role))
             params.put("xueshengId",request.getSession().getAttribute("userId"));
         else if("老师".equals(role))
-            params.put("laoshiId",request.getSession().getAttribute("userId"));
+            applyTeacherMajorScope(params, request);
         else if("企业".equals(role))
             params.put("qiyeId",request.getSession().getAttribute("userId"));
         if(params.get("orderBy")==null || params.get("orderBy")==""){
@@ -276,6 +276,17 @@ public class JiuyeController {
             e.printStackTrace();
             return R.error(511,"批量插入数据异常，请联系管理员");
         }
+    }
+
+    private void applyTeacherMajorScope(Map<String, Object> params, HttpServletRequest request) {
+        LaoshiEntity laoshi = laoshiService.selectById((Integer) request.getSession().getAttribute("userId"));
+        if (laoshi == null || laoshi.getYuanxiTypes() == null || laoshi.getZhuanyeTypes() == null) {
+            params.put("yuanxiTypes", -1);
+            params.put("zhuanyeTypes", -1);
+            return;
+        }
+        params.put("yuanxiTypes", laoshi.getYuanxiTypes());
+        params.put("zhuanyeTypes", laoshi.getZhuanyeTypes());
     }
 
 

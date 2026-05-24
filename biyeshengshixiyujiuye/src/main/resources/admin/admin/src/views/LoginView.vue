@@ -291,6 +291,12 @@ async function submitLogin() {
       return
     }
 
+    if (form.role === 'teacher') {
+      setMessage('success', '登录成功，正在进入教师端')
+      await router.push({ name: 'teacher.dashboard' })
+      return
+    }
+
     setMessage('success', '登录成功，该角色工作台后续实现')
   } catch (error) {
     setMessage('error', error.message || '登录失败，请稍后重试')

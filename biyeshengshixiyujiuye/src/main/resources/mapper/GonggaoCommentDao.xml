@@ -45,8 +45,20 @@
             <if test="params.gonggaoId != null and params.gonggaoId != ''">
                 and a.gonggao_id = #{params.gonggaoId}
             </if>
+            <if test="params.gonggaoFabuzheId != null and params.gonggaoFabuzheId != ''">
+                and g.fabuzhe_id = #{params.gonggaoFabuzheId}
+            </if>
+            <if test=" params.gonggaoFabuzheRole != '' and params.gonggaoFabuzheRole != null and params.gonggaoFabuzheRole != 'null' ">
+                and g.fabuzhe_role = #{params.gonggaoFabuzheRole}
+            </if>
             <if test="params.pinglunrenId != null and params.pinglunrenId != ''">
                 and a.pinglunren_id = #{params.pinglunrenId}
+            </if>
+            <if test="params.excludePinglunrenId != null and params.excludePinglunrenId != ''">
+                and (
+                    a.pinglunren_id != #{params.excludePinglunrenId}
+                    or a.pinglunren_role != #{params.excludePinglunrenRole}
+                )
             </if>
             <if test=" params.pinglunrenRole != '' and params.pinglunrenRole != null and params.pinglunrenRole != 'null' ">
                 and a.pinglunren_role = #{params.pinglunrenRole}

@@ -127,6 +127,14 @@ public class LaoshiEntity<T> implements Serializable {
 
 
     /**
+     * 专业
+     */
+    @TableField(value = "zhuanye_types")
+
+    private Integer zhuanyeTypes;
+
+
+    /**
      * 电子邮箱
      */
     @TableField(value = "laoshi_email")
@@ -275,6 +283,19 @@ public class LaoshiEntity<T> implements Serializable {
         this.yuanxiTypes = yuanxiTypes;
     }
     /**
+	 * 设置：专业
+	 */
+    public Integer getZhuanyeTypes() {
+        return zhuanyeTypes;
+    }
+    /**
+	 * 获取：专业
+	 */
+
+    public void setZhuanyeTypes(Integer zhuanyeTypes) {
+        this.zhuanyeTypes = zhuanyeTypes;
+    }
+    /**
 	 * 设置：电子邮箱
 	 */
     public String getLaoshiEmail() {
@@ -314,6 +335,7 @@ public class LaoshiEntity<T> implements Serializable {
             ", laoshiPhoto=" + laoshiPhoto +
             ", sexTypes=" + sexTypes +
             ", yuanxiTypes=" + yuanxiTypes +
+            ", zhuanyeTypes=" + zhuanyeTypes +
             ", laoshiEmail=" + laoshiEmail +
             ", createTime=" + createTime +
         "}";

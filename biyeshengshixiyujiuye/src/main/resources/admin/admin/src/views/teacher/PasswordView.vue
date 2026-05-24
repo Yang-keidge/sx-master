@@ -3,7 +3,7 @@
     <section class="page-heading">
       <div>
         <h1>修改密码</h1>
-        <p>更新当前学生账号的登录密码。</p>
+        <p>更新当前教师账号的登录密码。</p>
       </div>
     </section>
 
@@ -12,8 +12,8 @@
         <span class="lock-icon">
           <LockKeyhole :size="30" stroke-width="2.3" />
         </span>
-        <strong>{{ account.xueshengName || '学生用户' }}</strong>
-        <p>{{ account.xueshengXuehao || '-' }}</p>
+        <strong>{{ account.laoshiName || '教师用户' }}</strong>
+        <p>{{ account.laoshiGonghao || '-' }}</p>
       </div>
 
       <el-form class="password-form" :model="form" label-position="top">
@@ -39,7 +39,7 @@
 import { onMounted, reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { LockKeyhole } from 'lucide-vue-next'
-import { session, update } from '../../api/student'
+import { session, update } from '../../api/teacher'
 
 const account = ref({})
 const submitting = ref(false)
@@ -98,17 +98,15 @@ function buildPasswordPayload() {
     id: account.value.id,
     username: account.value.username,
     password: form.newPassword,
-    xueshengXuehao: account.value.xueshengXuehao,
-    xueshengName: account.value.xueshengName,
-    xueshengPhone: account.value.xueshengPhone,
-    xueshengIdNumber: account.value.xueshengIdNumber,
-    xueshengPhoto: account.value.xueshengPhoto,
+    laoshiGonghao: account.value.laoshiGonghao,
+    laoshiName: account.value.laoshiName,
+    laoshiPhone: account.value.laoshiPhone,
+    laoshiIdNumber: account.value.laoshiIdNumber,
+    laoshiPhoto: account.value.laoshiPhoto,
     sexTypes: account.value.sexTypes,
     yuanxiTypes: account.value.yuanxiTypes,
     zhuanyeTypes: account.value.zhuanyeTypes,
-    banjiTypes: account.value.banjiTypes,
-    ruxueYear: account.value.ruxueYear,
-    xueshengEmail: account.value.xueshengEmail
+    laoshiEmail: account.value.laoshiEmail
   }
 }
 

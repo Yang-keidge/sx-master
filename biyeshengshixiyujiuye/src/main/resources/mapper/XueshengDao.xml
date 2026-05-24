@@ -14,6 +14,7 @@
         ,a.xuesheng_photo as xueshengPhoto
         ,a.sex_types as sexTypes
         ,a.yuanxi_types as yuanxiTypes
+        ,a.zhuanye_types as zhuanyeTypes
         ,a.banji_types as banjiTypes
         ,a.ruxue_year as ruxueYear
         ,a.xuesheng_email as xueshengEmail
@@ -57,6 +58,9 @@
             </if>
             <if test="params.yuanxiTypes != null and params.yuanxiTypes != ''">
                 and a.yuanxi_types = #{params.yuanxiTypes}
+            </if>
+            <if test="params.zhuanyeTypes != null and params.zhuanyeTypes != ''">
+                and a.zhuanye_types = #{params.zhuanyeTypes}
             </if>
             <if test="params.banjiTypes != null and params.banjiTypes != ''">
                 and a.banji_types = #{params.banjiTypes}

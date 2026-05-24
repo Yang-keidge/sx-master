@@ -433,7 +433,8 @@ function initializeModels() {
 async function preloadDictionaries() {
   const dictionaryTypes = new Set()
   ;[...(config.searchFields || []), ...(config.columns || []), ...(config.formFields || [])].forEach((field) => {
-    if (field.dictionary) dictionaryTypes.add(field.dictionary)
+    ;(field.extraDictionaries || []).forEach((type) => dictionaryTypes.add(type))
+    if (typeof field.dictionary === 'string') dictionaryTypes.add(field.dictionary)
   })
   await Promise.all([...dictionaryTypes].map((type) => ensure(type).catch(() => [])))
 }
@@ -455,7 +456,8 @@ function getFieldOptions(field, model = {}) {
     options = field.options
   }
   if (field.dictionary) {
-    options = config.dictionaryOptions?.[field.dictionary] || getOptions(field.dictionary).value
+    const dictionaryType = resolveDictionary(field, model)
+    options = config.dictionaryOptions?.[dictionaryType] || getOptions(dictionaryType).value
   }
   if (field.optionFilter) {
     return options.filter((option) => field.optionFilter(option, model))
@@ -659,7 +661,11 @@ async function handleSearchFieldChange(field) {
 
 function getFieldDictionaryLabel(row, column) {
   if (!column.dictionary) return ''
-  return getLabel(column.dictionary, row[column.prop], row[column.valueProp] ? row[column.valueProp] : '')
+  return getLabel(resolveDictionary(column, row), row[column.prop], row[column.valueProp] ? row[column.valueProp] : '')
+}
+
+function resolveDictionary(field, model = {}) {
+  return typeof field.dictionary === 'function' ? field.dictionary(model) : field.dictionary
 }
 
 function displayValue(row, column) {

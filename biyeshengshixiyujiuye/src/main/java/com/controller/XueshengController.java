@@ -73,7 +73,7 @@ public class XueshengController {
         else if("学生".equals(role))
             params.put("xueshengId",request.getSession().getAttribute("userId"));
         else if("老师".equals(role))
-            params.put("laoshiId",request.getSession().getAttribute("userId"));
+            applyTeacherMajorScope(params, request);
         else if("企业".equals(role))
             params.put("qiyeId",request.getSession().getAttribute("userId"));
         if(params.get("orderBy")==null || params.get("orderBy")==""){
@@ -121,13 +121,19 @@ public class XueshengController {
         String role = String.valueOf(request.getSession().getAttribute("role"));
         if(false)
             return R.error(511,"永远不会进入");
+        if("老师".equals(role)) {
+            R scopeCheck = applyTeacherMajorScope(xuesheng, request);
+            if(scopeCheck != null) {
+                return scopeCheck;
+            }
+        }
         if(StringUtils.isBlank(xuesheng.getXueshengXuehao())){
             xuesheng.setXueshengXuehao(xuesheng.getUsername());
         }
         if(StringUtils.isBlank(xuesheng.getUsername())){
             xuesheng.setUsername(xuesheng.getXueshengXuehao());
         }
-        R relationCheck = validateDepartmentClassRelation(xuesheng);
+        R relationCheck = validateDepartmentMajorClassRelation(xuesheng);
         if(relationCheck != null) {
             return relationCheck;
         }
@@ -164,13 +170,19 @@ public class XueshengController {
         String role = String.valueOf(request.getSession().getAttribute("role"));
 //        if(false)
 //            return R.error(511,"永远不会进入");
+        if("老师".equals(role)) {
+            R scopeCheck = applyTeacherMajorScope(xuesheng, request);
+            if(scopeCheck != null) {
+                return scopeCheck;
+            }
+        }
         if(StringUtils.isBlank(xuesheng.getXueshengXuehao())){
             xuesheng.setXueshengXuehao(xuesheng.getUsername());
         }
         if(StringUtils.isBlank(xuesheng.getUsername())){
             xuesheng.setUsername(xuesheng.getXueshengXuehao());
         }
-        R relationCheck = validateDepartmentClassRelation(xuesheng);
+        R relationCheck = validateDepartmentMajorClassRelation(xuesheng);
         if(relationCheck != null) {
             return relationCheck;
         }
@@ -362,6 +374,10 @@ public class XueshengController {
         if(StringUtils.isBlank(xuesheng.getUsername())){
             xuesheng.setUsername(xuesheng.getXueshengXuehao());
         }
+        R relationCheck = validateDepartmentMajorClassRelation(xuesheng);
+        if(relationCheck != null) {
+            return relationCheck;
+        }
         Wrapper<XueshengEntity> queryWrapper = new EntityWrapper<XueshengEntity>()
             .eq("username", xuesheng.getUsername())
             .or()
@@ -442,9 +458,21 @@ public class XueshengController {
         return R.ok("退出成功");
     }
 
-    private R validateDepartmentClassRelation(XueshengEntity xuesheng) {
-        if (xuesheng.getYuanxiTypes() == null || xuesheng.getBanjiTypes() == null) {
-            return R.error(511, "请选择院系和班级");
+    private R validateDepartmentMajorClassRelation(XueshengEntity xuesheng) {
+        if (xuesheng.getYuanxiTypes() == null || xuesheng.getZhuanyeTypes() == null || xuesheng.getBanjiTypes() == null) {
+            return R.error(511, "请选择院系、专业和班级");
+        }
+
+        DictionaryEntity majorDictionary = dictionaryService.selectOne(
+                new EntityWrapper<DictionaryEntity>().eq("dic_code", "zhuanye_types").eq("code_index", xuesheng.getZhuanyeTypes())
+        );
+        if (majorDictionary == null) {
+            return R.error(511, "专业不存在");
+        }
+
+        Integer majorSuperId = majorDictionary.getSuperId();
+        if (majorSuperId != null && !majorSuperId.equals(xuesheng.getYuanxiTypes())) {
+            return R.error(511, "专业和院系不匹配");
         }
 
         DictionaryEntity classDictionary = dictionaryService.selectOne(
@@ -455,27 +483,55 @@ public class XueshengController {
         }
 
         Integer superId = classDictionary.getSuperId();
-        if (superId != null && !superId.equals(xuesheng.getYuanxiTypes())) {
-            return R.error(511, "班级和院系不匹配");
+        if (superId != null && !superId.equals(xuesheng.getZhuanyeTypes())) {
+            return R.error(511, "班级和专业不匹配");
         }
 
-        if (superId == null && !matchesLegacyDepartmentMapping(xuesheng.getYuanxiTypes(), xuesheng.getBanjiTypes())) {
-            return R.error(511, "班级和院系不匹配");
+        if (superId == null && !matchesLegacyMajorMapping(xuesheng.getZhuanyeTypes(), xuesheng.getBanjiTypes())) {
+            return R.error(511, "班级和专业不匹配");
         }
 
         return null;
     }
 
-    private boolean matchesLegacyDepartmentMapping(Integer yuanxiTypes, Integer banjiTypes) {
-        if (yuanxiTypes == null || banjiTypes == null) {
+    private void applyTeacherMajorScope(Map<String, Object> params, HttpServletRequest request) {
+        LaoshiEntity laoshi = laoshiService.selectById((Integer) request.getSession().getAttribute("userId"));
+        if (laoshi == null || laoshi.getYuanxiTypes() == null || laoshi.getZhuanyeTypes() == null) {
+            params.put("yuanxiTypes", -1);
+            params.put("zhuanyeTypes", -1);
+            return;
+        }
+        params.put("yuanxiTypes", laoshi.getYuanxiTypes());
+        params.put("zhuanyeTypes", laoshi.getZhuanyeTypes());
+    }
+
+    private R applyTeacherMajorScope(XueshengEntity xuesheng, HttpServletRequest request) {
+        LaoshiEntity laoshi = laoshiService.selectById((Integer) request.getSession().getAttribute("userId"));
+        if (laoshi == null) {
+            return R.error(511, "教师信息不存在");
+        }
+        if (laoshi.getYuanxiTypes() == null || laoshi.getZhuanyeTypes() == null) {
+            return R.error(511, "教师未设置院系和专业");
+        }
+        xuesheng.setYuanxiTypes(laoshi.getYuanxiTypes());
+        xuesheng.setZhuanyeTypes(laoshi.getZhuanyeTypes());
+        return null;
+    }
+
+    private boolean matchesLegacyMajorMapping(Integer zhuanyeTypes, Integer banjiTypes) {
+        if (zhuanyeTypes == null || banjiTypes == null) {
             return false;
         }
         Map<Integer, List<Integer>> mapping = new HashMap<>();
-        mapping.put(1, Arrays.asList(1, 2, 7, 11));
-        mapping.put(2, Arrays.asList(3, 6, 8));
-        mapping.put(3, Arrays.asList(4, 10));
-        mapping.put(4, Arrays.asList(5, 9));
-        List<Integer> classList = mapping.get(yuanxiTypes);
+        mapping.put(1, Arrays.asList(1, 7));
+        mapping.put(2, Arrays.asList(2, 11));
+        mapping.put(3, Arrays.asList(3, 8));
+        mapping.put(4, Collections.singletonList(4));
+        mapping.put(5, Collections.singletonList(5));
+        mapping.put(6, Collections.singletonList(6));
+        mapping.put(7, Collections.singletonList(9));
+        mapping.put(8, Collections.singletonList(10));
+        List<Integer> classList = mapping.get(zhuanyeTypes);
         return classList != null && classList.contains(banjiTypes);
     }
 
