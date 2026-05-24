@@ -181,8 +181,9 @@ const router = createRouter({
           }
         },
         companyModuleRoute('internships', 'company.internships', '实习管理', 'business', 'internships'),
-        companyModuleRoute('announcements', 'company.announcements', '招聘公告', 'business', 'announcements'),
         companyModuleRoute('employment-data', 'company.employmentData', '就业管理', 'business', 'employmentData'),
+        companyModuleRoute('announcements', 'company.announcements', '招聘公告', 'announcement', 'announcements'),
+        companyModuleRoute('other-announcements', 'company.otherAnnouncements', '其他公告', 'announcement', 'otherAnnouncements'),
         companyModuleRoute('comments', 'company.comments', '公告评论', 'interaction', 'comments')
       ]
     },

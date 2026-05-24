@@ -14,7 +14,6 @@ import com.utils.R;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -69,10 +69,16 @@ public class GonggaoController {
     @RequestMapping("/info/{id}")
     public R info(@PathVariable("id") Long id, HttpServletRequest request) {
         logger.debug("info方法:,,Controller:{},,id:{}", this.getClass().getName(), id);
-        GonggaoEntity gonggao = gonggaoService.selectById(id);
-        if (gonggao != null) {
-            GonggaoView view = new GonggaoView();
-            BeanUtils.copyProperties(gonggao, view);
+        Map<String, Object> params = new HashMap<>();
+        params.put("page", "1");
+        params.put("limit", "1");
+        params.put("orderBy", "id");
+        params.put("ids", Arrays.asList(id));
+
+        PageUtils page = gonggaoService.queryPage(params);
+        List<GonggaoView> list = (List<GonggaoView>) page.getList();
+        if (list != null && !list.isEmpty()) {
+            GonggaoView view = list.get(0);
             view.setCommentCount(gonggaoCommentService.selectCount(new EntityWrapper<GonggaoCommentEntity>().eq("gonggao_id", id)));
             dictionaryService.dictionaryConvert(view, request);
             return R.ok().put("data", view);

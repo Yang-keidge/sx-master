@@ -144,7 +144,7 @@
               {{ fallbackInitial(row, column) }}
             </el-avatar>
             <el-tag v-else-if="column.type === 'tag'" effect="light" :type="column.tagType || 'primary'">
-              {{ displayValue(row, column) || '-' }}
+              {{ formatDisplay(displayValue(row, column)) }}
             </el-tag>
             <el-link
               v-else-if="column.type === 'file' && row[column.prop]"
@@ -157,17 +157,23 @@
             <span v-else-if="column.type === 'date'">{{ formatDate(row[column.prop]) }}</span>
             <span v-else-if="column.type === 'datetime'">{{ formatDateTime(row[column.prop]) }}</span>
             <span v-else-if="column.type === 'html'" class="text-clip">{{ stripHtml(row[column.prop]) || '-' }}</span>
-            <span v-else-if="column.type === 'multiline'" class="multi-line">{{ row[column.prop] || '-' }}</span>
-            <span v-else>{{ displayValue(row, column) || '-' }}</span>
+            <span v-else-if="column.type === 'multiline'" class="multi-line">{{ formatDisplay(row[column.prop]) }}</span>
+            <span v-else>{{ formatDisplay(displayValue(row, column)) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作" fixed="right" width="178">
+        <el-table-column label="操作" fixed="right" :width="actionColumnWidth">
           <template #default="{ row }">
             <el-button link type="primary" @click="openDetail(row)">查看</el-button>
             <el-button v-if="config.canEdit !== false" link type="primary" @click="openForm('edit', row)">
               编辑
             </el-button>
-            <el-button v-if="config.canDelete !== false" link type="danger" @click="confirmDelete([row.id])">
+            <el-button v-if="config.commentable" link type="primary" @click="openComments(row)">
+              查看评论
+            </el-button>
+            <el-button v-if="config.commentable" link type="primary" @click="openCommentForm(row)">
+              评论
+            </el-button>
+            <el-button v-if="canRowDelete" link type="danger" @click="confirmDelete([row.id])">
               删除
             </el-button>
           </template>
@@ -318,11 +324,59 @@
         </el-link>
         <span v-else-if="field.type === 'date'">{{ formatDate(detailData[field.prop]) }}</span>
         <span v-else-if="field.type === 'datetime'">{{ formatDateTime(detailData[field.prop]) }}</span>
-        <span v-else-if="field.type === 'multiline'" class="multi-line">{{ detailData[field.prop] || '-' }}</span>
+        <span v-else-if="field.type === 'multiline'" class="multi-line">{{ formatDisplay(detailData[field.prop]) }}</span>
         <div v-else-if="field.type === 'html'" class="detail-html" v-html="detailData[field.prop] || '-'"></div>
-        <span v-else>{{ displayValue(detailData, field) || '-' }}</span>
+        <span v-else>{{ formatDisplay(displayValue(detailData, field)) }}</span>
       </el-descriptions-item>
     </el-descriptions>
+  </el-dialog>
+
+  <el-dialog
+    v-model="commentsDialog.visible"
+    :title="`公告评论${commentsDialog.announcementName ? ` - ${commentsDialog.announcementName}` : ''}`"
+    width="760px"
+    destroy-on-close
+  >
+    <div class="comment-toolbar">
+      <span>共 {{ commentsDialog.total }} 条评论</span>
+      <el-button type="primary" plain @click="showCommentComposer">评论</el-button>
+    </div>
+
+    <el-skeleton v-if="commentsDialog.loading" :rows="4" animated />
+    <el-empty v-else-if="!commentsDialog.comments.length" description="暂无评论" />
+    <div v-else class="comment-list">
+      <article v-for="comment in commentsDialog.comments" :key="comment.id" class="comment-item">
+        <header class="comment-meta">
+          <strong>{{ comment.pinglunrenName || '匿名用户' }}</strong>
+          <el-tag size="small" effect="plain">{{ comment.pinglunrenRole || '未知身份' }}</el-tag>
+          <time>{{ formatDateTime(comment.createTime) }}</time>
+        </header>
+        <p>{{ comment.gonggaoCommentContent }}</p>
+      </article>
+    </div>
+
+    <div v-if="commentsDialog.composing" class="comment-composer">
+      <el-input
+        v-model="commentForm.content"
+        type="textarea"
+        :rows="4"
+        maxlength="500"
+        show-word-limit
+        placeholder="请输入评论内容"
+      />
+    </div>
+
+    <template #footer>
+      <el-button @click="commentsDialog.visible = false">关闭</el-button>
+      <el-button
+        v-if="commentsDialog.composing"
+        type="primary"
+        :loading="commentSubmitting"
+        @click="submitComment"
+      >
+        提交评论
+      </el-button>
+    </template>
   </el-dialog>
 
   <el-dialog v-model="importDialog.visible" :title="`批量导入${config.entityName}`" width="460px">
@@ -343,6 +397,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import TablePage from '../../../components/TablePage/index.vue'
 import UploadControl from '../../../components/Upload/index.vue'
 import RichTextEditor from '../../../components/RichTextEditor.vue'
+import * as commentApi from '../../../api/comment'
 import { downloadAsset, normalizeAssetUrl } from '../../../api/request'
 import { useDictionary } from '../../../hooks/useDictionary'
 
@@ -358,10 +413,14 @@ const { ensure, getOptions, getLabel, clearDictionary } = useDictionary()
 const rows = ref([])
 const loading = ref(false)
 const submitting = ref(false)
+const commentSubmitting = ref(false)
 const selection = ref([])
 const filters = reactive({})
 const form = reactive({})
 const detailData = reactive({})
+const commentForm = reactive({
+  content: ''
+})
 const remoteOptions = reactive({})
 const sortRules = reactive([
   { prop: '', order: 'asc' },
@@ -388,8 +447,26 @@ const importDialog = reactive({
   fileName: ''
 })
 
+const commentsDialog = reactive({
+  visible: false,
+  loading: false,
+  announcementId: null,
+  announcementName: '',
+  comments: [],
+  total: 0,
+  composing: false
+})
+
 const config = computed(() => props.config).value
 const detailFields = computed(() => config.detailFields || [...config.columns, ...(config.formFields || [])])
+const canRowDelete = computed(() => config.canDelete !== false && !config.batchDeleteOnly)
+const actionColumnWidth = computed(() => {
+  let width = 78
+  if (config.canEdit !== false) width += 54
+  if (canRowDelete.value) width += 54
+  if (config.commentable) width += 132
+  return Math.max(width, 150)
+})
 const sortableFields = computed(() =>
   (config.sortFields || config.columns || [])
     .filter((column) => column.prop && !['image', 'file', 'html'].includes(column.type))
@@ -549,6 +626,65 @@ async function openDetail(row) {
   detailDialog.visible = true
 }
 
+async function openComments(row, composing = false) {
+  commentsDialog.announcementId = row.id
+  commentsDialog.announcementName = row.gonggaoName || ''
+  commentsDialog.comments = []
+  commentsDialog.total = Number(row.commentCount || 0)
+  commentsDialog.composing = composing
+  commentForm.content = ''
+  commentsDialog.visible = true
+  await loadComments()
+}
+
+function openCommentForm(row) {
+  openComments(row, true)
+}
+
+function showCommentComposer() {
+  commentsDialog.composing = true
+}
+
+async function loadComments() {
+  if (!commentsDialog.announcementId) return
+  commentsDialog.loading = true
+  try {
+    const result = await commentApi.page({
+      page: 1,
+      limit: 1000,
+      orderBy: 'create_time',
+      gonggaoId: commentsDialog.announcementId
+    })
+    const page = result.data || {}
+    commentsDialog.comments = page.list || []
+    commentsDialog.total = Number(page.total || commentsDialog.comments.length || 0)
+  } finally {
+    commentsDialog.loading = false
+  }
+}
+
+async function submitComment() {
+  const content = String(commentForm.content || '').trim()
+  if (!content) {
+    ElMessage.warning('请输入评论内容')
+    return
+  }
+  commentSubmitting.value = true
+  try {
+    await commentApi.save({
+      gonggaoId: commentsDialog.announcementId,
+      gonggaoCommentContent: content
+    })
+    ElMessage.success('评论成功')
+    commentForm.content = ''
+    commentsDialog.composing = false
+    await loadComments()
+    await fetchData()
+  } finally {
+    commentSubmitting.value = false
+  }
+}
+
 function validateForm() {
   const missing = config.formFields.find(
     (field) => isFieldRequired(field) && (form[field.prop] === '' || form[field.prop] == null)
@@ -672,6 +808,10 @@ function displayValue(row, column) {
   if (column.formatter) return column.formatter(row)
   if (column.dictionary) return row[column.valueProp] || getFieldDictionaryLabel(row, column)
   return row[column.prop]
+}
+
+function formatDisplay(value) {
+  return value === '' || value === null || value === undefined ? '-' : value
 }
 
 function getSortValue(row, field) {
@@ -850,6 +990,60 @@ function stripHtml(value) {
   max-height: 240px;
   overflow: auto;
   line-height: 1.7;
+}
+
+.comment-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  color: #66738b;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.comment-list {
+  display: grid;
+  gap: 12px;
+  max-height: 340px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.comment-item {
+  padding: 12px 14px;
+  border: 1px solid #e3e9f3;
+  border-radius: 8px;
+  background: #fbfcff;
+}
+
+.comment-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: #2f3b52;
+  font-size: 13px;
+}
+
+.comment-meta time {
+  margin-left: auto;
+  color: #8290a6;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.comment-item p {
+  margin: 0;
+  color: #344057;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.comment-composer {
+  margin-top: 16px;
 }
 
 .import-tip {

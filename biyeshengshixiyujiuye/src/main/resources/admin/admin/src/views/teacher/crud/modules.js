@@ -296,7 +296,6 @@ export const teacherModuleConfigs = {
       field('qiyePhone', '企业电话'),
       field('jiuyeGangweiName', '入职岗位'),
       field('jiuyeKaishiTime', '入职日期', 'date'),
-      field('jiuyeFile', '相关文件', 'file'),
       field('jiuyeContent', '就业备注', 'multiline'),
       createTimeColumn
     ]
@@ -307,6 +306,8 @@ export const teacherModuleConfigs = {
     subtitle: '发布并维护当前教师账号的实习、就业和教学通知公告。',
     entityName: '公告',
     api: announcementApi,
+    commentable: true,
+    batchDeleteOnly: true,
     transformSearch: myAnnouncements,
     searchFields: [
       field('gonggaoName', '公告标题'),
@@ -386,6 +387,7 @@ export const teacherModuleConfigs = {
     subtitle: '查看其他老师、企业和管理员发布的公告信息。',
     entityName: '公告',
     api: announcementApi,
+    commentable: true,
     canCreate: false,
     canEdit: false,
     canDelete: false,

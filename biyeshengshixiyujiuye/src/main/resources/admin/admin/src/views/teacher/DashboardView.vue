@@ -107,7 +107,6 @@
       <article class="panel-card list-card">
         <header>
           <h2>最新评论</h2>
-          <RouterLink :to="{ name: 'teacher.announcementComments' }">查看全部</RouterLink>
         </header>
         <ul v-if="latestComments.length" class="comment-list">
           <li v-for="item in latestComments" :key="item.id">

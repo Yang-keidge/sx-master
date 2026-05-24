@@ -132,6 +132,13 @@ function myAnnouncements(params) {
   }
 }
 
+function otherAnnouncements(params) {
+  return {
+    ...params,
+    notMine: 'true'
+  }
+}
+
 function myComments(params) {
   return {
     ...params,
@@ -244,6 +251,8 @@ export const companyModuleConfigs = {
     subtitle: '发布和维护本企业招聘、实习推荐类公告。',
     entityName: '公告',
     api: announcementApi,
+    commentable: true,
+    batchDeleteOnly: true,
     transformSearch: myAnnouncements,
     searchFields: [
       field('gonggaoName', '公告标题'),
@@ -261,6 +270,43 @@ export const companyModuleConfigs = {
       field('gonggaoName', '公告标题'),
       dictionaryColumn('gonggaoTypes', '公告类型', 'gonggao_types', 'gonggaoValue'),
       field('fabuzheName', '发布企业'),
+      field('insertTime', '发布日期', 'datetime'),
+      field('commentCount', '评论数量'),
+      field('gonggaoContent', '公告内容', 'html'),
+      createTimeColumn
+    ]
+  },
+
+  otherAnnouncements: {
+    title: '其他公告',
+    subtitle: '查看其他老师、企业和管理员发布的公告信息，仅支持查看与评论。',
+    entityName: '公告',
+    api: announcementApi,
+    commentable: true,
+    canCreate: false,
+    canEdit: false,
+    canDelete: false,
+    transformSearch: otherAnnouncements,
+    searchFields: [
+      field('gonggaoName', '公告标题'),
+      field('gonggaoTypes', '公告类型', announcementTypeSelect.type, { dictionary: announcementTypeSelect.dictionary }),
+      field('fabuzheName', '发布者名称')
+    ],
+    columns: [
+      field('gonggaoName', '公告标题', 'input', { minWidth: 240 }),
+      dictionaryColumn('gonggaoTypes', '公告类型', 'gonggao_types', 'gonggaoValue', { type: 'tag', minWidth: 116 }),
+      field('fabuzheRole', '发布者身份', 'input', { minWidth: 116 }),
+      field('fabuzheName', '发布者名称', 'input', { minWidth: 140 }),
+      field('commentCount', '评论数', 'input', { width: 96 }),
+      field('insertTime', '发布日期', 'datetime', { minWidth: 168 }),
+      createTimeColumn
+    ],
+    formFields: [],
+    detailFields: [
+      field('gonggaoName', '公告标题'),
+      dictionaryColumn('gonggaoTypes', '公告类型', 'gonggao_types', 'gonggaoValue'),
+      field('fabuzheRole', '发布者身份'),
+      field('fabuzheName', '发布者名称'),
       field('insertTime', '发布日期', 'datetime'),
       field('commentCount', '评论数量'),
       field('gonggaoContent', '公告内容', 'html'),

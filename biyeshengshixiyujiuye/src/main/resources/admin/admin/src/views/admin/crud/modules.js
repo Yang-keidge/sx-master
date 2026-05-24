@@ -481,6 +481,8 @@ export const moduleConfigs = {
     subtitle: '维护后台公告标题、类型和富文本内容，发布者由后端自动识别。',
     entityName: '公告',
     api: announcementApi,
+    commentable: true,
+    batchDeleteOnly: true,
     searchFields: [
       field('gonggaoName', '公告标题'),
       field('gonggaoTypes', '公告类型', announcementTypeSelect.type, { dictionary: announcementTypeSelect.dictionary }),
@@ -491,6 +493,7 @@ export const moduleConfigs = {
       dictionaryColumn('gonggaoTypes', '公告类型', 'gonggao_types', 'gonggaoValue', { type: 'tag', minWidth: 116 }),
       field('fabuzheRole', '发布者身份', 'input', { minWidth: 116 }),
       field('fabuzheName', '发布者名称', 'input', { minWidth: 140 }),
+      field('commentCount', '评论数', 'input', { width: 96 }),
       field('insertTime', '发布日期', 'datetime', { minWidth: 168 }),
       createTimeColumn
     ],

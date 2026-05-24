@@ -36,7 +36,6 @@ export const teacherSidebarSections = [
     title: '公告管理',
     items: [
       { label: '我的公告', routeName: 'teacher.announcements', icon: Megaphone },
-      { label: '公告评论', routeName: 'teacher.announcementComments', icon: MessageSquareText },
       { label: '其他公告', routeName: 'teacher.otherAnnouncements', icon: Megaphone },
       { label: '我的评论', routeName: 'teacher.comments', icon: MessageSquareText }
     ]

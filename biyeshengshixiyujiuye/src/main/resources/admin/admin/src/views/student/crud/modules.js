@@ -105,7 +105,6 @@ export const studentModuleConfigs = {
       field('qiyePhone', '企业电话'),
       field('jiuyeGangweiName', '入职岗位'),
       field('jiuyeKaishiTime', '入职日期', 'date'),
-      field('jiuyeFile', '相关文件', 'file'),
       field('jiuyeContent', '就业备注', 'multiline'),
       createTimeColumn
     ]
@@ -116,6 +115,7 @@ export const studentModuleConfigs = {
     subtitle: '查看学校和企业发布的实习、就业、招聘与通知公告。',
     entityName: '公告',
     api: announcementApi,
+    commentable: true,
     canCreate: false,
     canEdit: false,
     canDelete: false,
