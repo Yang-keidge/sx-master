@@ -736,7 +736,15 @@ async function runRowAction(action, row) {
     return
   }
 
-  await action.handler?.(row, { fetchData, ElMessage, ElMessageBox })
+  let actionResult
+  try {
+    actionResult = await action.handler?.(row, { fetchData, ElMessage, ElMessageBox })
+  } catch {
+    return
+  }
+  if (actionResult === false) {
+    return
+  }
   if (action.successMessage) {
     ElMessage.success(resolveActionText(action.successMessage, row))
   }

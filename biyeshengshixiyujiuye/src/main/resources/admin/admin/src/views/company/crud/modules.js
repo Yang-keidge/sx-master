@@ -167,6 +167,61 @@ function formatRecruitmentStatus(row) {
   return Number(row.yizhaoRenshu || 0) >= Number(row.zhaopinRenshu || 0) ? '已招满' : '招聘中'
 }
 
+function formatDateText(date) {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+function parseDateText(value) {
+  const text = String(value || '').trim()
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(text)) return null
+  const [year, month, day] = text.split('-').map(Number)
+  const date = new Date(year, month - 1, day)
+  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) return null
+  return date
+}
+
+async function promptDate(ElMessageBox, title, message, inputValue, validator) {
+  const result = await ElMessageBox.prompt(message, title, {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    inputValue,
+    inputPlaceholder: 'YYYY-MM-DD',
+    inputValidator(value) {
+      const date = parseDateText(value)
+      if (!date) return '请输入有效日期（YYYY-MM-DD）'
+      return validator ? validator(String(value).trim(), date) : true
+    }
+  })
+  return String(result.value || '').trim()
+}
+
+async function promptAcceptInternshipDates(row, { ElMessageBox }) {
+  const studentName = row.xueshengName || '该学生'
+  const positionName = row.zhaopinGangweiName || '该岗位'
+  const startText = await promptDate(
+    ElMessageBox,
+    '实习开始日期',
+    `录用 ${studentName} 到 ${positionName} 前，请填写实习开始日期。`,
+    formatDateText(new Date())
+  )
+  const startDate = parseDateText(startText)
+  const endText = await promptDate(
+    ElMessageBox,
+    '预计结束日期',
+    '请填写预计实习结束日期。',
+    '',
+    (value, endDate) => (endDate < startDate ? '结束日期不能早于开始日期' : true)
+  )
+
+  return {
+    shixiKaishiTime: startText,
+    shixiJieshuTime: endText
+  }
+}
+
 function getCurrentCompanyId() {
   try {
     return JSON.parse(localStorage.getItem('currentUser') || '{}').userId || ''
@@ -334,7 +389,10 @@ export const companyModuleConfigs = {
         confirm: (row) => `确认录用 ${row.xueshengName || '该学生'} 到 ${row.zhaopinGangweiName || '该岗位'}？`,
         confirmButtonText: '确认录用',
         successMessage: '录用成功，已生成实习记录',
-        handler: (row) => applicationApi.accept(row.id)
+        handler: async (row, tools) => {
+          const internshipDates = await promptAcceptInternshipDates(row, tools)
+          await applicationApi.accept(row.id, internshipDates)
+        }
       }
     ],
     formFields: [],

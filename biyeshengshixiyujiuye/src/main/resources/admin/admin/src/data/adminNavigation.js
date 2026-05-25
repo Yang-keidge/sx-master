@@ -24,7 +24,7 @@ export const sidebarSections = [
     ]
   },
   {
-    title: '基础信息管理',
+    title: '基础资料',
     items: [
       { label: '学生管理', routeName: 'admin.students', icon: UsersRound },
       { label: '教师管理', routeName: 'admin.teachers', icon: UserRound },
@@ -32,12 +32,17 @@ export const sidebarSections = [
     ]
   },
   {
-    title: '业务管理',
+    title: '实习就业',
     items: [
       { label: '实习管理', routeName: 'admin.internships', icon: UsersRound },
       { label: '就业管理', routeName: 'admin.employment', icon: BriefcaseBusiness },
       { label: '招聘岗位', routeName: 'admin.recruitmentJobs', icon: BriefcaseBusiness },
-      { label: '应聘学生', routeName: 'admin.applications', icon: UsersRound },
+      { label: '应聘学生', routeName: 'admin.applications', icon: UsersRound }
+    ]
+  },
+  {
+    title: '信息互动',
+    items: [
       { label: '公告管理', routeName: 'admin.announcements', icon: Megaphone },
       { label: '公告评论', routeName: 'admin.announcementComments', icon: MessageSquareText },
       { label: '讨论区', routeName: 'admin.discussions', icon: MessageSquareText },
@@ -45,7 +50,7 @@ export const sidebarSections = [
     ]
   },
   {
-    title: '系统管理',
+    title: '系统设置',
     items: [
       { label: '字典管理', routeName: 'admin.dictionaries', icon: BookOpenText },
       { label: '文件管理', routeName: 'admin.files', icon: Folder, hidden: true },

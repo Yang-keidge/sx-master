@@ -16,6 +16,7 @@ import com.service.YingpinService;
 import com.service.ZhaopinGangweiService;
 import com.utils.PageUtils;
 import com.utils.R;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,6 +42,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/yingpin")
 public class YingpinController {
+    private static final int SHIXI_JIEGUO_PENDING = 4;
 
     @Autowired
     private YingpinService yingpinService;
@@ -155,7 +157,7 @@ public class YingpinController {
 
     @Transactional
     @RequestMapping("/accept/{id}")
-    public R accept(@PathVariable("id") Integer id, HttpServletRequest request) {
+    public R accept(@PathVariable("id") Integer id, @RequestBody(required = false) AcceptInternshipRequest acceptRequest, HttpServletRequest request) {
         YingpinEntity yingpin = yingpinService.selectById(id);
         if (yingpin == null) {
             return R.error(511, "查不到数据");
@@ -183,15 +185,26 @@ public class YingpinController {
         if (isStudentInActiveInternship(xuesheng.getId())) {
             return R.error(511, "您正在实习中，如已离职请联系企业修改实习结束时间");
         }
+        if (acceptRequest == null || acceptRequest.getShixiKaishiTime() == null) {
+            return R.error(511, "请填写实习开始时间");
+        }
+        if (acceptRequest.getShixiJieshuTime() == null) {
+            return R.error(511, "请填写预计实习结束时间");
+        }
+        Date shixiKaishiTime = truncate(acceptRequest.getShixiKaishiTime());
+        Date shixiJieshuTime = truncate(acceptRequest.getShixiJieshuTime());
+        if (shixiJieshuTime.before(shixiKaishiTime)) {
+            return R.error(511, "实习结束时间不能早于开始时间");
+        }
 
         ShixiEntity shixi = new ShixiEntity();
         shixi.setXueshengId(yingpin.getXueshengId());
         shixi.setQiyeId(qiyeId);
         shixi.setShixiName("招聘录用实习");
         shixi.setShixiTypes(3);
-        shixi.setShixiKaishiTime(today());
-        shixi.setShixiJieshuTime(null);
-        shixi.setShixiJieguoTypes(3);
+        shixi.setShixiKaishiTime(shixiKaishiTime);
+        shixi.setShixiJieshuTime(shixiJieshuTime);
+        shixi.setShixiJieguoTypes(SHIXI_JIEGUO_PENDING);
         shixi.setShixiGangweiName(zhaopin.getZhaopinGangweiName());
         shixi.setShixiContent("由招聘应聘录用自动生成，实习类型为校企合作实习。");
         shixi.setCreateTime(new Date());
@@ -339,5 +352,29 @@ public class YingpinController {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
+    }
+
+    public static class AcceptInternshipRequest {
+        @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd")
+        private Date shixiKaishiTime;
+
+        @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd")
+        private Date shixiJieshuTime;
+
+        public Date getShixiKaishiTime() {
+            return shixiKaishiTime;
+        }
+
+        public void setShixiKaishiTime(Date shixiKaishiTime) {
+            this.shixiKaishiTime = shixiKaishiTime;
+        }
+
+        public Date getShixiJieshuTime() {
+            return shixiJieshuTime;
+        }
+
+        public void setShixiJieshuTime(Date shixiJieshuTime) {
+            this.shixiJieshuTime = shixiJieshuTime;
+        }
     }
 }

@@ -7,6 +7,6 @@ export function apply(zhaopinId) {
   return request.post(`/yingpin/apply/${zhaopinId}`)
 }
 
-export function accept(id) {
-  return request.post(`/yingpin/accept/${id}`)
+export function accept(id, data = {}) {
+  return request.post(`/yingpin/accept/${id}`, data)
 }
