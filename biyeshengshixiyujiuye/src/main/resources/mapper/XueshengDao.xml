@@ -12,6 +12,7 @@
         ,a.xuesheng_phone as xueshengPhone
         ,a.xuesheng_id_number as xueshengIdNumber
         ,a.xuesheng_photo as xueshengPhoto
+        ,a.xuesheng_jianli_file as xueshengJianliFile
         ,a.sex_types as sexTypes
         ,a.yuanxi_types as yuanxiTypes
         ,a.zhuanye_types as zhuanyeTypes

@@ -1,7 +1,9 @@
 import * as announcementApi from '../../../api/announcement'
+import * as applicationApi from '../../../api/application'
 import * as commentApi from '../../../api/comment'
 import * as employmentApi from '../../../api/employment'
 import * as internshipApi from '../../../api/internship'
+import * as recruitmentApi from '../../../api/recruitment'
 
 const internshipTypeSelect = { type: 'select', dictionary: 'shixi_types' }
 const internshipResultSelect = { type: 'select', dictionary: 'shixi_jieguo_types' }
@@ -31,7 +33,102 @@ function myComments(params) {
   }
 }
 
+function formatRecruitmentProgress(row) {
+  return `${Number(row.yizhaoRenshu || 0)}/${Number(row.zhaopinRenshu || 0)}个`
+}
+
+function formatRecruitmentStatus(row) {
+  return Number(row.yizhaoRenshu || 0) >= Number(row.zhaopinRenshu || 0) ? '已招满' : '招聘中'
+}
+
+function isRecruitmentFull(row) {
+  return Number(row.yizhaoRenshu || 0) >= Number(row.zhaopinRenshu || 0)
+}
+
 export const studentModuleConfigs = {
+  recruitmentJobs: {
+    title: '招聘信息',
+    subtitle: '浏览企业发布的实习招聘岗位，并提交应聘。',
+    entityName: '招聘岗位',
+    api: recruitmentApi,
+    canCreate: false,
+    canEdit: false,
+    canDelete: false,
+    searchFields: [
+      field('qiyeName', '公司名称'),
+      field('zhaopinGangweiName', '职位名称'),
+      field('zhaopinLeixing', '职位类型'),
+      field('gongzuoDizhi', '工作地址')
+    ],
+    columns: [
+      field('qiyeName', '公司名称', 'input', { minWidth: 180 }),
+      field('zhaopinGangweiName', '职位名称', 'input', { minWidth: 160 }),
+      field('zhaopinLeixing', '职位类型', 'input', { minWidth: 130 }),
+      field('xinziFanwei', '薪资范围', 'input', { minWidth: 130 }),
+      field('gongzuoDizhi', '工作地址', 'input', { minWidth: 180 }),
+      field('zhaopinProgress', '已招到/招聘数量', 'input', { formatter: formatRecruitmentProgress, width: 144 }),
+      field('zhaomanStatus', '状态', 'tag', { formatter: formatRecruitmentStatus, width: 96 }),
+      createTimeColumn
+    ],
+    rowActions: [
+      {
+        label: '应聘',
+        type: 'primary',
+        visible: (row) => !isRecruitmentFull(row),
+        confirm: (row) => `确认应聘 ${row.qiyeName || '该企业'} 的 ${row.zhaopinGangweiName || '该岗位'}？`,
+        confirmButtonText: '确认应聘',
+        successMessage: '应聘成功',
+        handler: (row) => applicationApi.apply(row.id)
+      }
+    ],
+    formFields: [],
+    detailFields: [
+      field('qiyeName', '公司名称'),
+      field('zhaopinGangweiName', '职位名称'),
+      field('zhaopinLeixing', '职位类型'),
+      field('xinziFanwei', '薪资范围'),
+      field('gongzuoDizhi', '工作地址'),
+      field('zhaopinProgress', '已招到/招聘数量', 'input', { formatter: formatRecruitmentProgress }),
+      field('zhaomanStatus', '状态', 'input', { formatter: formatRecruitmentStatus }),
+      field('gongzuoYaoqiu', '工作要求', 'multiline'),
+      createTimeColumn
+    ]
+  },
+
+  applications: {
+    title: '我的应聘',
+    subtitle: '查看和管理我已提交的招聘岗位应聘数据。',
+    entityName: '应聘',
+    api: applicationApi,
+    canCreate: false,
+    canEdit: false,
+    searchFields: [
+      field('qiyeName', '公司名称'),
+      field('zhaopinGangweiName', '职位名称'),
+      field('zhaopinLeixing', '职位类型')
+    ],
+    columns: [
+      field('qiyeName', '公司名称', 'input', { minWidth: 180 }),
+      field('zhaopinGangweiName', '职位名称', 'input', { minWidth: 160 }),
+      field('zhaopinLeixing', '职位类型', 'input', { minWidth: 130 }),
+      field('xinziFanwei', '薪资范围', 'input', { minWidth: 130 }),
+      field('gongzuoDizhi', '工作地址', 'input', { minWidth: 180 }),
+      field('yingpinStatus', '状态', 'tag', { width: 92 }),
+      createTimeColumn
+    ],
+    formFields: [],
+    detailFields: [
+      field('qiyeName', '公司名称'),
+      field('zhaopinGangweiName', '职位名称'),
+      field('zhaopinLeixing', '职位类型'),
+      field('xinziFanwei', '薪资范围'),
+      field('gongzuoDizhi', '工作地址'),
+      field('gongzuoYaoqiu', '工作要求', 'multiline'),
+      field('yingpinStatus', '应聘状态'),
+      createTimeColumn
+    ]
+  },
+
   internships: {
     title: '我的实习',
     subtitle: '查看我的实习企业、岗位、实习周期和实习结果。',

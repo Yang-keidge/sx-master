@@ -130,6 +130,7 @@ const teacherStudentFields = [
   field('xueshengPhone', '手机号', 'input', { required: true }),
   field('xueshengIdNumber', '身份证号', 'input', { required: true }),
   field('xueshengPhoto', '头像', 'image'),
+  field('xueshengJianliFile', '学生简历', 'file'),
   field('sexTypes', '性别', sexSelect.type, { dictionary: sexSelect.dictionary, required: true }),
   field('yuanxiTypes', '院系', yuanxiSelect.type, {
     dictionary: yuanxiSelect.dictionary,
@@ -247,6 +248,7 @@ export const teacherModuleConfigs = {
     detailFields: [
       field('xueshengName', '学生姓名'),
       field('xueshengXuehao', '学号'),
+      field('xueshengJianliFile', '学生简历', 'file'),
       dictionaryColumn('yuanxiTypes', '院系', 'yuanxi_types', 'yuanxiValue'),
       dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue'),
       field('studentClass', '班级', 'input', { formatter: formatStudentClass }),
@@ -288,6 +290,7 @@ export const teacherModuleConfigs = {
     detailFields: [
       field('xueshengName', '学生姓名'),
       field('xueshengXuehao', '学号'),
+      field('xueshengJianliFile', '学生简历', 'file'),
       dictionaryColumn('yuanxiTypes', '院系', 'yuanxi_types', 'yuanxiValue'),
       dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue'),
       field('studentClass', '班级', 'input', { formatter: formatStudentClass }),

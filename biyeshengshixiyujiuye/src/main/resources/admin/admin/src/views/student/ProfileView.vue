@@ -3,7 +3,7 @@
     <section class="page-heading">
       <div>
         <h1>个人信息</h1>
-        <p>维护账号、学号、联系方式、院系、专业、班级与头像信息。</p>
+        <p>维护账号、学号、联系方式、院系、专业、班级、头像与简历信息。</p>
       </div>
     </section>
 
@@ -63,6 +63,9 @@
         <el-form-item class="form-wide" label="头像">
           <UploadControl v-model="form.xueshengPhoto" type="image" accept="image/*" />
         </el-form-item>
+        <el-form-item class="form-wide" label="简历">
+          <UploadControl v-model="form.xueshengJianliFile" type="file" accept=".pdf,.doc,.docx" />
+        </el-form-item>
         <el-form-item class="form-actions">
           <el-button type="primary" :loading="submitting" @click="submitProfile">保存信息</el-button>
           <el-button @click="loadProfile">重新加载</el-button>
@@ -101,6 +104,7 @@ const form = reactive({
   xueshengPhone: '',
   xueshengIdNumber: '',
   xueshengPhoto: '',
+  xueshengJianliFile: '',
   sexTypes: '',
   yuanxiTypes: '',
   zhuanyeTypes: '',
@@ -193,6 +197,7 @@ function buildProfilePayload() {
     xueshengPhone: form.xueshengPhone,
     xueshengIdNumber: form.xueshengIdNumber,
     xueshengPhoto: form.xueshengPhoto,
+    xueshengJianliFile: form.xueshengJianliFile,
     sexTypes: form.sexTypes,
     yuanxiTypes: form.yuanxiTypes,
     zhuanyeTypes: form.zhuanyeTypes,

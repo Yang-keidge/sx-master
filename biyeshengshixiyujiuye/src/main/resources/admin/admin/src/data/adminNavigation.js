@@ -36,6 +36,8 @@ export const sidebarSections = [
     items: [
       { label: '实习管理', routeName: 'admin.internships', icon: UsersRound },
       { label: '就业管理', routeName: 'admin.employment', icon: BriefcaseBusiness },
+      { label: '招聘岗位', routeName: 'admin.recruitmentJobs', icon: BriefcaseBusiness },
+      { label: '应聘学生', routeName: 'admin.applications', icon: UsersRound },
       { label: '公告管理', routeName: 'admin.announcements', icon: Megaphone },
       { label: '公告评论', routeName: 'admin.announcementComments', icon: MessageSquareText }
     ]
@@ -55,6 +57,7 @@ export const quickActions = [
   { label: '学生管理', routeName: 'admin.students', icon: UsersRound, tone: 'blue' },
   { label: '实习管理', routeName: 'admin.internships', icon: BriefcaseBusiness, tone: 'indigo' },
   { label: '就业管理', routeName: 'admin.employment', icon: Building2, tone: 'green' },
+  { label: '招聘岗位', routeName: 'admin.recruitmentJobs', icon: BriefcaseBusiness, tone: 'sky' },
   { label: '公告管理', routeName: 'admin.announcements', icon: Megaphone, tone: 'orange' },
   { label: '数据统计', routeName: 'admin.statistics', icon: BarChart3, tone: 'blue', hidden: true },
   { label: '文件上传', routeName: 'admin.files', icon: FileCog, tone: 'sky', hidden: true }

@@ -133,6 +133,8 @@ const router = createRouter({
         moduleRoute('companies', 'admin.companies', '企业管理', 'basic', 'companies', 'company'),
         moduleRoute('internships', 'admin.internships', '实习管理', 'business', 'internships', 'internship'),
         moduleRoute('employment', 'admin.employment', '就业管理', 'business', 'employment'),
+        moduleRoute('recruitment-jobs', 'admin.recruitmentJobs', '招聘岗位', 'business', 'recruitmentJobs'),
+        moduleRoute('applications', 'admin.applications', '应聘学生', 'business', 'applications'),
         moduleRoute('announcements', 'admin.announcements', '公告管理', 'business', 'announcements', 'announcement'),
         moduleRoute(
           'announcement-comments',
@@ -182,6 +184,8 @@ const router = createRouter({
         },
         companyModuleRoute('internships', 'company.internships', '实习管理', 'business', 'internships'),
         companyModuleRoute('employment-data', 'company.employmentData', '就业管理', 'business', 'employmentData'),
+        companyModuleRoute('recruitment-jobs', 'company.recruitmentJobs', '招聘岗位', 'business', 'recruitmentJobs'),
+        companyModuleRoute('applications', 'company.applications', '应聘学生', 'business', 'applications'),
         companyModuleRoute('announcements', 'company.announcements', '招聘公告', 'announcement', 'announcements'),
         companyModuleRoute('other-announcements', 'company.otherAnnouncements', '其他公告', 'announcement', 'otherAnnouncements'),
         companyModuleRoute('comments', 'company.comments', '公告评论', 'interaction', 'comments')
@@ -229,6 +233,8 @@ const router = createRouter({
             role: 'student'
           }
         },
+        studentModuleRoute('recruitment-jobs', 'student.recruitmentJobs', '招聘信息', 'business', 'recruitmentJobs'),
+        studentModuleRoute('applications', 'student.applications', '我的应聘', 'business', 'applications'),
         studentModuleRoute('internships', 'student.internships', '我的实习', 'business', 'internships'),
         studentModuleRoute('employment', 'student.employment', '我的就业', 'business', 'employment'),
         studentModuleRoute('announcements', 'student.announcements', '公告信息', 'service', 'announcements'),

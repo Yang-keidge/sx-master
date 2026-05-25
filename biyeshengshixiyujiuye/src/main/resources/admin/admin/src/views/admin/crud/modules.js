@@ -1,10 +1,12 @@
 import * as announcementApi from '../../../api/announcement'
+import * as applicationApi from '../../../api/application'
 import * as commentApi from '../../../api/comment'
 import * as companyApi from '../../../api/company'
 import * as configApi from '../../../api/config'
 import * as dictionaryApi from '../../../api/dictionary'
 import * as employmentApi from '../../../api/employment'
 import * as internshipApi from '../../../api/internship'
+import * as recruitmentApi from '../../../api/recruitment'
 import * as studentApi from '../../../api/student'
 import * as teacherApi from '../../../api/teacher'
 
@@ -173,6 +175,14 @@ async function loadCompanyOptions() {
   }))
 }
 
+async function loadRecruitmentOptions() {
+  const result = await recruitmentApi.page({ page: 1, limit: 1000, orderBy: 'id' })
+  return (result.data?.list || []).map((item) => ({
+    label: `${item.qiyeName || '未命名企业'} - ${item.zhaopinGangweiName || '未命名岗位'}`,
+    value: item.id
+  }))
+}
+
 async function fillNextCodeIndex(form) {
   if (!form.dicCode) {
     form.codeIndex = ''
@@ -187,6 +197,14 @@ async function fillNextCodeIndex(form) {
   }
 }
 
+function formatRecruitmentProgress(row) {
+  return `${Number(row.yizhaoRenshu || 0)}/${Number(row.zhaopinRenshu || 0)}个`
+}
+
+function formatRecruitmentStatus(row) {
+  return Number(row.yizhaoRenshu || 0) >= Number(row.zhaopinRenshu || 0) ? '已招满' : '招聘中'
+}
+
 const studentFields = [
   field('username', '账号', 'input', { required: true }),
   userPasswordField,
@@ -195,6 +213,7 @@ const studentFields = [
   field('xueshengPhone', '手机号', 'input', { required: true }),
   field('xueshengIdNumber', '身份证号', 'input', { required: true }),
   field('xueshengPhoto', '头像', 'image'),
+  field('xueshengJianliFile', '学生简历', 'file'),
   field('sexTypes', '性别', sexSelect.type, { dictionary: sexSelect.dictionary, required: true }),
   field('yuanxiTypes', '院系', yuanxiSelect.type, {
     dictionary: yuanxiSelect.dictionary,
@@ -421,6 +440,7 @@ export const moduleConfigs = {
     detailFields: [
       field('xueshengName', '学生姓名'),
       field('xueshengXuehao', '学号'),
+      field('xueshengJianliFile', '学生简历', 'file'),
       dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue'),
       dictionaryColumn('banjiTypes', '班级', 'banji_types', 'banjiValue'),
       field('qiyeName', '企业名称'),
@@ -466,12 +486,111 @@ export const moduleConfigs = {
     detailFields: [
       field('xueshengName', '学生姓名'),
       field('xueshengXuehao', '学号'),
+      field('xueshengJianliFile', '学生简历', 'file'),
       dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue'),
       dictionaryColumn('banjiTypes', '班级', 'banji_types', 'banjiValue'),
       field('qiyeName', '企业名称'),
       field('jiuyeGangweiName', '入职岗位'),
       field('jiuyeKaishiTime', '入职日期', 'date'),
       field('jiuyeContent', '就业备注', 'multiline'),
+      createTimeColumn
+    ]
+  },
+
+  recruitmentJobs: {
+    title: '招聘岗位',
+    subtitle: '管理企业发布的招聘岗位、薪资范围、工作地址、招聘数量和招满状态。',
+    entityName: '招聘岗位',
+    api: recruitmentApi,
+    optionLoaders: {
+      companies: loadCompanyOptions
+    },
+    searchFields: [
+      field('qiyeName', '公司名称'),
+      field('zhaopinGangweiName', '职位名称'),
+      field('zhaopinLeixing', '职位类型'),
+      field('gongzuoDizhi', '工作地址')
+    ],
+    columns: [
+      field('qiyeName', '公司名称', 'input', { minWidth: 180 }),
+      field('zhaopinGangweiName', '职位名称', 'input', { minWidth: 160 }),
+      field('zhaopinLeixing', '职位类型', 'input', { minWidth: 130 }),
+      field('xinziFanwei', '薪资范围', 'input', { minWidth: 130 }),
+      field('gongzuoDizhi', '工作地址', 'input', { minWidth: 180 }),
+      field('zhaopinProgress', '已招到/招聘数量', 'input', { formatter: formatRecruitmentProgress, width: 144 }),
+      field('zhaomanStatus', '状态', 'tag', { formatter: formatRecruitmentStatus, width: 96 }),
+      createTimeColumn
+    ],
+    formFields: [
+      field('qiyeId', '公司名称', 'remoteSelect', { source: 'companies', required: true }),
+      field('zhaopinGangweiName', '职位名称', 'input', { required: true }),
+      field('zhaopinLeixing', '职位类型', 'input', { required: true }),
+      field('xinziFanwei', '薪资范围', 'input', { required: true }),
+      field('gongzuoDizhi', '工作地址', 'input', { required: true }),
+      field('zhaopinRenshu', '招聘数量', 'number', { required: true, min: 1 }),
+      field('yizhaoRenshu', '已招人数', 'number', { min: 0, default: 0 }),
+      field('gongzuoYaoqiu', '工作要求', 'textarea', { wide: true, rows: 5, required: true })
+    ],
+    detailFields: [
+      field('qiyeName', '公司名称'),
+      field('zhaopinGangweiName', '职位名称'),
+      field('zhaopinLeixing', '职位类型'),
+      field('xinziFanwei', '薪资范围'),
+      field('gongzuoDizhi', '工作地址'),
+      field('zhaopinProgress', '已招到/招聘数量', 'input', { formatter: formatRecruitmentProgress }),
+      field('zhaomanStatus', '状态', 'input', { formatter: formatRecruitmentStatus }),
+      field('gongzuoYaoqiu', '工作要求', 'multiline'),
+      createTimeColumn
+    ]
+  },
+
+  applications: {
+    title: '应聘学生',
+    subtitle: '管理学生投递到招聘岗位的应聘信息，可查看学生基础信息和简历。',
+    entityName: '应聘',
+    api: applicationApi,
+    optionLoaders: {
+      students: loadStudentOptions,
+      recruitments: loadRecruitmentOptions
+    },
+    searchFields: [
+      field('xueshengName', '学生姓名'),
+      field('xueshengXuehao', '学号'),
+      field('qiyeName', '公司名称'),
+      field('zhaopinGangweiName', '职位名称')
+    ],
+    columns: [
+      field('xueshengName', '学生姓名', 'input', { minWidth: 120 }),
+      field('xueshengXuehao', '学号', 'input', { minWidth: 128 }),
+      dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue', { minWidth: 120 }),
+      dictionaryColumn('banjiTypes', '班级', 'banji_types', 'banjiValue', { minWidth: 132 }),
+      field('xueshengJianliFile', '学生简历', 'file', { width: 118 }),
+      field('qiyeName', '公司名称', 'input', { minWidth: 180 }),
+      field('zhaopinGangweiName', '职位名称', 'input', { minWidth: 160 }),
+      field('zhaopinLeixing', '职位类型', 'input', { minWidth: 120 }),
+      field('yingpinStatus', '状态', 'tag', { minWidth: 92 }),
+      createTimeColumn
+    ],
+    formFields: [
+      field('zhaopinId', '招聘岗位', 'remoteSelect', { source: 'recruitments', required: true }),
+      field('xueshengId', '学生', 'remoteSelect', { source: 'students', required: true })
+    ],
+    detailFields: [
+      field('xueshengName', '学生姓名'),
+      field('xueshengXuehao', '学号'),
+      dictionaryColumn('yuanxiTypes', '院系', 'yuanxi_types', 'yuanxiValue'),
+      dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue'),
+      dictionaryColumn('banjiTypes', '班级', 'banji_types', 'banjiValue'),
+      field('xueshengPhone', '学生手机号'),
+      field('xueshengEmail', '学生邮箱'),
+      field('xueshengJianliFile', '学生简历', 'file'),
+      field('qiyeName', '公司名称'),
+      field('zhaopinGangweiName', '职位名称'),
+      field('zhaopinLeixing', '职位类型'),
+      field('xinziFanwei', '薪资范围'),
+      field('gongzuoDizhi', '工作地址'),
+      field('gongzuoYaoqiu', '工作要求', 'multiline'),
+      field('yingpinStatus', '应聘状态'),
       createTimeColumn
     ]
   },

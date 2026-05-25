@@ -31,6 +31,7 @@
         ,xuesheng.xuesheng_phone as xueshengPhone
         ,xuesheng.xuesheng_id_number as xueshengIdNumber
         ,xuesheng.xuesheng_photo as xueshengPhoto
+        ,xuesheng.xuesheng_jianli_file as xueshengJianliFile
         ,xuesheng.yuanxi_types as yuanxiTypes
         ,xuesheng.zhuanye_types as zhuanyeTypes
         ,xuesheng.banji_types as banjiTypes

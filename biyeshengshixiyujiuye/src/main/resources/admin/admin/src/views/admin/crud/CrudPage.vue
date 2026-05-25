@@ -173,6 +173,16 @@
             <el-button v-if="config.commentable" link type="primary" @click="openCommentForm(row)">
               评论
             </el-button>
+            <el-button
+              v-for="action in visibleRowActions(row)"
+              :key="action.label"
+              link
+              :type="action.type || 'primary'"
+              :disabled="isRowActionDisabled(action, row)"
+              @click="runRowAction(action, row)"
+            >
+              {{ action.label }}
+            </el-button>
             <el-button v-if="canRowDelete" link type="danger" @click="confirmDelete([row.id])">
               删除
             </el-button>
@@ -465,6 +475,7 @@ const actionColumnWidth = computed(() => {
   if (config.canEdit !== false) width += 54
   if (canRowDelete.value) width += 54
   if (config.commentable) width += 132
+  if (config.rowActions?.length) width += config.rowActions.length * 58
   return Math.max(width, 150)
 })
 const sortableFields = computed(() =>
@@ -683,6 +694,44 @@ async function submitComment() {
   } finally {
     commentSubmitting.value = false
   }
+}
+
+function visibleRowActions(row) {
+  return (config.rowActions || []).filter((action) => {
+    if (!action.visible) return true
+    return action.visible(row)
+  })
+}
+
+function isRowActionDisabled(action, row) {
+  return Boolean(action.disabled?.(row))
+}
+
+async function runRowAction(action, row) {
+  if (isRowActionDisabled(action, row)) return
+  try {
+    if (action.confirm) {
+      await ElMessageBox.confirm(resolveActionText(action.confirm, row), action.confirmTitle || '操作确认', {
+        type: action.confirmType || 'warning',
+        confirmButtonText: action.confirmButtonText || '确认',
+        cancelButtonText: '取消'
+      })
+    }
+  } catch {
+    return
+  }
+
+  await action.handler?.(row, { fetchData, ElMessage, ElMessageBox })
+  if (action.successMessage) {
+    ElMessage.success(resolveActionText(action.successMessage, row))
+  }
+  if (action.refresh !== false) {
+    await fetchData()
+  }
+}
+
+function resolveActionText(value, row) {
+  return typeof value === 'function' ? value(row) : value
 }
 
 function validateForm() {

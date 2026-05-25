@@ -204,6 +204,9 @@ public class XueshengController {
         if("".equals(xuesheng.getXueshengPhoto()) || "null".equals(xuesheng.getXueshengPhoto())){
                 xuesheng.setXueshengPhoto(null);
         }
+        if("".equals(xuesheng.getXueshengJianliFile()) || "null".equals(xuesheng.getXueshengJianliFile())){
+                xuesheng.setXueshengJianliFile(null);
+        }
         if(xueshengEntity==null){
             xueshengService.updateById(xuesheng);//根据id更新
             return R.ok();

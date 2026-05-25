@@ -17,7 +17,9 @@ export const companySidebarSections = [
     items: [
       { label: '企业信息', routeName: 'company.profile', icon: Building2 },
       { label: '实习管理', routeName: 'company.internships', icon: UsersRound },
-      { label: '就业管理', routeName: 'company.employmentData', icon: BriefcaseBusiness }
+      { label: '就业管理', routeName: 'company.employmentData', icon: BriefcaseBusiness },
+      { label: '招聘岗位', routeName: 'company.recruitmentJobs', icon: BriefcaseBusiness },
+      { label: '应聘学生', routeName: 'company.applications', icon: UsersRound }
     ]
   },
   {

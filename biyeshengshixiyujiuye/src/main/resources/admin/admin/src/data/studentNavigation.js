@@ -22,7 +22,11 @@ export const studentSidebarSections = [
   },
   {
     title: '实习管理',
-    items: [{ label: '我的实习', routeName: 'student.internships', icon: BriefcaseBusiness }]
+    items: [
+      { label: '招聘信息', routeName: 'student.recruitmentJobs', icon: BriefcaseBusiness },
+      { label: '我的应聘', routeName: 'student.applications', icon: UsersRound },
+      { label: '我的实习', routeName: 'student.internships', icon: BriefcaseBusiness }
+    ]
   },
   {
     title: '就业管理',

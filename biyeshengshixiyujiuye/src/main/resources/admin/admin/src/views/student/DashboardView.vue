@@ -5,6 +5,12 @@
         <h1>欢迎回来，{{ studentName }}</h1>
         <p>{{ studentMeta }}</p>
       </div>
+      <div class="status-strip">
+        <span v-for="item in topStatusBadges" :key="item.label" class="status-badge" :class="`tone-${item.tone}`">
+          <em>{{ item.label }}</em>
+          <strong>{{ item.value }}</strong>
+        </span>
+      </div>
       <span v-if="loadError" class="load-warning">{{ loadError }}</span>
     </section>
 
@@ -248,6 +254,19 @@ const statCards = computed(() => [
   }
 ])
 
+const topStatusBadges = computed(() => [
+  {
+    label: '毕业状态',
+    value: graduation.value.value === '已毕业' ? '已毕业' : '未毕业',
+    tone: graduation.value.value === '已毕业' ? 'green' : 'blue'
+  },
+  {
+    label: '实习状态',
+    value: currentStatus.value === '进行中' ? '实习中' : '未实习中',
+    tone: currentStatus.value === '进行中' ? 'green' : 'gray'
+  }
+])
+
 const internshipMonths = computed(() => {
   const record = latestInternship.value
   if (!record) return { completed: 0, remaining: 0, total: 0 }
@@ -403,6 +422,7 @@ function formatPercent(value, total) {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  gap: 18px;
   margin-bottom: 26px;
 }
 
@@ -429,6 +449,51 @@ function formatPercent(value, total) {
   color: #b66a00;
   font-size: 13px;
   font-weight: 800;
+}
+
+.status-strip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.status-badge {
+  display: inline-grid;
+  min-width: 116px;
+  gap: 5px;
+  padding: 10px 13px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+}
+
+.status-badge em {
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.status-badge strong {
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.status-badge.tone-blue {
+  border-color: #d8e4ff;
+  background: #f3f6ff;
+  color: #3657ff;
+}
+
+.status-badge.tone-green {
+  border-color: #d6f0e2;
+  background: #f0fbf5;
+  color: #16944e;
+}
+
+.status-badge.tone-gray {
+  border-color: #e0e7f1;
+  background: #f8fafd;
+  color: #65738b;
 }
 
 .stat-grid {

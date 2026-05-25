@@ -109,6 +109,13 @@ public class XueshengEntity<T> implements Serializable {
 
     private String xueshengPhoto;
 
+    /**
+     * 学生简历
+     */
+    @TableField(value = "xuesheng_jianli_file")
+
+    private String xueshengJianliFile;
+
 
     /**
      * 性别
@@ -273,6 +280,19 @@ public class XueshengEntity<T> implements Serializable {
         this.xueshengPhoto = xueshengPhoto;
     }
     /**
+	 * 设置：学生简历
+	 */
+    public String getXueshengJianliFile() {
+        return xueshengJianliFile;
+    }
+    /**
+	 * 获取：学生简历
+	 */
+
+    public void setXueshengJianliFile(String xueshengJianliFile) {
+        this.xueshengJianliFile = xueshengJianliFile;
+    }
+    /**
 	 * 设置：性别
 	 */
     public Integer getSexTypes() {
@@ -375,6 +395,7 @@ public class XueshengEntity<T> implements Serializable {
             ", xueshengPhone=" + xueshengPhone +
             ", xueshengIdNumber=" + xueshengIdNumber +
             ", xueshengPhoto=" + xueshengPhoto +
+            ", xueshengJianliFile=" + xueshengJianliFile +
             ", sexTypes=" + sexTypes +
             ", yuanxiTypes=" + yuanxiTypes +
             ", zhuanyeTypes=" + zhuanyeTypes +

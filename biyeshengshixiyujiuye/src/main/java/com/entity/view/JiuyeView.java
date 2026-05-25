@@ -81,6 +81,10 @@ public class JiuyeView extends JiuyeEntity implements Serializable {
 			*/
 			private String xueshengPhoto;
 			/**
+			* 学生简历
+			*/
+			private String xueshengJianliFile;
+			/**
 			* 院系
 			*/
 			private Integer yuanxiTypes;
@@ -337,6 +341,19 @@ public class JiuyeView extends JiuyeEntity implements Serializable {
 					*/
 					public void setXueshengPhoto(String xueshengPhoto) {
 						this.xueshengPhoto = xueshengPhoto;
+					}
+
+					/**
+					* 获取： 学生简历
+					*/
+					public String getXueshengJianliFile() {
+						return xueshengJianliFile;
+					}
+					/**
+					* 设置： 学生简历
+					*/
+					public void setXueshengJianliFile(String xueshengJianliFile) {
+						this.xueshengJianliFile = xueshengJianliFile;
 					}
 
 					/**

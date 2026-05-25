@@ -176,6 +176,47 @@ CREATE TABLE `qiye` (
 
 insert  into `qiye`(`id`,`username`,`password`,`qiye_bianhao`,`qiye_name`,`qiye_address`,`qiye_photo`,`qiye_phone`,`qiye_email`,`qiye_types`,`qiye_content`,`create_time`) values (1,'QY001','123456','QY001','郑州云启软件有限公司','河南省郑州市高新区科学大道89号','http://localhost:8080/biyeshengshixiyujiuye/upload/qiye1.jpg','0371-65010001','hr@yunqisoft.com',1,'主要从事政企管理系统、数据中台和移动应用开发，长期接收软件工程与网络工程专业学生实习。','2022-03-28 21:46:24'),(2,'QY002','123456','QY002','河南中原化工科技有限公司','河南省新乡市经开区化工路18号','http://localhost:8080/biyeshengshixiyujiuye/upload/qiye2.jpg','0373-61020002','hr@zychem.com',2,'从事精细化工产品研发、检测与生产管理，适合应用化学、化学工程与工艺专业学生。','2022-03-28 21:46:24'),(3,'QY003','123456','QY003','洛阳智造装备有限公司','河南省洛阳市涧西区建设路66号','http://localhost:8080/biyeshengshixiyujiuye/upload/qiye3.jpg','0379-62030003','campus@lyzzzb.com',3,'聚焦智能装备制造、自动化生产线集成和设备运维，提供机械类实习和就业岗位。','2022-03-28 21:46:24'),(4,'QY004','123456','QY004','河南数科信息技术有限公司','河南省郑州市郑东新区龙子湖智慧岛12号','http://localhost:8080/biyeshengshixiyujiuye/upload/qiye1.jpg','0371-65040004','campus@hndigital.com',1,'面向高校提供数字化项目实训、软件开发和数据分析岗位。','2022-03-28 21:46:24'),(5,'QY005','123456','QY005','河南华信财务咨询有限公司','河南省郑州市金水区经三路58号','http://localhost:8080/biyeshengshixiyujiuye/upload/qiye2.jpg','0371-65050005','hr@huaxincw.com',4,'提供代理记账、审计辅助和企业财税咨询服务，适合财务管理、会计学专业学生。','2022-03-28 21:46:24'),(6,'QY006','123456','QY006','郑州星河网络科技有限公司','河南省郑州市管城区航海东路168号','http://localhost:8080/biyeshengshixiyujiuye/upload/qiye3.jpg','0371-65060006','jobs@xinghenet.com',1,'专注互联网应用测试、运维和质量保障，提供软件测试方向岗位。','2022-03-28 21:46:24');
 
+/*Table structure for table `zhaopin_gangwei` */
+
+DROP TABLE IF EXISTS `zhaopin_gangwei`;
+
+CREATE TABLE `zhaopin_gangwei` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `qiye_id` int(11) NOT NULL COMMENT '企业',
+  `zhaopin_gangwei_name` varchar(200) NOT NULL COMMENT '职位名称 Search111',
+  `zhaopin_leixing` varchar(200) NOT NULL COMMENT '职位类型 Search111',
+  `xinzi_fanwei` varchar(200) NOT NULL COMMENT '薪资范围',
+  `gongzuo_dizhi` varchar(200) NOT NULL COMMENT '工作地址 Search111',
+  `gongzuo_yaoqiu` text NOT NULL COMMENT '工作要求',
+  `yizhao_renshu` int(11) NOT NULL DEFAULT '0' COMMENT '已招人数',
+  `zhaopin_renshu` int(11) NOT NULL COMMENT '招聘人数',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_zhaopin_qiye_id` (`qiye_id`),
+  KEY `idx_zhaopin_status` (`yizhao_renshu`,`zhaopin_renshu`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='招聘岗位';
+
+/*Data for the table `zhaopin_gangwei` */
+
+/*Table structure for table `yingpin` */
+
+DROP TABLE IF EXISTS `yingpin`;
+
+CREATE TABLE `yingpin` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `zhaopin_id` int(11) NOT NULL COMMENT '招聘岗位',
+  `xuesheng_id` int(11) NOT NULL COMMENT '学生',
+  `qiye_id` int(11) NOT NULL COMMENT '企业',
+  `yingpin_status` varchar(50) NOT NULL DEFAULT '待处理' COMMENT '应聘状态',
+  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_yingpin_job_student` (`zhaopin_id`,`xuesheng_id`),
+  KEY `idx_yingpin_xuesheng_id` (`xuesheng_id`),
+  KEY `idx_yingpin_qiye_id` (`qiye_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='应聘学生';
+
+/*Data for the table `yingpin` */
+
 /*Table structure for table `shixi` */
 
 DROP TABLE IF EXISTS `shixi`;
@@ -251,6 +292,7 @@ CREATE TABLE `xuesheng` (
   `xuesheng_phone` varchar(200) DEFAULT NULL COMMENT '学生手机号',
   `xuesheng_id_number` varchar(200) DEFAULT NULL COMMENT '学生身份证号',
   `xuesheng_photo` varchar(200) DEFAULT NULL COMMENT '学生头像',
+  `xuesheng_jianli_file` varchar(200) DEFAULT NULL COMMENT '学生简历',
   `sex_types` int(11) DEFAULT NULL COMMENT '性别',
   `yuanxi_types` int(11) DEFAULT NULL COMMENT '院系',
   `zhuanye_types` int(11) DEFAULT NULL COMMENT '专业',
