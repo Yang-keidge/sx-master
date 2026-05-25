@@ -144,6 +144,8 @@ const router = createRouter({
           'announcementComments',
           'comment'
         ),
+        moduleRoute('discussions', 'admin.discussions', '讨论区', 'business', 'discussions'),
+        moduleRoute('discussion-replies', 'admin.discussionReplies', '讨论回复', 'business', 'discussionReplies'),
         moduleRoute('dictionaries', 'admin.dictionaries', '字典管理', 'system', 'dictionaries', 'dictionary'),
         moduleRoute('settings', 'admin.settings', '系统配置', 'system', 'settings', 'config'),
         placeholder('files', 'admin.files', '文件管理', 'system'),
@@ -188,6 +190,7 @@ const router = createRouter({
         companyModuleRoute('applications', 'company.applications', '应聘学生', 'business', 'applications'),
         companyModuleRoute('announcements', 'company.announcements', '招聘公告', 'announcement', 'announcements'),
         companyModuleRoute('other-announcements', 'company.otherAnnouncements', '其他公告', 'announcement', 'otherAnnouncements'),
+        companyModuleRoute('discussions', 'company.discussions', '讨论区', 'interaction', 'discussions'),
         companyModuleRoute('comments', 'company.comments', '公告评论', 'interaction', 'comments')
       ]
     },
@@ -238,6 +241,8 @@ const router = createRouter({
         studentModuleRoute('internships', 'student.internships', '我的实习', 'business', 'internships'),
         studentModuleRoute('employment', 'student.employment', '我的就业', 'business', 'employment'),
         studentModuleRoute('announcements', 'student.announcements', '公告信息', 'service', 'announcements'),
+        studentModuleRoute('discussions', 'student.discussions', '讨论区', 'interaction', 'discussions'),
+        studentModuleRoute('questions', 'student.questions', '问题记录', 'interaction', 'questions'),
         studentModuleRoute('comments', 'student.comments', '我的评论', 'interaction', 'comments')
       ]
     },
@@ -295,7 +300,9 @@ const router = createRouter({
           'announcementComments'
         ),
         teacherModuleRoute('comments', 'teacher.comments', '我的评论', 'announcement', 'comments'),
-        teacherModuleRoute('other-announcements', 'teacher.otherAnnouncements', '其他公告', 'announcement', 'otherAnnouncements')
+        teacherModuleRoute('other-announcements', 'teacher.otherAnnouncements', '其他公告', 'announcement', 'otherAnnouncements'),
+        teacherModuleRoute('discussions', 'teacher.discussions', '讨论区', 'interaction', 'discussions'),
+        teacherModuleRoute('questions', 'teacher.questions', '问题解答', 'interaction', 'questions')
       ]
     }
   ],

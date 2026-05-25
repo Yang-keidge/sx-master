@@ -2,6 +2,8 @@ import * as announcementApi from '../../../api/announcement'
 import * as applicationApi from '../../../api/application'
 import * as commentApi from '../../../api/comment'
 import * as companyApi from '../../../api/company'
+import * as discussionApi from '../../../api/discussion'
+import * as discussionReplyApi from '../../../api/discussionReply'
 import * as employmentApi from '../../../api/employment'
 import * as internshipApi from '../../../api/internship'
 import * as recruitmentApi from '../../../api/recruitment'
@@ -448,6 +450,51 @@ export const companyModuleConfigs = {
       field('pinglunrenName', '评论人名称'),
       field('pinglunrenRole', '评论人身份'),
       field('gonggaoCommentContent', '评论内容', 'multiline'),
+      createTimeColumn
+    ]
+  },
+
+  discussions: {
+    title: '讨论区',
+    subtitle: '发布实习岗位、招聘和企业指导相关交流帖，并回复学生问题。',
+    entityName: '帖子',
+    api: discussionApi,
+    commentable: true,
+    commentsApi: discussionReplyApi,
+    commentParentParam: 'taolunId',
+    commentPayloadParentField: 'taolunId',
+    commentTitleProp: 'taolunTitle',
+    commentAuthorNameProp: 'huifurenName',
+    commentAuthorRoleProp: 'huifurenRole',
+    commentContentProp: 'huifuContent',
+    commentCountProp: 'replyCount',
+    commentDialogTitle: '讨论回复',
+    commentListActionLabel: '查看回复',
+    commentActionLabel: '回复',
+    commentEmptyText: '暂无回复',
+    commentPlaceholder: '请输入回复内容',
+    commentSuccessMessage: '回复成功',
+    orderBy: 'create_time',
+    canEdit: false,
+    canDelete: false,
+    searchFields: [field('taolunTitle', '帖子标题'), field('fabuzheName', '发布者名称')],
+    columns: [
+      field('taolunTitle', '帖子标题', 'input', { minWidth: 260 }),
+      field('fabuzheName', '发布者名称', 'input', { minWidth: 140 }),
+      field('fabuzheRole', '发布者身份', 'input', { minWidth: 116 }),
+      field('replyCount', '回复数', 'input', { width: 96 }),
+      createTimeColumn
+    ],
+    formFields: [
+      field('taolunTitle', '帖子标题', 'input', { required: true }),
+      field('taolunContent', '帖子内容', 'richtext', { wide: true, required: true })
+    ],
+    detailFields: [
+      field('taolunTitle', '帖子标题'),
+      field('fabuzheName', '发布者名称'),
+      field('fabuzheRole', '发布者身份'),
+      field('replyCount', '回复数量'),
+      field('taolunContent', '帖子内容', 'html'),
       createTimeColumn
     ]
   }

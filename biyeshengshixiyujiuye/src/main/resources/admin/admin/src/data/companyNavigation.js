@@ -31,6 +31,9 @@ export const companySidebarSections = [
   },
   {
     title: '互动交流',
-    items: [{ label: '公告评论', routeName: 'company.comments', icon: MessageSquareText }]
+    items: [
+      { label: '讨论区', routeName: 'company.discussions', icon: MessageSquareText },
+      { label: '公告评论', routeName: 'company.comments', icon: MessageSquareText }
+    ]
   }
 ]

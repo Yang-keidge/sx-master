@@ -39,7 +39,9 @@ export const sidebarSections = [
       { label: '招聘岗位', routeName: 'admin.recruitmentJobs', icon: BriefcaseBusiness },
       { label: '应聘学生', routeName: 'admin.applications', icon: UsersRound },
       { label: '公告管理', routeName: 'admin.announcements', icon: Megaphone },
-      { label: '公告评论', routeName: 'admin.announcementComments', icon: MessageSquareText }
+      { label: '公告评论', routeName: 'admin.announcementComments', icon: MessageSquareText },
+      { label: '讨论区', routeName: 'admin.discussions', icon: MessageSquareText },
+      { label: '讨论回复', routeName: 'admin.discussionReplies', icon: MessageSquareText }
     ]
   },
   {

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.WentiJiedaDao">
+
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.xuesheng_id as xueshengId
+        ,a.laoshi_id as laoshiId
+        ,a.wenti_title as wentiTitle
+        ,a.wenti_content as wentiContent
+        ,a.wenti_status as wentiStatus
+        ,a.huifu_content as huifuContent
+        ,a.huifu_laoshi_id as huifuLaoshiId
+        ,a.huifu_time as huifuTime
+        ,a.create_time as createTime
+        ,a.update_time as updateTime
+    </sql>
+
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.WentiJiedaView">
+        SELECT
+        <include refid="Base_Column_List" />
+        ,xuesheng.xuesheng_name as xueshengName
+        ,xuesheng.xuesheng_xuehao as xueshengXuehao
+        ,xuesheng.xuesheng_phone as xueshengPhone
+        ,xuesheng.xuesheng_email as xueshengEmail
+        ,xuesheng.yuanxi_types as yuanxiTypes
+        ,xuesheng.zhuanye_types as zhuanyeTypes
+        ,xuesheng.banji_types as banjiTypes
+        ,laoshi.laoshi_name as laoshiName
+        ,huifu_laoshi.laoshi_name as huifuLaoshiName
+        FROM wenti_jieda a
+        LEFT JOIN xuesheng xuesheng ON a.xuesheng_id = xuesheng.id
+        LEFT JOIN laoshi laoshi ON a.laoshi_id = laoshi.id
+        LEFT JOIN laoshi huifu_laoshi ON a.huifu_laoshi_id = huifu_laoshi.id
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="params.xueshengId != null and params.xueshengId != ''">
+                and a.xuesheng_id = #{params.xueshengId}
+            </if>
+            <if test="params.laoshiId != null and params.laoshiId != ''">
+                and a.laoshi_id = #{params.laoshiId}
+            </if>
+            <if test="params.teacherScopeId != null and params.teacherScopeId != ''">
+                and (a.laoshi_id = #{params.teacherScopeId} or a.laoshi_id is null)
+            </if>
+            <if test="params.yuanxiTypes != null and params.yuanxiTypes != ''">
+                and xuesheng.yuanxi_types = #{params.yuanxiTypes}
+            </if>
+            <if test="params.zhuanyeTypes != null and params.zhuanyeTypes != ''">
+                and xuesheng.zhuanye_types = #{params.zhuanyeTypes}
+            </if>
+            <if test="params.banjiTypes != null and params.banjiTypes != ''">
+                and xuesheng.banji_types = #{params.banjiTypes}
+            </if>
+            <if test=" params.wentiTitle != '' and params.wentiTitle != null and params.wentiTitle != 'null' ">
+                and a.wenti_title like CONCAT('%',#{params.wentiTitle},'%')
+            </if>
+            <if test=" params.wentiContent != '' and params.wentiContent != null and params.wentiContent != 'null' ">
+                and a.wenti_content like CONCAT('%',#{params.wentiContent},'%')
+            </if>
+            <if test=" params.wentiStatus != '' and params.wentiStatus != null and params.wentiStatus != 'null' ">
+                and a.wenti_status = #{params.wentiStatus}
+            </if>
+            <if test=" params.xueshengName != '' and params.xueshengName != null and params.xueshengName != 'null' ">
+                and xuesheng.xuesheng_name like CONCAT('%',#{params.xueshengName},'%')
+            </if>
+            <if test=" params.xueshengXuehao != '' and params.xueshengXuehao != null and params.xueshengXuehao != 'null' ">
+                and xuesheng.xuesheng_xuehao like CONCAT('%',#{params.xueshengXuehao},'%')
+            </if>
+            <if test=" params.laoshiName != '' and params.laoshiName != null and params.laoshiName != 'null' ">
+                and laoshi.laoshi_name like CONCAT('%',#{params.laoshiName},'%')
+            </if>
+        </where>
+
+        order by a.${params.orderBy} desc
+    </select>
+
+</mapper>

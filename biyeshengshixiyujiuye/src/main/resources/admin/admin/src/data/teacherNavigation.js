@@ -39,5 +39,12 @@ export const teacherSidebarSections = [
       { label: '其他公告', routeName: 'teacher.otherAnnouncements', icon: Megaphone },
       { label: '我的评论', routeName: 'teacher.comments', icon: MessageSquareText }
     ]
+  },
+  {
+    title: '互动交流',
+    items: [
+      { label: '讨论区', routeName: 'teacher.discussions', icon: MessageSquareText },
+      { label: '问题解答', routeName: 'teacher.questions', icon: MessageSquareText }
+    ]
   }
 ]

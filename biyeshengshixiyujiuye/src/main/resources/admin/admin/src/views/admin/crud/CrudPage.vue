@@ -168,10 +168,10 @@
               编辑
             </el-button>
             <el-button v-if="config.commentable" link type="primary" @click="openComments(row)">
-              查看评论
+              {{ config.commentListActionLabel || '查看评论' }}
             </el-button>
             <el-button v-if="config.commentable" link type="primary" @click="openCommentForm(row)">
-              评论
+              {{ config.commentActionLabel || '评论' }}
             </el-button>
             <el-button
               v-for="action in visibleRowActions(row)"
@@ -343,25 +343,25 @@
 
   <el-dialog
     v-model="commentsDialog.visible"
-    :title="`公告评论${commentsDialog.announcementName ? ` - ${commentsDialog.announcementName}` : ''}`"
+    :title="`${commentConfig.dialogTitle}${commentsDialog.parentName ? ` - ${commentsDialog.parentName}` : ''}`"
     width="760px"
     destroy-on-close
   >
     <div class="comment-toolbar">
-      <span>共 {{ commentsDialog.total }} 条评论</span>
-      <el-button type="primary" plain @click="showCommentComposer">评论</el-button>
+      <span>共 {{ commentsDialog.total }} 条{{ commentConfig.actionLabel }}</span>
+      <el-button type="primary" plain @click="showCommentComposer">{{ commentConfig.actionLabel }}</el-button>
     </div>
 
     <el-skeleton v-if="commentsDialog.loading" :rows="4" animated />
-    <el-empty v-else-if="!commentsDialog.comments.length" description="暂无评论" />
+    <el-empty v-else-if="!commentsDialog.comments.length" :description="commentConfig.emptyText" />
     <div v-else class="comment-list">
       <article v-for="comment in commentsDialog.comments" :key="comment.id" class="comment-item">
         <header class="comment-meta">
-          <strong>{{ comment.pinglunrenName || '匿名用户' }}</strong>
-          <el-tag size="small" effect="plain">{{ comment.pinglunrenRole || '未知身份' }}</el-tag>
+          <strong>{{ comment[commentConfig.authorNameProp] || '匿名用户' }}</strong>
+          <el-tag size="small" effect="plain">{{ comment[commentConfig.authorRoleProp] || '未知身份' }}</el-tag>
           <time>{{ formatDateTime(comment.createTime) }}</time>
         </header>
-        <p>{{ comment.gonggaoCommentContent }}</p>
+        <p>{{ comment[commentConfig.contentProp] }}</p>
       </article>
     </div>
 
@@ -372,7 +372,7 @@
         :rows="4"
         maxlength="500"
         show-word-limit
-        placeholder="请输入评论内容"
+        :placeholder="commentConfig.placeholder"
       />
     </div>
 
@@ -384,7 +384,7 @@
         :loading="commentSubmitting"
         @click="submitComment"
       >
-        提交评论
+        提交{{ commentConfig.actionLabel }}
       </el-button>
     </template>
   </el-dialog>
@@ -407,7 +407,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import TablePage from '../../../components/TablePage/index.vue'
 import UploadControl from '../../../components/Upload/index.vue'
 import RichTextEditor from '../../../components/RichTextEditor.vue'
-import * as commentApi from '../../../api/comment'
+import * as defaultCommentApi from '../../../api/comment'
 import { downloadAsset, normalizeAssetUrl } from '../../../api/request'
 import { useDictionary } from '../../../hooks/useDictionary'
 
@@ -460,8 +460,8 @@ const importDialog = reactive({
 const commentsDialog = reactive({
   visible: false,
   loading: false,
-  announcementId: null,
-  announcementName: '',
+  parentId: null,
+  parentName: '',
   comments: [],
   total: 0,
   composing: false
@@ -469,6 +469,21 @@ const commentsDialog = reactive({
 
 const config = computed(() => props.config).value
 const detailFields = computed(() => config.detailFields || [...config.columns, ...(config.formFields || [])])
+const commentConfig = computed(() => ({
+  api: config.commentsApi || defaultCommentApi,
+  parentParam: config.commentParentParam || 'gonggaoId',
+  payloadParentField: config.commentPayloadParentField || config.commentParentParam || 'gonggaoId',
+  titleProp: config.commentTitleProp || 'gonggaoName',
+  authorNameProp: config.commentAuthorNameProp || 'pinglunrenName',
+  authorRoleProp: config.commentAuthorRoleProp || 'pinglunrenRole',
+  contentProp: config.commentContentProp || 'gonggaoCommentContent',
+  countProp: config.commentCountProp || 'commentCount',
+  dialogTitle: config.commentDialogTitle || '公告评论',
+  actionLabel: config.commentActionLabel || '评论',
+  emptyText: config.commentEmptyText || '暂无评论',
+  placeholder: config.commentPlaceholder || '请输入评论内容',
+  successMessage: config.commentSuccessMessage || '评论成功'
+}))
 const canRowDelete = computed(() => config.canDelete !== false && !config.batchDeleteOnly)
 const actionColumnWidth = computed(() => {
   let width = 78
@@ -638,10 +653,10 @@ async function openDetail(row) {
 }
 
 async function openComments(row, composing = false) {
-  commentsDialog.announcementId = row.id
-  commentsDialog.announcementName = row.gonggaoName || ''
+  commentsDialog.parentId = row.id
+  commentsDialog.parentName = row[commentConfig.value.titleProp] || ''
   commentsDialog.comments = []
-  commentsDialog.total = Number(row.commentCount || 0)
+  commentsDialog.total = Number(row[commentConfig.value.countProp] || 0)
   commentsDialog.composing = composing
   commentForm.content = ''
   commentsDialog.visible = true
@@ -657,14 +672,14 @@ function showCommentComposer() {
 }
 
 async function loadComments() {
-  if (!commentsDialog.announcementId) return
+  if (!commentsDialog.parentId) return
   commentsDialog.loading = true
   try {
-    const result = await commentApi.page({
+    const result = await commentConfig.value.api.page({
       page: 1,
       limit: 1000,
       orderBy: 'create_time',
-      gonggaoId: commentsDialog.announcementId
+      [commentConfig.value.parentParam]: commentsDialog.parentId
     })
     const page = result.data || {}
     commentsDialog.comments = page.list || []
@@ -682,11 +697,11 @@ async function submitComment() {
   }
   commentSubmitting.value = true
   try {
-    await commentApi.save({
-      gonggaoId: commentsDialog.announcementId,
-      gonggaoCommentContent: content
+    await commentConfig.value.api.save({
+      [commentConfig.value.payloadParentField]: commentsDialog.parentId,
+      [commentConfig.value.contentProp]: content
     })
-    ElMessage.success('评论成功')
+    ElMessage.success(commentConfig.value.successMessage)
     commentForm.content = ''
     commentsDialog.composing = false
     await loadComments()

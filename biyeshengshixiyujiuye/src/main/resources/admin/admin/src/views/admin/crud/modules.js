@@ -4,6 +4,8 @@ import * as commentApi from '../../../api/comment'
 import * as companyApi from '../../../api/company'
 import * as configApi from '../../../api/config'
 import * as dictionaryApi from '../../../api/dictionary'
+import * as discussionApi from '../../../api/discussion'
+import * as discussionReplyApi from '../../../api/discussionReply'
 import * as employmentApi from '../../../api/employment'
 import * as internshipApi from '../../../api/internship'
 import * as recruitmentApi from '../../../api/recruitment'
@@ -662,6 +664,83 @@ export const moduleConfigs = {
       field('pinglunrenName', '评论人名称'),
       field('pinglunrenRole', '评论人身份'),
       field('gonggaoCommentContent', '评论内容', 'multiline'),
+      createTimeColumn
+    ]
+  },
+
+  discussions: {
+    title: '讨论区',
+    subtitle: '管理学生、老师和企业在实习就业过程中发布的交流帖子。',
+    entityName: '帖子',
+    api: discussionApi,
+    commentable: true,
+    commentsApi: discussionReplyApi,
+    commentParentParam: 'taolunId',
+    commentPayloadParentField: 'taolunId',
+    commentTitleProp: 'taolunTitle',
+    commentAuthorNameProp: 'huifurenName',
+    commentAuthorRoleProp: 'huifurenRole',
+    commentContentProp: 'huifuContent',
+    commentCountProp: 'replyCount',
+    commentDialogTitle: '讨论回复',
+    commentListActionLabel: '查看回复',
+    commentActionLabel: '回复',
+    commentEmptyText: '暂无回复',
+    commentPlaceholder: '请输入回复内容',
+    commentSuccessMessage: '回复成功',
+    orderBy: 'create_time',
+    searchFields: [
+      field('taolunTitle', '帖子标题'),
+      field('fabuzheName', '发布者名称'),
+      field('fabuzheRole', '发布者身份', 'select', { options: roleOptions })
+    ],
+    columns: [
+      field('taolunTitle', '帖子标题', 'input', { minWidth: 260 }),
+      field('fabuzheName', '发布者名称', 'input', { minWidth: 140 }),
+      field('fabuzheRole', '发布者身份', 'input', { minWidth: 116 }),
+      field('replyCount', '回复数', 'input', { width: 96 }),
+      createTimeColumn
+    ],
+    formFields: [
+      field('taolunTitle', '帖子标题', 'input', { required: true }),
+      field('taolunContent', '帖子内容', 'richtext', { wide: true, required: true })
+    ],
+    detailFields: [
+      field('taolunTitle', '帖子标题'),
+      field('fabuzheName', '发布者名称'),
+      field('fabuzheRole', '发布者身份'),
+      field('replyCount', '回复数量'),
+      field('taolunContent', '帖子内容', 'html'),
+      createTimeColumn
+    ]
+  },
+
+  discussionReplies: {
+    title: '讨论回复',
+    subtitle: '查看并删除讨论区帖子下的回复内容。',
+    entityName: '回复',
+    api: discussionReplyApi,
+    canCreate: false,
+    canEdit: false,
+    searchFields: [
+      field('taolunTitle', '帖子标题'),
+      field('huifurenName', '回复人名称'),
+      field('huifurenRole', '回复人身份', 'select', { options: roleOptions }),
+      field('huifuContent', '回复内容')
+    ],
+    columns: [
+      field('taolunTitle', '帖子标题', 'input', { minWidth: 240 }),
+      field('huifurenName', '回复人名称', 'input', { minWidth: 140 }),
+      field('huifurenRole', '回复人身份', 'input', { minWidth: 116 }),
+      field('huifuContent', '回复内容', 'multiline', { minWidth: 360 }),
+      createTimeColumn
+    ],
+    formFields: [],
+    detailFields: [
+      field('taolunTitle', '帖子标题'),
+      field('huifurenName', '回复人名称'),
+      field('huifurenRole', '回复人身份'),
+      field('huifuContent', '回复内容', 'multiline'),
       createTimeColumn
     ]
   },

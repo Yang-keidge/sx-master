@@ -38,6 +38,10 @@ export const studentSidebarSections = [
   },
   {
     title: '互动交流',
-    items: [{ label: '我的评论', routeName: 'student.comments', icon: MessageSquareText }]
+    items: [
+      { label: '讨论区', routeName: 'student.discussions', icon: MessageSquareText },
+      { label: '问题记录', routeName: 'student.questions', icon: MessageSquareText },
+      { label: '我的评论', routeName: 'student.comments', icon: MessageSquareText }
+    ]
   }
 ]

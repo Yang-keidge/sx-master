@@ -1,7 +1,10 @@
 import * as announcementApi from '../../../api/announcement'
 import * as commentApi from '../../../api/comment'
+import * as discussionApi from '../../../api/discussion'
+import * as discussionReplyApi from '../../../api/discussionReply'
 import * as employmentApi from '../../../api/employment'
 import * as internshipApi from '../../../api/internship'
+import * as questionApi from '../../../api/question'
 import * as studentApi from '../../../api/student'
 import * as teacherApi from '../../../api/teacher'
 import { formatStudentClass } from '../../../utils/student'
@@ -14,6 +17,10 @@ const internshipTypeSelect = { type: 'select', dictionary: 'shixi_types' }
 const internshipResultSelect = { type: 'select', dictionary: 'shixi_jieguo_types' }
 const announcementTypeSelect = { type: 'select', dictionary: 'gonggao_types' }
 const createTimeColumn = { prop: 'createTime', label: '创建时间', type: 'datetime', minWidth: 168 }
+const questionStatusOptions = [
+  { label: '未回复', value: '未回复' },
+  { label: '已回复', value: '已回复' }
+]
 
 const graduationOptions = [
   { label: '已毕业', value: 'graduated' },
@@ -410,6 +417,94 @@ export const teacherModuleConfigs = {
       field('insertTime', '发布日期', 'datetime'),
       field('commentCount', '评论数量'),
       field('gonggaoContent', '公告内容', 'html'),
+      createTimeColumn
+    ]
+  },
+
+  discussions: {
+    title: '讨论区',
+    subtitle: '发布实习就业指导交流帖，并参与学生、企业和老师之间的讨论回复。',
+    entityName: '帖子',
+    api: discussionApi,
+    commentable: true,
+    commentsApi: discussionReplyApi,
+    commentParentParam: 'taolunId',
+    commentPayloadParentField: 'taolunId',
+    commentTitleProp: 'taolunTitle',
+    commentAuthorNameProp: 'huifurenName',
+    commentAuthorRoleProp: 'huifurenRole',
+    commentContentProp: 'huifuContent',
+    commentCountProp: 'replyCount',
+    commentDialogTitle: '讨论回复',
+    commentListActionLabel: '查看回复',
+    commentActionLabel: '回复',
+    commentEmptyText: '暂无回复',
+    commentPlaceholder: '请输入回复内容',
+    commentSuccessMessage: '回复成功',
+    orderBy: 'create_time',
+    canEdit: false,
+    canDelete: false,
+    searchFields: [field('taolunTitle', '帖子标题'), field('fabuzheName', '发布者名称')],
+    columns: [
+      field('taolunTitle', '帖子标题', 'input', { minWidth: 260 }),
+      field('fabuzheName', '发布者名称', 'input', { minWidth: 140 }),
+      field('fabuzheRole', '发布者身份', 'input', { minWidth: 116 }),
+      field('replyCount', '回复数', 'input', { width: 96 }),
+      createTimeColumn
+    ],
+    formFields: [
+      field('taolunTitle', '帖子标题', 'input', { required: true }),
+      field('taolunContent', '帖子内容', 'richtext', { wide: true, required: true })
+    ],
+    detailFields: [
+      field('taolunTitle', '帖子标题'),
+      field('fabuzheName', '发布者名称'),
+      field('fabuzheRole', '发布者身份'),
+      field('replyCount', '回复数量'),
+      field('taolunContent', '帖子内容', 'html'),
+      createTimeColumn
+    ]
+  },
+
+  questions: {
+    title: '问题解答',
+    subtitle: '查看本专业学生提交给我的答疑问题，并在线回复。',
+    entityName: '问题',
+    api: questionApi,
+    canCreate: false,
+    canDelete: false,
+    orderBy: 'create_time',
+    searchFields: [
+      field('xueshengName', '学生姓名'),
+      field('xueshengXuehao', '学号'),
+      field('wentiTitle', '问题标题'),
+      field('wentiStatus', '回复状态', 'select', { options: questionStatusOptions })
+    ],
+    columns: [
+      field('xueshengName', '学生姓名', 'input', { minWidth: 120 }),
+      field('xueshengXuehao', '学号', 'input', { minWidth: 128 }),
+      field('studentClass', '班级', 'input', { minWidth: 150, formatter: formatStudentClass }),
+      field('wentiTitle', '问题标题', 'input', { minWidth: 240 }),
+      field('wentiStatus', '回复状态', 'tag', { width: 96 }),
+      field('huifuTime', '回复时间', 'datetime', { minWidth: 168 }),
+      createTimeColumn
+    ],
+    formFields: [
+      field('huifuContent', '回复内容', 'textarea', { wide: true, rows: 5, required: true })
+    ],
+    detailFields: [
+      field('xueshengName', '学生姓名'),
+      field('xueshengXuehao', '学号'),
+      dictionaryColumn('yuanxiTypes', '院系', 'yuanxi_types', 'yuanxiValue'),
+      dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue'),
+      field('studentClass', '班级', 'input', { formatter: formatStudentClass }),
+      field('laoshiName', '答疑老师'),
+      field('wentiTitle', '问题标题'),
+      field('wentiStatus', '回复状态'),
+      field('wentiContent', '问题内容', 'multiline'),
+      field('huifuLaoshiName', '回复老师'),
+      field('huifuTime', '回复时间', 'datetime'),
+      field('huifuContent', '回复内容', 'multiline'),
       createTimeColumn
     ]
   }
