@@ -25,14 +25,14 @@ export const companySidebarSections = [
     items: [
       { label: '就业管理', routeName: 'company.employmentData', icon: BriefcaseBusiness },
       { label: '招聘公告', routeName: 'company.announcements', icon: Megaphone },
-      { label: '其他公告', routeName: 'company.otherAnnouncements', icon: Megaphone }
+      { label: '其他公告', routeName: 'company.otherAnnouncements', icon: Megaphone },
+      { label: '公告评论', routeName: 'company.comments', icon: MessageSquareText }
     ]
   },
   {
     title: '互动交流',
     items: [
-      { label: '讨论区', routeName: 'company.discussions', icon: MessageSquareText },
-      { label: '公告评论', routeName: 'company.comments', icon: MessageSquareText }
+      { label: '讨论区', routeName: 'company.discussions', icon: MessageSquareText }
     ]
   },
   {

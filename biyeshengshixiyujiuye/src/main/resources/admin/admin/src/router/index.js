@@ -191,7 +191,7 @@ const router = createRouter({
         companyModuleRoute('announcements', 'company.announcements', '招聘公告', 'announcement', 'announcements'),
         companyModuleRoute('other-announcements', 'company.otherAnnouncements', '其他公告', 'announcement', 'otherAnnouncements'),
         companyModuleRoute('discussions', 'company.discussions', '讨论区', 'interaction', 'discussions'),
-        companyModuleRoute('comments', 'company.comments', '公告评论', 'interaction', 'comments')
+        companyModuleRoute('comments', 'company.comments', '公告评论', 'announcement', 'comments')
       ]
     },
     {
