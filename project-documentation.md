@@ -112,9 +112,8 @@ MySQL 业务数据库
 
 | 脚本 | 用途 |
 | --- | --- |
-| `db.sql` | 基础库表、基础字典、示例账号、实习就业、公告评论、招聘应聘表结构和简历字段 |
-| `add_discussion_question.sql` | 讨论区、讨论回复、问题解答增量表 |
-| `docs/20260525_resume_recruitment.sql` | 旧库升级用的简历字段、招聘岗位、应聘学生增量脚本 |
+| `db.sql` | 全部表结构和 `dictionary` 字典数据 |
+| `db2.sql` | 全部基础数据和补充演示数据 |
 
 主要唯一约束：
 
@@ -408,15 +407,10 @@ GET /dashboard/summary
 
 ```bash
 mysql -u root -p < db.sql
-mysql -u root -p < add_discussion_question.sql
+mysql -u root -p < db2.sql
 ```
 
-旧库升级时，先备份数据库，再按需执行：
-
-```bash
-mysql -u root -p biyeshengshixiyujiuye < docs/20260525_resume_recruitment.sql
-mysql -u root -p biyeshengshixiyujiuye < add_discussion_question.sql
-```
+`db.sql` 负责创建数据库、全部表结构和字典数据，`db2.sql` 负责写入全部基础数据。旧库升级时应先备份数据库，再按当前结构自行比对差异后执行。
 
 ### 9.2 后端开发启动
 
@@ -473,7 +467,7 @@ npm run build
 | 老师 | T2020001 | 123456 |
 | 企业 | QY001 | 123456 |
 
-`db.sql` 已包含基础字典、学生、教师、企业、实习、就业、公告和评论示例数据，并包含招聘岗位、应聘学生和学生简历相关表结构。讨论区、讨论回复和问题解答表由 `add_discussion_question.sql` 补充。
+`db.sql` 已包含全部表结构和基础字典数据。`db2.sql` 已包含学生、教师、企业、实习、就业、公告和评论等全部基础数据，并保留原补充演示数据。
 
 ## 11. 运维与部署建议
 

@@ -43,14 +43,10 @@
 ```text
 .
 ├── README.md
-├── db.sql                              # 基础库表、招聘应聘表结构、简历字段和示例数据
-├── add_discussion_question.sql         # 讨论区、讨论回复、问题解答增量脚本
+├── db.sql                              # 全部表结构和字典数据
+├── db2.sql                             # 全部基础数据和补充演示数据
 ├── Makefile                            # Git Bash 下的一键启动脚本
-├── docs/
-│   ├── project-documentation.md        # 完整项目文档
-│   ├── 20260525_resume_recruitment.sql # 旧库升级招聘应聘和简历字段的增量脚本
-│   ├── design.md
-│   └── ...
+├── project-documentation.md            # 完整项目文档
 └── biyeshengshixiyujiuye/
     ├── pom.xml
     └── src/main/
@@ -87,17 +83,10 @@
 
 ```bash
 mysql -u root -p < db.sql
-mysql -u root -p < add_discussion_question.sql
+mysql -u root -p < db2.sql
 ```
 
-`db.sql` 会创建并使用数据库 `biyeshengshixiyujiuye`，写入基础字典、示例账号、实习就业、公告评论等示例数据，并包含招聘岗位、应聘学生和学生简历相关表结构。`add_discussion_question.sql` 会补充讨论区、讨论回复和问题解答相关表。
-
-如果是旧库升级，先备份数据库，再按需导入：
-
-```bash
-mysql -u root -p biyeshengshixiyujiuye < docs/20260525_resume_recruitment.sql
-mysql -u root -p biyeshengshixiyujiuye < add_discussion_question.sql
-```
+`db.sql` 会创建并使用数据库 `biyeshengshixiyujiuye`，包含全部表结构和 `dictionary` 字典数据。`db2.sql` 会写入示例账号、学生、教师、企业、实习、就业、公告评论等全部基础数据和补充演示数据。
 
 ### 2. 修改数据库配置
 
