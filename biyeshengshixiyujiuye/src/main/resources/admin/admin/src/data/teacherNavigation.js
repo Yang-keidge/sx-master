@@ -17,8 +17,7 @@ export const teacherSidebarSections = [
     title: '学生业务',
     items: [
       { label: '学生管理', routeName: 'teacher.students', icon: UsersRound },
-      { label: '实习情况', routeName: 'teacher.internships', icon: BriefcaseBusiness },
-      { label: '就业情况', routeName: 'teacher.employment', icon: UsersRound }
+      { label: '实习情况', routeName: 'teacher.internships', icon: BriefcaseBusiness }
     ]
   },
   {

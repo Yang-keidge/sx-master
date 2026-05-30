@@ -162,37 +162,37 @@
 
       <article class="panel-card records-card">
         <header>
-          <h2>最新就业记录</h2>
-          <RouterLink :to="{ name: 'admin.employment' }">查看更多</RouterLink>
+          <h2>最新招聘岗位</h2>
+          <RouterLink :to="{ name: 'admin.recruitmentJobs' }">查看更多</RouterLink>
         </header>
         <div class="table-wrap">
           <table>
             <colgroup>
-              <col class="col-name" />
-              <col class="col-number" />
               <col class="col-company-wide" />
               <col class="col-position" />
+              <col class="col-type" />
+              <col class="col-salary" />
               <col class="col-date" />
             </colgroup>
             <thead>
               <tr>
-                <th>学生姓名</th>
-                <th>学号</th>
                 <th>企业名称</th>
-                <th>入职岗位</th>
-                <th>入职日期</th>
+                <th>岗位名称</th>
+                <th>岗位类型</th>
+                <th>薪资范围</th>
+                <th>发布日期</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="record in dashboardEmploymentRecords" :key="record.number + record.startDate">
-                <td><UserCell :name="record.name" :photo="record.photo" /></td>
-                <td>{{ record.number }}</td>
+              <tr v-for="record in latestRecruitmentJobs" :key="record.company + record.position + record.publishDate">
                 <td>{{ record.company }}</td>
                 <td>{{ record.position }}</td>
-                <td>{{ record.startDate }}</td>
+                <td>{{ record.type }}</td>
+                <td>{{ record.salary }}</td>
+                <td>{{ record.publishDate }}</td>
               </tr>
-              <tr v-if="!dashboardEmploymentRecords.length">
-                <td class="empty-row" colspan="5">暂无就业记录</td>
+              <tr v-if="!latestRecruitmentJobs.length">
+                <td class="empty-row" colspan="5">暂无招聘岗位</td>
               </tr>
             </tbody>
           </table>
@@ -208,10 +208,8 @@ import { RouterLink } from 'vue-router'
 import {
   ArrowDown,
   ArrowUp,
-  BadgeCheck,
   BriefcaseBusiness,
   Building2,
-  ChartPie,
   GraduationCap,
   UserRound
 } from 'lucide-vue-next'
@@ -227,8 +225,8 @@ const metricCards = [
   { label: '企业总数', icon: Building2, tone: 'green' },
   { label: '教师总数', icon: GraduationCap, tone: 'purple' },
   { label: '实习学生数', icon: BriefcaseBusiness, tone: 'sky' },
-  { label: '就业学生数', icon: BadgeCheck, tone: 'orange' },
-  { label: '就业率（已毕业）', icon: ChartPie, tone: 'blue' }
+  { label: '招聘岗位数', icon: BriefcaseBusiness, tone: 'orange' },
+  { label: '应聘学生数', icon: UserRound, tone: 'blue' }
 ]
 
 onMounted(async () => {
@@ -288,8 +286,8 @@ const dashboardStatCards = computed(() => {
     makeStatCard(1, base.qiyeCount, base.qiyeMonthChange),
     makeStatCard(2, base.laoshiCount, base.laoshiMonthChange),
     makeStatCard(3, base.shixiCount, base.shixiMonthChange),
-    makeStatCard(4, base.jiuyeCount, base.jiuyeMonthChange),
-    makeStatCard(5, base.employmentRate, base.employmentRateChange, '%')
+    makeStatCard(4, base.zhaopinCount, base.zhaopinMonthChange),
+    makeStatCard(5, base.yingpinCount, base.yingpinMonthChange)
   ]
 })
 
@@ -344,18 +342,17 @@ const dashboardInternshipRecords = computed(() => {
   }))
 })
 
-const dashboardEmploymentRecords = computed(() => {
+const latestRecruitmentJobs = computed(() => {
   if (!summary.value) {
     return []
   }
 
-  return (summary.value.latestJiuye || []).map((item) => ({
-    name: item.studentName || '-',
-    number: item.studentNumber || '-',
-    photo: item.studentPhoto || '',
+  return (summary.value.latestRecruitmentJobs || []).map((item) => ({
     company: item.companyName || '-',
     position: item.positionName || '-',
-    startDate: item.startDate || '-'
+    type: item.positionType || '-',
+    salary: item.salaryRange || '-',
+    publishDate: item.publishDate || '-'
   }))
 })
 
@@ -895,11 +892,19 @@ table {
 }
 
 .col-company-wide {
-  width: 28%;
+  width: 30%;
 }
 
 .col-position {
-  width: 20%;
+  width: 22%;
+}
+
+.col-type {
+  width: 16%;
+}
+
+.col-salary {
+  width: 16%;
 }
 
 .col-date {

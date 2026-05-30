@@ -5,8 +5,6 @@ import com.service.DashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -23,45 +21,12 @@ public class DashboardServiceImpl implements DashboardService {
     public Map<String, Object> getBaseData() {
         Map<String, Object> baseData = dashboardDao.selectBaseData();
 
-        Long studentCount = ((Number) baseData.get("studentCount")).longValue();
-        Long graduatedCount = ((Number) baseData.get("graduatedCount")).longValue();
-        Long notGraduatedCount = ((Number) baseData.get("notGraduatedCount")).longValue();
-        Long shixiCount = ((Number) baseData.get("shixiCount")).longValue();
-        Long jiuyeCount = ((Number) baseData.get("jiuyeCount")).longValue();
-        Long notGraduatedShixiCount = ((Number) baseData.get("notGraduatedShixiCount")).longValue();
-        Long graduatedJiuyeCount = ((Number) baseData.get("graduatedJiuyeCount")).longValue();
-        Long previousGraduatedJiuyeCount = getLong(baseData, "previousGraduatedJiuyeCount");
-
-        // 计算已毕业就业率 = 已毕业就业人数 / 已毕业总人数
-        BigDecimal employmentRate = BigDecimal.ZERO;
-        if (graduatedCount != null && graduatedCount > 0 && graduatedJiuyeCount != null) {
-            employmentRate = new BigDecimal(graduatedJiuyeCount)
-                    .multiply(new BigDecimal(100))
-                    .divide(new BigDecimal(graduatedCount), 1, RoundingMode.HALF_UP);
-        }
-        baseData.put("employmentRate", employmentRate);
-
-        BigDecimal previousEmploymentRate = BigDecimal.ZERO;
-        if (graduatedCount != null && graduatedCount > 0 && previousGraduatedJiuyeCount != null) {
-            previousEmploymentRate = new BigDecimal(previousGraduatedJiuyeCount)
-                    .multiply(new BigDecimal(100))
-                    .divide(new BigDecimal(graduatedCount), 1, RoundingMode.HALF_UP);
-        }
-        baseData.put("employmentRateChange", employmentRate.subtract(previousEmploymentRate));
         baseData.put("studentMonthChange", getLong(baseData, "studentCurrentMonthCount") - getLong(baseData, "studentPreviousMonthCount"));
         baseData.put("qiyeMonthChange", getLong(baseData, "qiyeCurrentMonthCount") - getLong(baseData, "qiyePreviousMonthCount"));
         baseData.put("laoshiMonthChange", getLong(baseData, "laoshiCurrentMonthCount") - getLong(baseData, "laoshiPreviousMonthCount"));
         baseData.put("shixiMonthChange", getLong(baseData, "shixiCurrentMonthCount") - getLong(baseData, "shixiPreviousMonthCount"));
-        baseData.put("jiuyeMonthChange", getLong(baseData, "jiuyeCurrentMonthCount") - getLong(baseData, "jiuyePreviousMonthCount"));
-
-        // 计算未毕业实习率 = 未毕业实习人数 / 未毕业总人数
-        BigDecimal shixiRate = BigDecimal.ZERO;
-        if (notGraduatedCount != null && notGraduatedCount > 0 && notGraduatedShixiCount != null) {
-            shixiRate = new BigDecimal(notGraduatedShixiCount)
-                    .multiply(new BigDecimal(100))
-                    .divide(new BigDecimal(notGraduatedCount), 1, RoundingMode.HALF_UP);
-        }
-        baseData.put("shixiRate", shixiRate);
+        baseData.put("zhaopinMonthChange", getLong(baseData, "zhaopinCurrentMonthCount") - getLong(baseData, "zhaopinPreviousMonthCount"));
+        baseData.put("yingpinMonthChange", getLong(baseData, "yingpinCurrentMonthCount") - getLong(baseData, "yingpinPreviousMonthCount"));
 
         return baseData;
     }
@@ -128,7 +93,7 @@ public class DashboardServiceImpl implements DashboardService {
         result.put("monthTrend", getMonthTrend());
         result.put("companyTop", getCompanyTop());
         result.put("latestShixi", dashboardDao.selectLatestShixi());
-        result.put("latestJiuye", dashboardDao.selectLatestJiuye());
+        result.put("latestRecruitmentJobs", dashboardDao.selectLatestRecruitmentJobs());
         return result;
     }
 

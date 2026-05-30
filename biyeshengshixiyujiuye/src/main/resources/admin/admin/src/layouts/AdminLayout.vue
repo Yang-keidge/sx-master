@@ -6,7 +6,7 @@
           <GraduationCap :size="27" stroke-width="2.4" />
         </span>
         <span>
-          <strong>实习就业管理系统</strong>
+          <strong>实习信息管理系统</strong>
           <small>管理员</small>
         </span>
       </RouterLink>
@@ -45,7 +45,7 @@
     <div class="admin-main">
       <header class="admin-topbar">
         <div class="mobile-title">
-          <strong>实习就业管理系统</strong>
+          <strong>实习信息管理系统</strong>
           <span>管理员</span>
         </div>
 

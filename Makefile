@@ -1,4 +1,4 @@
-# 就业管理系统 Makefile
+# 实习信息管理系统 Makefile
 # 一键启动前后端服务（Git Bash on Windows）
 
 SHELL := /bin/bash
@@ -22,7 +22,7 @@ NC = \033[0m
 .PHONY: help dev start stop restart status backend frontend install clean
 
 help:
-	@echo -e "$(GREEN)就业管理系统 Makefile$(NC)"
+	@echo -e "$(GREEN)实习信息管理系统 Makefile$(NC)"
 	@echo ""
 	@echo -e "可用命令："
 	@echo -e "  $(YELLOW)make dev$(NC)       - 启动开发环境（前台运行，Ctrl+C 停止）"

@@ -142,25 +142,8 @@ CREATE TABLE IF NOT EXISTS `wenti_jieda` (
   KEY `idx_wenti_create_time` (`create_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='问题解答';
 
-/*Table structure for table `jiuye` */
-
+/* Removed employment module table */
 DROP TABLE IF EXISTS `jiuye`;
-
-CREATE TABLE `jiuye` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键 ',
-  `xuesheng_id` int(11) DEFAULT NULL COMMENT '学生',
-  `qiye_id` int(11) DEFAULT NULL COMMENT '企业',
-  `jiuye_kaishi_time` date DEFAULT NULL COMMENT '入职日期',
-  `jiuye_gangwei_name` varchar(200) DEFAULT NULL COMMENT '入职岗位',
-  `jiuye_file` varchar(200) DEFAULT NULL COMMENT '相关文件',
-  `jiuye_content` text COMMENT '就业备注 ',
-  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`id`),
-  KEY `idx_jiuye_xuesheng_id` (`xuesheng_id`),
-  KEY `idx_jiuye_qiye_id` (`qiye_id`),
-  UNIQUE KEY `uk_jiuye_student_company_start` (`xuesheng_id`,`qiye_id`,`jiuye_kaishi_time`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='就业信息';
-
 
 /*Table structure for table `laoshi` */
 

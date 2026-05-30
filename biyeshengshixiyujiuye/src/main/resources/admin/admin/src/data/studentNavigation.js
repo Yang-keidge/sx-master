@@ -22,9 +22,8 @@ export const studentSidebarSections = [
     ]
   },
   {
-    title: '就业服务',
+    title: '公告查看',
     items: [
-      { label: '我的就业', routeName: 'student.employment', icon: UsersRound },
       { label: '公告信息', routeName: 'student.announcements', icon: Megaphone }
     ]
   },

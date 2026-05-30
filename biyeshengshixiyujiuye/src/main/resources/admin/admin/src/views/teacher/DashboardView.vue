@@ -47,16 +47,16 @@
       </article>
 
       <article class="panel-card donut-panel">
-        <h2>学生就业状态分布</h2>
+        <h2>学生实习类型分布</h2>
         <div class="donut-layout">
-          <div class="donut-chart" :style="donutStyle(employmentStatusDistribution)">
+          <div class="donut-chart" :style="donutStyle(internshipTypeDistribution)">
             <div class="donut-center">
-              <span>已毕业</span>
-              <strong>{{ graduatedStudents.length }}</strong>
+              <span>总数</span>
+              <strong>{{ internships.length }}</strong>
             </div>
           </div>
           <ul class="legend-list">
-            <li v-for="item in employmentStatusDistribution" :key="item.label">
+            <li v-for="item in internshipTypeDistribution" :key="item.label">
               <span :style="{ background: item.color }"></span>
               <strong>{{ item.label }}</strong>
               <em>{{ item.value }} ({{ item.percent }})</em>
@@ -125,14 +125,14 @@
       </article>
     </section>
 
-    <footer class="page-footer">© 2025 实习就业管理系统 版权所有</footer>
+    <footer class="page-footer">© 2025 实习信息管理系统 版权所有</footer>
   </main>
 </template>
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
-import { ArrowUp, BriefcaseBusiness, GraduationCap, Megaphone, UserRound } from 'lucide-vue-next'
+import { ArrowUp, BriefcaseBusiness, Megaphone, UserRound } from 'lucide-vue-next'
 import { useDictionary } from '../../hooks/useDictionary'
 import { fetchTeacherDashboardSummary } from '../../services/teacherDashboard'
 
@@ -142,7 +142,7 @@ const loadError = ref('')
 const { ensure, getLabel } = useDictionary()
 
 onMounted(async () => {
-  await Promise.all([ensure('gonggao_types'), ensure('zhuanye_types'), ensure('yuanxi_types')])
+  await Promise.all([ensure('gonggao_types'), ensure('zhuanye_types'), ensure('yuanxi_types'), ensure('shixi_types')])
   try {
     summary.value = await fetchTeacherDashboardSummary()
     loadError.value = ''
@@ -155,7 +155,6 @@ onMounted(async () => {
 const teacher = computed(() => summary.value?.teacher || {})
 const students = computed(() => summary.value?.students || [])
 const internships = computed(() => summary.value?.internships || [])
-const employment = computed(() => summary.value?.employment || [])
 const announcements = computed(() => summary.value?.announcements || [])
 const comments = computed(() => summary.value?.comments || [])
 
@@ -196,13 +195,6 @@ const statCards = computed(() => [
     tone: 'green'
   },
   {
-    label: '就业学生数',
-    value: summary.value?.totals?.employedStudents || 0,
-    change: summary.value?.totals?.employedStudents || 0,
-    icon: GraduationCap,
-    tone: 'purple'
-  },
-  {
     label: '发布公告数',
     value: summary.value?.totals?.announcements || 0,
     change: summary.value?.totals?.announcements || 0,
@@ -220,9 +212,6 @@ const internshipsByStudent = computed(() => {
   return map
 })
 
-const employmentStudentIds = computed(() => new Set(employment.value.map((item) => item.xueshengId).filter(Boolean)))
-const graduatedStudents = computed(() => students.value.filter(isGraduated))
-
 const internshipStatusDistribution = computed(() => {
   const counts = {
     未实习: 0,
@@ -235,15 +224,13 @@ const internshipStatusDistribution = computed(() => {
   return buildFixedDistribution(counts, ['#3f5fff', '#7185f6', '#58d2ae'])
 })
 
-const employmentStatusDistribution = computed(() => {
-  const counts = {
-    待就业: 0,
-    已就业: 0
-  }
-  graduatedStudents.value.forEach((student) => {
-    counts[employmentStudentIds.value.has(student.id) ? '已就业' : '待就业'] += 1
+const internshipTypeDistribution = computed(() => {
+  const counts = {}
+  internships.value.forEach((item) => {
+    const label = item.shixiValue || getLabel('shixi_types', item.shixiTypes, '') || '未设置'
+    counts[label] = (counts[label] || 0) + 1
   })
-  return buildFixedDistribution(counts, ['#3f5fff', '#58d2ae'])
+  return buildFixedDistribution(counts, ['#3f5fff', '#7185f6', '#58d2ae', '#b8dce9', '#f6a15f'])
 })
 
 const trendData = computed(() => {
@@ -296,13 +283,6 @@ function isActiveInternship(item) {
   if (start && start > today) return false
   if (end && end < today) return false
   return true
-}
-
-function isGraduated(student) {
-  const year = Number(student.ruxueYear)
-  if (!year) return false
-  const graduationDate = new Date(year + 4, 5, 1)
-  return startOfToday() >= graduationDate
 }
 
 function buildRecentMonths() {
@@ -421,7 +401,7 @@ function formatPercent(value, total) {
 
 .stat-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(190px, 1fr));
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
   gap: 20px;
   margin-bottom: 25px;
 }

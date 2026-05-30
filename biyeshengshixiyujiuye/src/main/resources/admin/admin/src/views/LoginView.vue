@@ -1,10 +1,10 @@
 <template>
   <main class="login-page">
-    <section class="login-shell" aria-label="实习就业管理系统登录">
+    <section class="login-shell" aria-label="实习信息管理系统登录">
       <div class="brand-panel">
         <div class="brand-copy">
-          <h1>实习就业管理系统</h1>
-          <p>高效管理实习与就业全过程，助力学生成长与发展</p>
+          <h1>实习信息管理系统</h1>
+          <p>高效管理实习全过程，助力学生成长与发展</p>
         </div>
 
         <div class="visual-wrap" aria-hidden="true">
@@ -113,7 +113,7 @@
       </form>
     </section>
 
-    <footer class="copyright">© 2025 实习就业管理系统 版权所有</footer>
+    <footer class="copyright">© 2025 实习信息管理系统 版权所有</footer>
   </main>
 </template>
 

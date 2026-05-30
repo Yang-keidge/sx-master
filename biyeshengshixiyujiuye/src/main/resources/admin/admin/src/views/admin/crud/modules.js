@@ -6,7 +6,6 @@ import * as configApi from '../../../api/config'
 import * as dictionaryApi from '../../../api/dictionary'
 import * as discussionApi from '../../../api/discussion'
 import * as discussionReplyApi from '../../../api/discussionReply'
-import * as employmentApi from '../../../api/employment'
 import * as internshipApi from '../../../api/internship'
 import * as recruitmentApi from '../../../api/recruitment'
 import * as studentApi from '../../../api/student'
@@ -457,48 +456,6 @@ export const moduleConfigs = {
     ]
   },
 
-  employment: {
-    title: '就业管理',
-    subtitle: '维护毕业生入职企业、岗位和入职日期。',
-    entityName: '就业',
-    api: employmentApi,
-    batchImport: true,
-    optionLoaders: {
-      students: loadStudentOptions,
-      companies: loadCompanyOptions
-    },
-    searchFields: [field('xueshengName', '学生姓名'), field('qiyeName', '企业名称'), field('jiuyeGangweiName', '岗位')],
-    columns: [
-      field('xueshengName', '学生姓名', 'input', { minWidth: 120 }),
-      field('xueshengXuehao', '学号', 'input', { minWidth: 128 }),
-      dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue', { minWidth: 120 }),
-      dictionaryColumn('banjiTypes', '班级', 'banji_types', 'banjiValue', { minWidth: 132 }),
-      field('qiyeName', '企业名称', 'input', { minWidth: 180 }),
-      field('jiuyeGangweiName', '入职岗位', 'input', { minWidth: 160 }),
-      field('jiuyeKaishiTime', '入职日期', 'date', { width: 118 }),
-      createTimeColumn
-    ],
-    formFields: [
-      field('xueshengId', '学生', 'remoteSelect', { source: 'students', required: true }),
-      field('qiyeId', '企业', 'remoteSelect', { source: 'companies', required: true }),
-      field('jiuyeGangweiName', '入职岗位', 'input', { required: true }),
-      field('jiuyeKaishiTime', '入职日期', 'date', { required: true }),
-      field('jiuyeContent', '就业备注', 'textarea', { wide: true, rows: 5 })
-    ],
-    detailFields: [
-      field('xueshengName', '学生姓名'),
-      field('xueshengXuehao', '学号'),
-      field('xueshengJianliFile', '学生简历', 'file'),
-      dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue'),
-      dictionaryColumn('banjiTypes', '班级', 'banji_types', 'banjiValue'),
-      field('qiyeName', '企业名称'),
-      field('jiuyeGangweiName', '入职岗位'),
-      field('jiuyeKaishiTime', '入职日期', 'date'),
-      field('jiuyeContent', '就业备注', 'multiline'),
-      createTimeColumn
-    ]
-  },
-
   recruitmentJobs: {
     title: '招聘岗位',
     subtitle: '管理企业发布的招聘岗位、薪资范围、工作地址、招聘数量和招满状态。',
@@ -670,7 +627,7 @@ export const moduleConfigs = {
 
   discussions: {
     title: '讨论区',
-    subtitle: '管理学生、老师和企业在实习就业过程中发布的交流帖子。',
+    subtitle: '管理学生、老师和企业在实习招聘过程中发布的交流帖子。',
     entityName: '帖子',
     api: discussionApi,
     commentable: true,

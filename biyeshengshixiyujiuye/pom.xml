@@ -13,7 +13,7 @@
     <artifactId>biyeshengshixiyujiuye</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>biyeshengshixiyujiuye</name>
-    <description>毕业生实习与就业管理系统</description>
+    <description>学生实习信息管理系统</description>
 
     <properties>
         <java.version>1.8</java.version>

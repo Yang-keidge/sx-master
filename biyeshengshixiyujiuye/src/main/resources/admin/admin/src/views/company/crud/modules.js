@@ -4,7 +4,6 @@ import * as commentApi from '../../../api/comment'
 import * as companyApi from '../../../api/company'
 import * as discussionApi from '../../../api/discussion'
 import * as discussionReplyApi from '../../../api/discussionReply'
-import * as employmentApi from '../../../api/employment'
 import * as internshipApi from '../../../api/internship'
 import * as recruitmentApi from '../../../api/recruitment'
 import * as studentApi from '../../../api/student'
@@ -266,53 +265,6 @@ export const companyModuleConfigs = {
     formFields: internshipFormFields,
     transformPayload: withCurrentCompany,
     detailFields: internshipDetailFields
-  },
-
-  employmentData: {
-    title: '就业管理',
-    subtitle: '维护本企业就业学生、岗位和入职日期数据。',
-    entityName: '就业',
-    api: employmentApi,
-    canEdit: false,
-    canDelete: false,
-    optionLoaders: {
-      students: loadStudentOptions
-    },
-    searchFields: [field('xueshengName', '学生姓名'), field('xueshengXuehao', '学号'), field('jiuyeGangweiName', '岗位')],
-    columns: [
-      field('xueshengPhoto', '头像', 'image', { fallbackProp: 'xueshengName', width: 72 }),
-      field('xueshengName', '学生姓名', 'input', { minWidth: 120 }),
-      field('xueshengXuehao', '学号', 'input', { minWidth: 128 }),
-      dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue', { minWidth: 120 }),
-      field('studentClass', '班级', 'input', {
-        minWidth: 150,
-        formatter: formatStudentClass
-      }),
-      field('jiuyeGangweiName', '入职岗位', 'input', { minWidth: 160 }),
-      field('jiuyeKaishiTime', '入职日期', 'date', { width: 118 }),
-      field('jiuyeContent', '就业备注', 'multiline', { minWidth: 220 }),
-      createTimeColumn
-    ],
-    formFields: [
-      field('xueshengId', '学生', 'remoteSelect', { source: 'students', required: true }),
-      field('jiuyeGangweiName', '入职岗位', 'input', { required: true }),
-      field('jiuyeKaishiTime', '入职日期', 'date', { required: true }),
-      field('jiuyeContent', '就业备注', 'textarea', { wide: true, rows: 5 })
-    ],
-    transformPayload: withCurrentCompany,
-    detailFields: [
-      field('xueshengName', '学生姓名'),
-      field('xueshengXuehao', '学号'),
-      field('xueshengJianliFile', '学生简历', 'file'),
-      dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue'),
-      field('studentClass', '班级', 'input', { formatter: formatStudentClass }),
-      field('xueshengPhone', '学生手机号'),
-      field('xueshengEmail', '学生邮箱'),
-      field('jiuyeGangweiName', '入职岗位'),
-      field('jiuyeKaishiTime', '入职日期', 'date'),
-      field('jiuyeContent', '就业备注', 'multiline'),
-      createTimeColumn
-    ]
   },
 
   recruitmentJobs: {

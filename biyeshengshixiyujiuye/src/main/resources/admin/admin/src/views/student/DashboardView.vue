@@ -124,7 +124,7 @@
       </article>
     </section>
 
-    <footer class="page-footer">© 2025 实习就业管理系统 版权所有</footer>
+    <footer class="page-footer">© 2025 实习信息管理系统 版权所有</footer>
   </main>
 </template>
 
@@ -136,7 +136,6 @@ import {
   Building2,
   CalendarDays,
   CheckCircle2,
-  FileText,
   MessageSquareText
 } from 'lucide-vue-next'
 import { normalizeAssetUrl } from '../../api/request'
@@ -162,7 +161,6 @@ onMounted(async () => {
 
 const student = computed(() => summary.value?.student || {})
 const internships = computed(() => summary.value?.internships || [])
-const employment = computed(() => summary.value?.employment || [])
 const announcements = computed(() => summary.value?.announcements || [])
 const comments = computed(() => summary.value?.comments || [])
 
@@ -230,13 +228,6 @@ const statCards = computed(() => [
     icon: CheckCircle2,
     tone: 'green',
     valueClass: currentStatus.value === '进行中' ? 'success-text' : ''
-  },
-  {
-    label: '就业记录',
-    value: employment.value.length,
-    caption: employment.value.length ? '已有记录' : '暂无记录',
-    icon: FileText,
-    tone: 'purple'
   },
   {
     label: '评论数量',
@@ -498,7 +489,7 @@ function formatPercent(value, total) {
 
 .stat-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(168px, 1fr));
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
   gap: 16px;
   margin-bottom: 25px;
 }

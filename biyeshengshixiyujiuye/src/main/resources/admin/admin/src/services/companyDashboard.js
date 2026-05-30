@@ -1,31 +1,26 @@
 import * as announcementApi from '../api/announcement'
 import * as companyApi from '../api/company'
-import * as employmentApi from '../api/employment'
 import * as internshipApi from '../api/internship'
 
 export async function fetchCompanyDashboardSummary() {
-  const [companyResult, internshipsResult, employmentResult, announcementsResult] = await Promise.all([
+  const [companyResult, internshipsResult, announcementsResult] = await Promise.all([
     companyApi.session(),
     internshipApi.page({ page: 1, limit: 1000, orderBy: 'id' }),
-    employmentApi.page({ page: 1, limit: 1000, orderBy: 'id' }),
     announcementApi.page({ page: 1, limit: 1000, orderBy: 'id', myOnly: 'true' })
   ])
 
   const internships = internshipsResult.data?.list || []
-  const employment = employmentResult.data?.list || []
   const announcements = announcementsResult.data?.list || []
 
   return {
     company: companyResult.data || null,
     internships,
-    employment,
     announcements,
     totals: {
       internshipStudents: countDistinct(internships, 'xueshengId'),
       activeInternships: internships.filter(isActiveInternship).length,
       completedInternships: internships.filter(isCompletedInternship).length,
-      announcements: announcements.length,
-      employedStudents: countDistinct(employment, 'xueshengId')
+      announcements: announcements.length
     }
   }
 }

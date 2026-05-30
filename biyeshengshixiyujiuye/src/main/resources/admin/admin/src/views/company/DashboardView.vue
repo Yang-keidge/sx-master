@@ -142,7 +142,7 @@
       </article>
     </section>
 
-    <footer class="page-footer">© 2025 实习就业管理系统 版权所有</footer>
+    <footer class="page-footer">© 2025 实习信息管理系统 版权所有</footer>
   </main>
 </template>
 

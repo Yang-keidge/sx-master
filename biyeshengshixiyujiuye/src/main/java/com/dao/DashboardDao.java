@@ -45,7 +45,7 @@ public interface DashboardDao {
     List<Map<String, Object>> selectLatestShixi();
 
     /**
-     * 查询最新就业记录
+     * 查询最新招聘岗位
      */
-    List<Map<String, Object>> selectLatestJiuye();
+    List<Map<String, Object>> selectLatestRecruitmentJobs();
 }

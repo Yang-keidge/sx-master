@@ -39,15 +39,6 @@ public class DashboardController {
     }
 
     /**
-     * 就业率统计
-     */
-    @GetMapping("/employmentRate")
-    public R employmentRate() {
-        Map<String, Object> baseData = dashboardService.getBaseData();
-        return R.ok().put("data", baseData.get("employmentRate"));
-    }
-
-    /**
      * 实习结果统计
      */
     @GetMapping("/shixiResult")

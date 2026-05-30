@@ -3,7 +3,6 @@ import * as applicationApi from '../../../api/application'
 import * as commentApi from '../../../api/comment'
 import * as discussionApi from '../../../api/discussion'
 import * as discussionReplyApi from '../../../api/discussionReply'
-import * as employmentApi from '../../../api/employment'
 import * as internshipApi from '../../../api/internship'
 import * as questionApi from '../../../api/question'
 import * as recruitmentApi from '../../../api/recruitment'
@@ -211,39 +210,9 @@ export const studentModuleConfigs = {
     ]
   },
 
-  employment: {
-    title: '我的就业',
-    subtitle: '查看我的就业企业、入职岗位和入职日期。',
-    entityName: '就业',
-    api: employmentApi,
-    canCreate: false,
-    canEdit: false,
-    canDelete: false,
-    searchFields: [field('qiyeName', '企业名称'), field('jiuyeGangweiName', '入职岗位')],
-    columns: [
-      field('qiyeName', '企业名称', 'input', { minWidth: 180 }),
-      field('jiuyeGangweiName', '入职岗位', 'input', { minWidth: 160 }),
-      field('jiuyeKaishiTime', '入职日期', 'date', { width: 118 }),
-      field('jiuyeContent', '就业备注', 'multiline', { minWidth: 220 }),
-      createTimeColumn
-    ],
-    formFields: [],
-    detailFields: [
-      field('xueshengName', '学生姓名'),
-      field('xueshengXuehao', '学号'),
-      field('qiyeName', '企业名称'),
-      field('qiyeAddress', '企业地址'),
-      field('qiyePhone', '企业电话'),
-      field('jiuyeGangweiName', '入职岗位'),
-      field('jiuyeKaishiTime', '入职日期', 'date'),
-      field('jiuyeContent', '就业备注', 'multiline'),
-      createTimeColumn
-    ]
-  },
-
   announcements: {
     title: '公告信息',
-    subtitle: '查看学校和企业发布的实习、就业、招聘与通知公告。',
+    subtitle: '查看学校和企业发布的实习、招聘与通知公告。',
     entityName: '公告',
     api: announcementApi,
     commentable: true,
@@ -307,7 +276,7 @@ export const studentModuleConfigs = {
 
   discussions: {
     title: '讨论区',
-    subtitle: '发布实习、就业过程中的问题和经验，并参与帖子回复。',
+    subtitle: '发布实习过程中的问题和经验，并参与帖子回复。',
     entityName: '帖子',
     api: discussionApi,
     commentable: true,

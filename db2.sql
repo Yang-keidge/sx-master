@@ -3,8 +3,8 @@
 使用方式：先导入 db.sql，再导入本文件。
 说明：
 1. 本文件包含除 dictionary 字典数据以外的所有基础数据。
-2. db.sql 负责库表结构和字典数据，本文件负责账号、企业、学生、实习、就业、公告评论等基础数据。
-3. 原 db2.sql 的补充演示数据保持 INSERT IGNORE，重复导入时会跳过已存在主键或唯一键的数据。
+2. db.sql 负责库表结构和字典数据，本文件负责账号、企业、学生、实习、招聘、公告评论等基础数据。
+3. 补充演示数据保持 INSERT IGNORE，重复导入时会跳过已存在主键或唯一键的数据。
 */
 
 /*!40101 SET NAMES utf8 */;
@@ -19,9 +19,6 @@ insert  into `gonggao`(`id`,`fabuzhe_id`,`fabuzhe_table`,`fabuzhe_role`,`gonggao
 /*Data for the table `gonggao_comment` */
 
 insert  into `gonggao_comment`(`id`,`gonggao_id`,`pinglunren_id`,`pinglunren_table`,`pinglunren_role`,`pinglunren_name`,`gonggao_comment_content`,`create_time`,`update_time`) values (1,1,1,'xuesheng','学生','张三','老师，材料核验是否需要同时提交纸质版？','2025-06-01 10:20:00','2025-06-01 10:20:00'),(2,1,1,'laoshi','老师','王老师','先在线上传材料，学院复核后会另行通知是否需要纸质版。','2025-06-01 11:00:00','2025-06-01 11:00:00'),(3,4,2,'xuesheng','学生','李四','请问这个岗位是否接受远程面试？','2025-06-10 11:20:00','2025-06-10 11:20:00'),(4,4,1,'qiye','企业','郑州云启软件有限公司','可以远程初面，复试安排会通过系统通知。','2025-06-10 14:00:00','2025-06-10 14:00:00'),(5,6,7,'xuesheng','学生','吴八','实习动员会可以请假吗？','2025-06-20 12:30:00','2025-06-20 12:30:00'),(6,6,1,'laoshi','老师','王老师','特殊情况请提前向辅导员提交请假说明。','2025-06-20 13:10:00','2025-06-20 13:10:00');
-/*Data for the table `jiuye` */
-
-insert  into `jiuye`(`id`,`xuesheng_id`,`qiye_id`,`jiuye_kaishi_time`,`jiuye_gangwei_name`,`jiuye_file`,`jiuye_content`,`create_time`) values (1,1,4,'2025-07-01','前端开发工程师','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','李明轩毕业后入职河南数科信息技术有限公司，岗位与网络工程专业方向匹配。','2025-07-01 09:00:00'),(2,2,1,'2025-07-05','Java开发工程师','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','王雨晴通过校园招聘入职郑州云启软件有限公司，试用期三个月。','2025-07-05 09:00:00'),(3,4,2,'2025-07-10','化工分析员','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','赵子涵入职河南中原化工科技有限公司质量分析岗位。','2025-07-10 09:00:00'),(4,5,5,'2025-07-15','财务助理','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','刘佳怡入职河南华信财务咨询有限公司，从事财务资料整理与账务辅助工作。','2025-07-15 09:00:00'),(5,6,3,'2025-07-20','设备工程师','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','周浩然入职洛阳智造装备有限公司设备工程部。','2025-07-20 09:00:00'),(6,7,6,'2025-07-22','软件测试工程师','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar','孙若曦入职郑州星河网络科技有限公司，负责Web系统测试。','2025-07-22 09:00:00');
 /*Data for the table `laoshi` */
 
 insert  into `laoshi`(`id`,`username`,`password`,`laoshi_gonghao`,`laoshi_name`,`laoshi_phone`,`laoshi_id_number`,`laoshi_photo`,`sex_types`,`yuanxi_types`,`zhuanye_types`,`laoshi_email`,`create_time`) values (1,'T2020001','123456','T2020001','刘建华','13937100001','410102198106120011','http://localhost:8080/biyeshengshixiyujiuye/upload/laoshi1.jpg',1,1,1,'liujianhua@hnxy.edu.cn','2022-03-28 21:46:24'),(2,'T2019008','123456','T2019008','张晓梅','13937100002','410103198409180022','http://localhost:8080/biyeshengshixiyujiuye/upload/laoshi2.jpg',2,3,4,'zhangxiaomei@hnxy.edu.cn','2022-03-28 21:46:24'),(3,'T2018012','123456','T2018012','陈志远','13937100003','410104197912050033','http://localhost:8080/biyeshengshixiyujiuye/upload/laoshi3.jpg',1,2,3,'chenzhiyuan@hnxy.edu.cn','2022-03-28 21:46:24');
@@ -255,26 +252,6 @@ FROM (
   WHERE n.id BETWEEN 53 AND 120
 ) r;
 
-/* 就业数据：补充 2021 级已毕业学生就业信息，丰富管理员就业率和企业 TOP。 */
-INSERT IGNORE INTO `jiuye`
-(`id`,`xuesheng_id`,`qiye_id`,`jiuye_kaishi_time`,`jiuye_gangwei_name`,`jiuye_file`,`jiuye_content`,`create_time`)
-SELECT
-  2000 + n.id AS id,
-  n.id AS xuesheng_id,
-  1 + MOD(n.id, 6) AS qiye_id,
-  DATE_ADD('2026-07-01', INTERVAL MOD(n.id, 45) DAY) AS jiuye_kaishi_time,
-  CASE
-    WHEN 1 + MOD(n.id, 6) IN (1,4,6) THEN ELT(1 + MOD(n.id, 4), 'Java开发工程师','前端开发工程师','软件测试工程师','实施工程师')
-    WHEN 1 + MOD(n.id, 6) = 2 THEN ELT(1 + MOD(n.id, 3), '化工分析员','质量检测员','工艺助理')
-    WHEN 1 + MOD(n.id, 6) = 3 THEN ELT(1 + MOD(n.id, 3), '设备工程师','机械设计助理','自动化运维工程师')
-    ELSE ELT(1 + MOD(n.id, 3), '财务助理','审计助理','会计专员')
-  END AS jiuye_gangwei_name,
-  'http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar' AS jiuye_file,
-  '通过校园招聘或实习转正进入企业，岗位与学生专业方向基本匹配。' AS jiuye_content,
-  DATE_ADD('2026-04-10 10:00:00', INTERVAL MOD(n.id - 13, 38) DAY) AS create_time
-FROM `seed_numbers` n
-WHERE n.id BETWEEN 13 AND 50;
-
 /* 公告数据：覆盖管理员、QY001 企业端、刘建华老师端和其他发布者。 */
 INSERT IGNORE INTO `gonggao`
 (`id`,`fabuzhe_id`,`fabuzhe_table`,`fabuzhe_role`,`gonggao_name`,`gonggao_types`,`insert_time`,`gonggao_content`,`create_time`)
@@ -328,6 +305,70 @@ VALUES
 (1018,1303,90,'xuesheng','学生','高泽涵','设备调试岗位实习地点是在洛阳总部吗？','2026-04-06 13:35:00','2026-04-06 13:35:00');
 
 DROP TEMPORARY TABLE IF EXISTS `seed_numbers`;
+
+/* QY001 招聘岗位：新增 6 个岗位，便于企业端展示招聘列表和岗位进度。 */
+INSERT IGNORE INTO `zhaopin_gangwei`
+(`id`,`qiye_id`,`zhaopin_gangwei_name`,`zhaopin_leixing`,`xinzi_fanwei`,`gongzuo_dizhi`,`gongzuo_yaoqiu`,`yizhao_renshu`,`zhaopin_renshu`,`create_time`)
+VALUES
+(3001,1,'Java开发工程师','校园招聘','10K-15K','河南省郑州市高新区科学大道89号','熟悉 Java 基础、Spring Boot、MySQL，能阅读接口文档并完成业务模块开发。',1,6,'2026-05-20 09:00:00'),
+(3002,1,'前端开发工程师','校园招聘','9K-14K','河南省郑州市高新区科学大道89号','熟悉 Vue、JavaScript、Element Plus，了解组件化开发、接口联调和页面性能优化。',0,5,'2026-05-20 09:20:00'),
+(3003,1,'软件测试工程师','校园招聘','7K-11K','河南省郑州市高新区科学大道89号','掌握测试用例设计、缺陷跟踪和接口测试基础，有项目测试或课程设计经验优先。',0,4,'2026-05-20 09:40:00'),
+(3004,1,'数据分析助理','实习转正','8K-12K','河南省郑州市高新区科学大道89号','了解 SQL、Excel 数据整理和基础可视化，能配合业务部门完成数据报表分析。',1,3,'2026-05-20 10:00:00'),
+(3005,1,'实施运维工程师','校园招聘','8K-13K','河南省郑州市高新区科学大道89号','了解 Linux、网络基础和系统部署流程，能适应客户现场沟通和项目交付。',0,4,'2026-05-20 10:20:00'),
+(3006,1,'产品经理助理','实习岗位','7K-10K','河南省郑州市高新区科学大道89号','具备需求分析、原型绘制和文档整理能力，能参与政企系统需求调研。',0,3,'2026-05-20 10:40:00');
+
+/* QY001 应聘学生：新增 9 名可用于应聘展示的学生账号。 */
+INSERT IGNORE INTO `xuesheng`
+(`id`,`username`,`password`,`xuesheng_xuehao`,`xuesheng_name`,`xuesheng_phone`,`xuesheng_id_number`,`xuesheng_photo`,`xuesheng_jianli_file`,`sex_types`,`yuanxi_types`,`zhuanye_types`,`banji_types`,`ruxue_year`,`xuesheng_email`,`create_time`)
+VALUES
+(1301,'20230131','123456','20230131','张予安','13837301301','410102200503010131','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng1.jpg','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar',1,1,2,11,2023,'20230131@stu.hnxy.edu.cn','2026-05-21 08:30:00'),
+(1302,'20230132','123456','20230132','李思源','13837301302','410102200503020132','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng2.jpg','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar',1,1,2,11,2023,'20230132@stu.hnxy.edu.cn','2026-05-21 08:40:00'),
+(1303,'20230133','123456','20230133','王若琪','13837301303','410102200503030133','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng3.jpg','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar',2,1,2,11,2023,'20230133@stu.hnxy.edu.cn','2026-05-21 08:50:00'),
+(1304,'20230134','123456','20230134','赵嘉宁','13837301304','410102200503040134','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng4.jpg','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar',2,1,2,11,2023,'20230134@stu.hnxy.edu.cn','2026-05-21 09:00:00'),
+(1305,'20230135','123456','20230135','陈浩辰','13837301305','410102200503050135','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng5.jpg','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar',1,1,1,7,2023,'20230135@stu.hnxy.edu.cn','2026-05-21 09:10:00'),
+(1306,'20230136','123456','20230136','刘雅菲','13837301306','410102200503060136','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng6.jpg','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar',2,1,2,11,2023,'20230136@stu.hnxy.edu.cn','2026-05-21 09:20:00'),
+(1307,'20230137','123456','20230137','杨博文','13837301307','410102200503070137','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng7.jpg','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar',1,1,1,7,2023,'20230137@stu.hnxy.edu.cn','2026-05-21 09:30:00'),
+(1308,'20230138','123456','20230138','周锦瑜','13837301308','410102200503080138','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng8.jpg','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar',2,1,2,11,2023,'20230138@stu.hnxy.edu.cn','2026-05-21 09:40:00'),
+(1309,'20230139','123456','20230139','吴泽洋','13837301309','410102200503090139','http://localhost:8080/biyeshengshixiyujiuye/upload/xuesheng9.jpg','http://localhost:8080/biyeshengshixiyujiuye/upload/file.rar',1,1,1,7,2023,'20230139@stu.hnxy.edu.cn','2026-05-21 09:50:00');
+
+/* QY001 应聘记录：新增 9 条应聘学生数据，分布到不同招聘岗位。 */
+INSERT IGNORE INTO `yingpin`
+(`id`,`zhaopin_id`,`xuesheng_id`,`qiye_id`,`yingpin_status`,`create_time`)
+VALUES
+(5001,3001,1301,1,'待处理','2026-05-22 09:10:00'),
+(5002,3001,1302,1,'待处理','2026-05-22 09:35:00'),
+(5003,3002,1303,1,'待处理','2026-05-22 10:05:00'),
+(5004,3002,1304,1,'初筛通过','2026-05-22 10:30:00'),
+(5005,3003,1305,1,'待处理','2026-05-22 11:00:00'),
+(5006,3004,1306,1,'面试邀约','2026-05-22 14:10:00'),
+(5007,3005,1307,1,'待处理','2026-05-22 14:45:00'),
+(5008,3006,1308,1,'初筛通过','2026-05-22 15:20:00'),
+(5009,3006,1309,1,'待处理','2026-05-22 16:00:00');
+
+/* 讨论区帖子：新增 7 个帖子，覆盖企业、学生、老师和管理员视角。 */
+INSERT IGNORE INTO `taolun`
+(`id`,`fabuzhe_id`,`fabuzhe_table`,`fabuzhe_role`,`fabuzhe_name`,`taolun_title`,`taolun_content`,`create_time`,`update_time`)
+VALUES
+(4001,1,'qiye','企业','郑州云启软件有限公司','云启软件暑期项目实习答疑','公司暑期项目实习将围绕政企管理系统、数据看板和移动端接口展开，欢迎同学在本帖集中提问岗位内容、面试安排和实习周期。','2026-05-23 09:00:00','2026-05-23 09:00:00'),
+(4002,1301,'xuesheng','学生','张予安','Java岗位笔试准备经验求分享','已投递云启软件 Java 开发岗位，想了解笔试会更偏 Java 基础、数据库还是项目代码阅读，希望有经验的同学分享。','2026-05-23 10:15:00','2026-05-23 10:15:00'),
+(4003,1,'laoshi','老师','刘建华','简历项目经历怎么写更清晰','软件开发类岗位简历建议突出项目背景、本人职责、技术栈和可量化结果，欢迎同学把常见问题放在本帖讨论。','2026-05-23 11:00:00','2026-05-23 11:00:00'),
+(4004,1,'qiye','企业','郑州云启软件有限公司','实习转正考核关注哪些能力','云启软件实习转正主要关注代码质量、需求理解、沟通协作、问题闭环和出勤表现，大家可以结合岗位方向提前准备。','2026-05-24 09:30:00','2026-05-24 09:30:00'),
+(4005,1304,'xuesheng','学生','赵嘉宁','前端组件库项目需要准备哪些截图','准备投递前端岗位，想请教项目作品集中应该展示哪些页面、组件和接口联调截图。','2026-05-24 14:20:00','2026-05-24 14:20:00'),
+(4006,6,'users','管理员','admin','春招宣讲后续问题集中收集','春季招聘宣讲结束后，各位同学可以在本帖补充企业岗位、投递流程、面试安排等问题，学校会协调企业集中回复。','2026-05-25 09:10:00','2026-05-25 09:10:00'),
+(4007,1308,'xuesheng','学生','周锦瑜','测试岗位面试常见题记录','最近准备测试工程师岗位面试，整理了测试用例设计、缺陷生命周期、接口测试基础等问题，欢迎大家补充。','2026-05-25 15:40:00','2026-05-25 15:40:00');
+
+/* 问题答疑：给 T2020001 刘建华补充 8 条实习中学生问题记录。学生 25-31、52 在 db2.sql 中均为网络工程专业且 2026-05-28 处于实习周期内。 */
+INSERT IGNORE INTO `wenti_jieda`
+(`id`,`xuesheng_id`,`laoshi_id`,`wenti_title`,`wenti_content`,`wenti_status`,`huifu_content`,`huifu_laoshi_id`,`huifu_time`,`create_time`,`update_time`)
+VALUES
+(6001,25,1,'实习周报需要附代码截图吗','老师，我在云启软件做接口开发，周报里除了任务说明和问题记录，是否需要附上代码提交或接口联调截图？','已回复','可以附关键截图，但不要上传企业敏感代码。周报重点写清任务目标、完成进度、遇到的问题和下周计划。',1,'2026-05-26 10:20:00','2026-05-26 09:15:00','2026-05-26 10:20:00'),
+(6002,26,1,'企业导师评价表什么时候提交','我现在还在项目组实习，企业导师评价表是实习结束后提交，还是阶段检查时也需要先提交一版？','已回复','阶段检查先提交企业导师阶段评价或截图说明，最终评价表在实习结束后一周内上传即可。',1,'2026-05-26 14:10:00','2026-05-26 13:35:00','2026-05-26 14:10:00'),
+(6003,27,1,'实习岗位和专业方向不完全一致怎么办','我目前做测试开发，专业是网络工程，实习岗位和开发方向不完全一致，实习总结里应该怎么说明匹配关系？','已回复','可以从接口测试、网络环境、系统部署和质量保障角度说明专业能力应用，重点体现岗位任务与专业课程的关联。',1,'2026-05-27 09:30:00','2026-05-27 08:50:00','2026-05-27 09:30:00'),
+(6004,28,1,'请假一天是否影响实习考核','本周需要回校办理材料，预计请假一天，已经和企业导师沟通过，这种情况会影响实习成绩吗？','未回复',NULL,NULL,NULL,'2026-05-27 10:25:00','2026-05-27 10:25:00'),
+(6005,29,1,'实习月报和周报内容可以重复吗','月报需要总结本月任务，和每周周报内容会有重复，是否可以整合周报内容后再补充阶段收获？','已回复','可以整合周报内容，但月报需要体现阶段性总结，包括能力提升、问题复盘、企业导师反馈和下月安排。',1,'2026-05-27 15:40:00','2026-05-27 14:20:00','2026-05-27 15:40:00'),
+(6006,30,1,'实习系统里的结束时间需要调整吗','企业项目延期两周，系统里的预计结束时间还是原来的日期，是否需要现在申请调整？','未回复',NULL,NULL,NULL,'2026-05-28 09:05:00','2026-05-28 09:05:00'),
+(6007,31,1,'项目演示材料可以用测试环境吗','阶段答辩准备项目演示材料时，企业只允许使用测试环境，不能展示真实客户数据，这样可以吗？','已回复','可以使用测试环境，演示时注意脱敏数据和流程说明，答辩材料中不要出现真实客户名称、账号或业务数据。',1,'2026-05-28 10:30:00','2026-05-28 09:55:00','2026-05-28 10:30:00'),
+(6008,52,1,'实习成果证明上传哪些附件','我的实施工程师实习主要是部署和运维支持，除了实习鉴定表，还需要上传哪些成果证明？','已回复','可上传部署记录截图、运维日报节选、问题处理清单和企业导师评价。涉及企业内部信息的附件要先做脱敏处理。',1,'2026-05-28 15:00:00','2026-05-28 14:20:00','2026-05-28 15:00:00');
 
 
 COMMIT;

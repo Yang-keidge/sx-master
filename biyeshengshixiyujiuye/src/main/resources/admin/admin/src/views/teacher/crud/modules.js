@@ -2,7 +2,6 @@ import * as announcementApi from '../../../api/announcement'
 import * as commentApi from '../../../api/comment'
 import * as discussionApi from '../../../api/discussion'
 import * as discussionReplyApi from '../../../api/discussionReply'
-import * as employmentApi from '../../../api/employment'
 import * as internshipApi from '../../../api/internship'
 import * as questionApi from '../../../api/question'
 import * as studentApi from '../../../api/student'
@@ -273,47 +272,9 @@ export const teacherModuleConfigs = {
     ]
   },
 
-  employment: {
-    title: '就业情况',
-    subtitle: '只读查看当前教师所属专业已毕业学生的就业企业、岗位和入职日期。',
-    entityName: '就业',
-    api: employmentApi,
-    canCreate: false,
-    canEdit: false,
-    canDelete: false,
-    searchFields: [field('xueshengName', '学生姓名'), field('xueshengXuehao', '学号'), field('qiyeName', '企业名称'), field('jiuyeGangweiName', '岗位')],
-    columns: [
-      field('xueshengPhoto', '头像', 'image', { fallbackProp: 'xueshengName', width: 72 }),
-      field('xueshengName', '学生姓名', 'input', { minWidth: 120 }),
-      field('xueshengXuehao', '学号', 'input', { minWidth: 128 }),
-      field('studentClass', '班级', 'input', { minWidth: 150, formatter: formatStudentClass }),
-      field('qiyeName', '企业名称', 'input', { minWidth: 180 }),
-      field('jiuyeGangweiName', '入职岗位', 'input', { minWidth: 160 }),
-      field('jiuyeKaishiTime', '入职日期', 'date', { width: 118 }),
-      field('jiuyeContent', '就业备注', 'multiline', { minWidth: 220 }),
-      createTimeColumn
-    ],
-    formFields: [],
-    detailFields: [
-      field('xueshengName', '学生姓名'),
-      field('xueshengXuehao', '学号'),
-      field('xueshengJianliFile', '学生简历', 'file'),
-      dictionaryColumn('yuanxiTypes', '院系', 'yuanxi_types', 'yuanxiValue'),
-      dictionaryColumn('zhuanyeTypes', '专业', 'zhuanye_types', 'zhuanyeValue'),
-      field('studentClass', '班级', 'input', { formatter: formatStudentClass }),
-      field('qiyeName', '企业名称'),
-      field('qiyeAddress', '企业地址'),
-      field('qiyePhone', '企业电话'),
-      field('jiuyeGangweiName', '入职岗位'),
-      field('jiuyeKaishiTime', '入职日期', 'date'),
-      field('jiuyeContent', '就业备注', 'multiline'),
-      createTimeColumn
-    ]
-  },
-
   announcements: {
     title: '我的公告',
-    subtitle: '发布并维护当前教师账号的实习、就业和教学通知公告。',
+    subtitle: '发布并维护当前教师账号的实习和教学通知公告。',
     entityName: '公告',
     api: announcementApi,
     commentable: true,
@@ -423,7 +384,7 @@ export const teacherModuleConfigs = {
 
   discussions: {
     title: '讨论区',
-    subtitle: '发布实习就业指导交流帖，并参与学生、企业和老师之间的讨论回复。',
+    subtitle: '发布实习指导交流帖，并参与学生、企业和老师之间的讨论回复。',
     entityName: '帖子',
     api: discussionApi,
     commentable: true,
